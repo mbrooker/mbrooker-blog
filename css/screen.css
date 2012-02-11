@@ -62,13 +62,16 @@ ul.posts {
   margin-bottom: 2em;
 }
 
+a.posts {
+    color: #0a000a;
+}
+
   ul.posts li {
     line-height: 1.75em;
   }
 
   ul.posts span {
-    color: #aaa;
-    font-family: Monaco, "Courier New", monospace;
+    color: #bbb;
     font-size: 80%;
   }
 
@@ -81,7 +84,7 @@ ul.posts {
 .site {
   font-size: 100%;
   text-align: justify;
-  width: 40em;
+  width: 45em;
   margin: 3em auto 2em auto;
   line-height: 1.5em;
 }
@@ -128,7 +131,7 @@ ul.posts {
     .site .footer .contact {
       float: left;
       margin-right: 3em;
-      width: 20em;
+      width: 25em;
     }
 
       .site .footer .contact a {
@@ -138,7 +141,7 @@ ul.posts {
     .site .footer .license {
       margin-top: 1.1em;
       margin-right: .2em;
-      width: 20em;
+      width: 25em;
       float: right;
     }
 
@@ -155,6 +158,11 @@ ul.posts {
 #post {
 
 }
+
+ #post img {
+     width: 45em;
+     padding: 0 0.4em;
+ }
 
   /* standard */
 
