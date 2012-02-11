@@ -6,7 +6,7 @@ title: The benefits of having data
 {{ page.title }}
 ================
 
-<p class="meta">The benefits of having data</p>
+<p class="meta">Two ways to look at drive failures and temperature</p>
 
 Almost all recent articles and papers I have read on hard drive failure rates refer to either [Failure Trends in a Large Disk Drive Population](http://www.usenix.org/events/fast07/tech/full_papers/pinheiro/pinheiro_html/) from Google, or [Estimating Drive Reliability in Desktop Computers and Consumer Electronics Systems](http://www.seagate.com/docs/pdf/whitepaper/drive_reliability.pdf) from Seagate. Despite both sounding a looking authoritative, these papers come to some wildly different conclusions, and couldn't be more different in their approach.
 
