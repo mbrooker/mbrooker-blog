@@ -12,9 +12,9 @@ Hiring good software engineers is really difficult. It's hard to find good peopl
 
 I recently came across a pair of papers from [Andrew Begel](http://research.microsoft.com/en-us/um/people/abegel/) at Microsoft Research, and [Beth Simon](http://cseweb.ucsd.edu/~bsimon/) at UCSD. In [Novice Software Developers, All Over Again](http://research.microsoft.com/en-us/um/people/abegel/papers/icer-begel-2008.pdf) and [Struggles of New College Graduates in their First Software Development Job](http://research.microsoft.com/en-us/um/people/abegel/papers/sigcse-begel-2008.pdf), they present the results from a study where they followed eight new Microsoft hires for a total of 85 hours.
 
-All of the material in these studies is very interesting, but the section I found most relevant to my interests is the list of ''Misconceptions Which Hinder''. The universal misconceptions they list all seem to match my own experiences early in my career, and seem to align well with what I see colleagues struggling with. Perhaps the most poignant of these is the first one:
+All of the material in these studies is very interesting, but the section I found most relevant to my interests is the list of *Misconceptions Which Hinder*. The universal misconceptions they list all seem to match my own experiences early in my career, and seem to align well with what I see colleagues struggling with. Perhaps the most poignant of these is the first one:
 
-> '''1. I must do everything myself so that I look good to my manager.'''
+> *1. I must do everything myself so that I look good to my manager.*
 > This misconception is particularly dangerous, especially in large, complex development environments. \[...\] the perceived need to “perform” and not “reveal deficiencies” makes for much wasted time. It also seems to contribute to poor communication and a longer acclimatization. Communication suffered both by waiting too long to seek help and by trying to cover up issues that the \[engineer\] perhaps felt he “should know.”
 
 The fact that this was universally felt is especially interesting given the diverse educational backgrounds of the study subjects:
