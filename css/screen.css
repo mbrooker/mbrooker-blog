@@ -45,7 +45,7 @@ p {
 }
 
 a {
-    color: #00a;
+    color: #000066;
 }
 
 a:hover {
@@ -53,7 +53,7 @@ a:hover {
 }
 
 a:visited {
-    color: #a0a;
+    color: #660066;
 }
 
 table {
@@ -94,7 +94,7 @@ ul.posts span {
 .site {
     font-size: 100%;
     text-align: justify;
-    width: 45em;
+    width: 70em;
     margin: 3em auto 2em auto;
     line-height: 1.6em;
 }
@@ -133,16 +133,17 @@ ul.posts span {
 
 .site .footer {
     font-size: 80%;
-    color: #666;
+    color: #555;
     border-top: 4px solid #eee;
     margin-top: 2em;
     overflow: hidden;
+    clear: both;
 }
 
 .site .footer .contact {
     float: left;
     margin-right: 3em;
-    width: 25em;
+    width: 45em;
 }
 
 .site .footer .contact a {
@@ -160,6 +161,18 @@ ul.posts span {
     border: 0;
 }
 
+.site .about {
+    width: 20em;
+    float: right;
+    color: #555;
+}
+
+.site .about h1 {
+    font-size: 120%;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
 /*****************************************************************************/
 /*
 /* Posts
@@ -167,7 +180,8 @@ ul.posts span {
 /*****************************************************************************/
 
 #post {
-
+    width: 45em;
+    float: left;
 }
 
  #post img {
@@ -179,7 +193,7 @@ ul.posts span {
 
  #post pre {
     border: 1px solid #ddd;
-    background-color: #eef;
+    background-color: #f3f3f3;
     padding: 0 .4em;
  }
 
@@ -190,8 +204,8 @@ ul.posts span {
 
  #post code {
      border: 1px solid #ddd;
-     background-color: #eef;
-     font-size: 85%;
+     background-color: #f3f3f3;
+     font-size: 100%;
      padding: 0 .2em;
  }
  
@@ -213,6 +227,9 @@ ul.posts span {
  
  #related {
      margin-top: 2em;
+     clear: both;
+     width: 45em;
+     float: left;
  }
  
  #related h2 {
