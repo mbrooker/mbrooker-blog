@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Under the hood: Java's Atomic and volatile on x86
+title: Java's Atomic and volatile, under the hood on x86
 ---
 
 {{ page.title }}
@@ -25,7 +25,7 @@ To understand what is going on under the hood, let's start with a very simple pi
  2. Loops a large number of times (N) in each thread, incrementing a shared variable.
  3. Joins the threads.
 
-The three threads are running in parallel, and sharing the value of the variable. For it to end up with the right value at the end (M*N), two things need to be true. First, changes made by one threads must be immediately *visible* to the other threads. Second, changes made to the variable must be *atomic* - each threads must perform the load, increment and save as one effective operation. Visibility is not enough, because it allows something like this to happen:
+The three threads are running in parallel, and sharing the value of the variable. For it to end up with the right value at the end (M\*N), two things need to be true. First, changes made by one threads must be immediately *visible* to the other threads. Second, changes made to the variable must be *atomic* - each threads must perform the load, increment and save as one effective operation. Visibility is not enough, because it allows something like this to happen:
 
  1. Thread 1 loads 5
  2. Thread 1 increments its private copy to 6.
@@ -81,24 +81,24 @@ The *compareAndSet* function is a native implementation from Unsafe.java. Counti
 
 To understand what's making this amazing 10-thousand-fold difference in program runtime, we can turn to [Linux performance counters](https://perf.wiki.kernel.org/index.php/Main_Page), and run the JVM under the *perf stat* program. Here are some highlights of the report for the two versions, with the no-contention (fast) version first:
 
-       806,970,762 instructions              #    0.52  insns per cycle         [22.44%]
-       165,637,507 branches                  #   57.996 M/sec                   [18.37%]
-         2,293,172 branch-misses             #    1.38% of all branches         [36.33%]
-       195,282,430 L1-dcache-loads           #   68.375 M/sec                   [31.29%]
-         4,348,143 L1-dcache-load-misses     #    2.23% of all L1-dcache hits   [27.51%]
-         1,978,387 LLC-loads                 #    0.693 M/sec                   [40.41%]
-           110,472 LLC-load-misses           #    5.58% of all LL-cache hits    [29.62%]
+       806,970,762 instructions              #    0.52  insns per cycle 
+       165,637,507 branches                  #   57.996 M/sec         
+         2,293,172 branch-misses             #    1.38% of all branches
+       195,282,430 L1-dcache-loads           #   68.375 M/sec          
+         4,348,143 L1-dcache-load-misses     #    2.23% of all L1-dcache hits
+         1,978,387 LLC-loads                 #    0.693 M/sec                
+           110,472 LLC-load-misses           #    5.58% of all LL-cache hits 
        0.713189740 seconds time elapsed
 
 Then the slow version, with contention:
 
-     1,066,079,264 instructions              #    0.08  insns per cycle         [37.39%]
-       227,089,065 branches                  #   17.347 M/sec                   [34.39%]
-        10,659,632 branch-misses             #    4.69% of all branches         [36.73%]
-       408,262,745 L1-dcache-loads           #   31.187 M/sec                   [21.69%]
-        24,905,458 L1-dcache-load-misses     #    6.10% of all L1-dcache hits   [27.63%]
-        21,168,959 LLC-loads                 #    1.617 M/sec                   [27.72%]
-        12,133,097 LLC-load-misses           #   57.32% of all LL-cache hits    [26.44%]
+     1,066,079,264 instructions              #    0.08  insns per cycle      
+       227,089,065 branches                  #   17.347 M/sec                
+        10,659,632 branch-misses             #    4.69% of all branches      
+       408,262,745 L1-dcache-loads           #   31.187 M/sec                
+        24,905,458 L1-dcache-load-misses     #    6.10% of all L1-dcache hits
+        21,168,959 LLC-loads                 #    1.617 M/sec                
+        12,133,097 LLC-load-misses           #   57.32% of all LL-cache hits 
        3.271893871 seconds time elapsed
 
 We must be careful interpreting these results, because they are polluted with data not related to our program under test, like the JVM startup sequence. Still, the differences are quite obvious. Our first smoking gun is instructions per cycle (the first line) - this measures how many CPU instructions were executed per clock cycle. This is the amount of time the CPU could actually do work without being blocked on other things, like loading data from RAM. Higher is obviously better. The fast no-contention version gets a respectable 0.52 instructions per cycle. The slow version scores a terrible 0.08 - indicating 92% of cycles were wasted. Moving down the report indicates why this is the case, with the last line being the most damning. We went from 110 thousand LLC (last-level cache) misses in the fast version, to over 12 million in the slow version. The slow version is spending most of its time waiting for data from RAM.
