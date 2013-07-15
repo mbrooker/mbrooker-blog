@@ -28,7 +28,7 @@ As expected, we're doing about 125 random IOs per second, each at 16k (32.00 512
 
 Time to turn to *blktrace* and see what we can find out. The first step to using *blktrace* is to capture an IO trace for a period of time. Here, I've chosen 30 seconds:
 
-    blktrace -w 30 -d /dev/sdf -o - > sdf
+    blktrace -w 30 -d /dev/sdf -o sdf
 
 The *blktrace* command writes down, in the file called *sdf*, a trace of all the IOs being performed to that disk. The trace is stored in a binary format, which doesn't make convenient reading. The tool for that job is *blkparse*, a simple interface for analyzing the IO traces dumped by *blktrace*. They are packaged together, so you'll have *blkparse* if you have *blktrace*. When given a *blktrace* file, *blkparse* outputs a stream of events like these:
 
