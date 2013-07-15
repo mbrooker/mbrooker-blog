@@ -12,7 +12,7 @@ If you've spent much time at all investigating IO performance on Linux, you're n
 
 Sometimes, though, you need to go into more detail than iostat can provide. The aggregate view from *iostat* is simple, but makes it difficult to tell which processes are doing which IOs. Averaging over a period of time can hide subtle performance issues and the real causes of may IO-related problems. To get around these issues, you'll want to go deeper. If you have the guts for it, a recent kernel, and a good understanding of IO performance issues, you'll want to reach for [blktrace](http://git.kernel.org/cgit/linux/kernel/git/axboe/blktrace.git/tree/README) and friends. The blktrace toolkit provides an extremely powerful way to look at the exact IO performance of a Linux machine, at a wide range of levels of detail, and is vastly more capable than the simple *iostat*.
 
-For a start, let's look at the performance of a random read workload to a 16k drive. The manufacturer's spec sheet says this drive should be delivering about 120 IOs per second on a completely random load. *iostat -x* has this to say about the drive:
+For a start, let's look at the performance of a random read workload to a magnetic drive, with 16k IOs. The manufacturer's spec sheet says this drive should be delivering about 120 IOs per second on a completely random load. *iostat -x* has this to say about the drive:
 
     Device:       rrqm/s   wrqm/s     r/s     w/s   rsec/s   wsec/s avgrq-sz
     sdb             0.00     0.00  124.67    0.00  3989.33     0.00    32.00
