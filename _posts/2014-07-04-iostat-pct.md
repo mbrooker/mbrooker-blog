@@ -22,9 +22,9 @@ To explain what's wrong, let me compare two lines of *iostat* output:
                  avgqu-sz   await r_await w_await  svctm  %util
                     15.27    0.21    0.21    0.00   0.01 100.00
 
-Both of these lines are from the same device (a [Samsung 840 EVO](http://www.samsung.com/global/business/semiconductor/minisite/SSD/global/html/about/SSD840EVO.html) SSD), and both are from read-only 4kB random read loads. What differs here is the level parallelism: in the first load the mean queue depth is only 0.78, and in the second it's 15.27. Same pattern, more threads.
+Both of these lines are from the same device (a [Samsung 840 EVO](http://www.samsung.com/global/business/semiconductor/minisite/SSD/global/html/about/SSD840EVO.html) SSD), and both are from read-only 4kB random loads. What differs here is the level of parallelism: in the first load the mean queue depth is only 0.78, and in the second it's 15.27. Same pattern, more threads.
 
-The first problem we run into with this output is the *svctm* field, widely taken to mean *the amount of time an operation takes*. The iostat man page describes it as:
+The first problem we run into with this output is the *svctm* field, widely taken to be *the average amount of time an operation takes*. The iostat man page describes it as:
 
 > The average service time (in milliseconds) for I/O requests that were issued to the device.
 
@@ -32,7 +32,7 @@ and goes on to say:
 
 > The average service time (svctm field) value is meaningless, as I/O statistics are now calculated at block level, and we don't know when the disk driver starts to process a request.
 
-The reasons the man page states for this field being meaningless are true, as are the warnings in the sysstat code. The calculation behind *svctm* is fundamentally broken, and doesn't really have a clear meaning. Inside iostat, svctm in an interval is calculated as *time the device was doing some work* / *number of IOs*, that is the amount of time we were doing work, divided by the amount of work that we being done. If we go back to our two workloads, we can compare their service times:
+The reasons the man page states for this field being meaningless are true, as are the warnings in the sysstat code. The calculation behind *svctm* is fundamentally broken, and doesn't really have a clear meaning. Inside iostat, svctm in an interval is calculated as *time the device was doing some work* / *number of IOs*, that is the amount of time we were doing work, divided by the amount of work done. Going back to our two workloads, we can compare their service times:
 
     svctm
     0.06
@@ -48,7 +48,7 @@ While SSDs vary in the details of their internal construction, most have the abi
 
 ![](https://s3.amazonaws.com/mbrooker-blog-images/agrawal-ssd-arch.png)
 
-If Jane does one thing at a time, and doing ten things takes Jane 20 minutes, each thing has taken Jane an average of two minutes. The mean time between asking Jane to do something and Jane completing it is two minutes. Alice, like Jane, can do ten things in twenty minutes, but she works on multiple things in parallel. Looking only at Alice's throughput (the number of things she gets done in a period of time) what can we say about Alice's latency (the amount of time it takes her from start to finish for a task)? Very little. We know its less than 10 minutes. If she's busy the whole time, we know it's 2 minutes or more minutes. That's it.
+If Jane does one thing at a time, and doing ten things takes Jane 20 minutes, each thing has taken Jane an average of two minutes. The mean time between asking Jane to do something and Jane completing it is two minutes. Alice, like Jane, can do ten things in twenty minutes, but she works on multiple things in parallel. Looking only at Alice's throughput (the number of things she gets done in a period of time) what can we say about Alice's latency (the amount of time it takes her from start to finish for a task)? Very little. We know its less than 10 minutes. If she's busy the whole time, we know it's 2 or more minutes. That's it.
 
 Let's go back to that iostat output:
 
@@ -68,6 +68,6 @@ The problem here is the same - parallelism. When iostat says *%util*, it means "
 
 > Device saturation occurs when this value is close to 100% for devices serving requests serially.  But for devices serving requests in parallel, such as RAID arrays and modern SSDs, this number does not reflect their performance limits.
 
-As a useful measure of general IO busyness *%util* is fairly handy, but as an indication of how much the system is doing compared to what it can do, it's terrible. Iostat's *svctm* has even fewer redeeming strengths. It's just extremely misleading for most modern storage systems and workloads. Both of these fields are likely to mislead more than inform on modern SSD-based storage systems, and their use should be treated with extreme care.
+As a measure of general IO busyness *%util* is fairly handy, but as an indication of how much the system is doing compared to what it can do, it's terrible. Iostat's *svctm* has even fewer redeeming strengths. It's just extremely misleading for most modern storage systems and workloads. Both of these fields are likely to mislead more than inform on modern SSD-based storage systems, and their use should be treated with extreme care.
 
-<sub>Hard drive image by Evan-Amos (Own work) [CC-BY-SA-3.0 (http://creativecommons.org/licenses/by-sa/3.0) or GFDL (http://www.gnu.org/copyleft/fdl.html)], via Wikimedia Commons</sub>
+<sub>Hard drive image by Evan-Amos (Own work) ([CC-BY-SA-3.0](http://creativecommons.org/licenses/by-sa/3.0) or [GFDL](http://www.gnu.org/copyleft/fdl.html)), via Wikimedia Commons</sub>
