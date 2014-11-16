@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Exactly-Once Delivery Isn't What You Want"
+title: "Exactly-Once Delivery May Not Be What You Want"
 ---
 
 {{ page.title }}
