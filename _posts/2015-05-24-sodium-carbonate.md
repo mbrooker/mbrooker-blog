@@ -18,7 +18,7 @@ Finally, there's sodium carbonate. This is baking soda's big brother, a powerful
 
 ![Scale with 7g of Sodium Carbonate](https://s3.amazonaws.com/mbrooker-blog-images/scale_with_sodium_carbonate.jpg)
 
-Making sodium carbonate at home is super simple. I took 11g (about 2 teaspoons) of baking soda, spread it out on a wide glass dish, and baked it in the oven at 150 celcius (300 f) for about an hour. That yielded about 7g of a fine, white powder. The problem with fine, white powder is it could have been anything. Most likely, it could still have been sodium bicarbonate.
+Making sodium carbonate at home is super simple. I took 11g (about 2 teaspoons) of baking soda, spread it out on a wide glass dish, and baked it in the oven at 150 Celsius (300 f) for about an hour. That yielded about 7g of a fine, white powder. The problem with fine, white powder is it could have been anything. Most likely, it could still have been sodium bicarbonate.
 
 The first test is to see if the masses work out. The reaction I'm going for is:
 
@@ -28,19 +28,19 @@ mass-wise, that's 168 parts of sodium bicarbonate to 106 parts of sodium carbona
 
 ![indicators with sodium carbonate and bicarbonate](https://s3.amazonaws.com/mbrooker-blog-images/indicators_two_solutions.jpg)
 
-The best test would be to test the pH of the ramenizing solution I made from the salt. Unfortunately, I don't own any kind of pH measuring device. I had to turn to every kid's favorite food-grade non-toxic indicator: red cabbage water. Making red cabbage water is super easy: start with that red cabbage that's been lying in your fridge since the 90s, chop it up fine, fill a cup with it, top up with water, and microwave until warm. Depending on the age of your cabbage, the resulting smell is either fairly pleasant, or disasterous. Either way, ignore it. The smell's not important. It's all about color.
+The best test would be to test the pH of the ramenizing solution I made from the salt. Unfortunately, I don't own any kind of pH measuring device. I had to turn to every kid's favorite food-grade non-toxic indicator: red cabbage water. Making red cabbage water is super easy: start with that red cabbage that's been lying in your fridge since the 90s, chop it up fine, fill a cup with it, top up with water, and microwave until warm. Depending on the age of your cabbage, the resulting smell is either fairly pleasant, or disastrous. Either way, ignore it. The smell's not important. It's all about color.
 
-I made two solutions, both 1% sodium *x*carbonate and 0.5% salt. Then, I dropped a quarter teaspoon of each into seperate glasses of cabbage water. A control glass got a *ml* of [StarSan](http://www.fivestarchemicals.com/wp-content/uploads/Star-San-HB4.pdf), which turned the cabbage stunning pink. The bicarbonate glass stayed stubornly purple. The sodium carbonate glass went a beautiful baby blue. Success!
+I made two solutions, both 1% sodium *x*carbonate and 0.5% salt. Then, I dropped a quarter teaspoon of each into separate glasses of cabbage water. A control glass got a *ml* of [StarSan](http://www.fivestarchemicals.com/wp-content/uploads/Star-San-HB4.pdf), which turned the cabbage stunning pink. The bicarbonate glass stayed stubbornly purple. The sodium carbonate glass went a beautiful baby blue. Success!
 
 ![two pastas](https://s3.amazonaws.com/mbrooker-blog-images/two_pastas.jpg)
 
 The next step was to soak pasta in the two solutions. After two hours, the dried pasta had become pliant and stretchy while remaining firm in both solutions. One of the things people look for in alkali noodles is a yellow color. The carbonate pasta was much yellower, having taken on the deep yellow hue of egg pasta. The bicarbonate pasta remained wan.
 
-Soapyness is probably not desirable in a pasta dish, so I washed both down a few times before boiling for three minutes in plenty of salted water. Both samples were firm, with a bit of chewiness but none of the stick-to-your-teethiness of undercooked pasta. Of the two I prefered the carbonate pasta, a little springier and stretchier, with no signs of being soft. My test subject prefered the bicarbonate pasta, citing less chew. On looks, the yellowness of the carbonate sample won out over the pallid bicarbonate one.
+Soapiness is probably not desirable in a pasta dish, so I washed both down a few times before boiling for three minutes in plenty of salted water. Both samples were firm, with a bit of chewiness but none of the stick-to-your-teethiness of under cooked pasta. Of the two I preferred the carbonate pasta, a little springier and stretchier, with no signs of being soft. My test subject preferred the bicarbonate pasta, citing less chew. On looks, the yellowness of the carbonate sample won out over the pallid bicarbonate one.
 
 ![](https://s3.amazonaws.com/mbrooker-blog-images/final_bowl.jpg)
 
-The final bowl, when combined with a meat source and some fresh basil (thanks Aerogarden, for my unending basil glut), was excellent. The texture of the ramenized pasta is different from both fresh and dried pastas. It's springier and chewier, which I enjoyed. The end product would probably be more at home with a broth than a chunky meat sauce, but it was still good.
+The final bowl, when combined with a meat sauce and some fresh basil (thanks Aerogarden, for my unending basil glut), was excellent. The texture of the ramenized pasta is different from both fresh and dried pastas. It's springier and chewier, which I enjoyed. The end product would probably be more at home with a broth than a chunky meat sauce, but it was still good.
 
 An experiment I'll repeat.
 
