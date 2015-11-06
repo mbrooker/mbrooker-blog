@@ -1,3 +1,13 @@
+---
+layout: post
+title: "Heuristic Traps for Systems Operators"
+---
+
+{{ page.title }}
+================
+
+<p class="meta">What can we learn from avalanche safety?</p>
+
 Powder magazine's new feature [The Human Factor 2.0](http://features.powder.com/human-factor-2.0/chapter-1) is a fantastic read. It's a good disaster story, like the New York Times' [Snow Fall: The Avalanche At Tunnel Creek](http://www.nytimes.com/projects/2012/snow-fall/#/?part=tunnel-creek), but looks deeply at a very interesting topic: the way that we make risk decisions. I think there are interesting lessons there for operators and designers of computer systems.
 
 > “That’s the brutal thing,” Donovan said. “It’s hard to get experience without exposing yourself to risk.”
