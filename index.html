@@ -6,7 +6,10 @@ title: Marc Brooker's Blog
 <div id="home">
   <h1>Blog Posts</h1>
   <ul class="posts">
+    {% assign lastyear = null %}
     {% for post in site.posts %}
+      {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
+      {% if lastyear != year %}<br /><b>{{ year }}</b><br />{% assign lastyear = year %}{% endif %}
       <li><span>{{ post.date | date_to_string }}</span> &nbsp;&nbsp; <a href="/blog{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
   </ul>
