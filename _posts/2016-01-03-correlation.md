@@ -8,7 +8,7 @@ title: "Why Must Systems Be Operated?"
 
 <p class="meta">Latent Failures and the Safety Margin of Systems</p>
 
-Mirrored RAID<sup>[1](#foot1)</sup> is a classic way of increasing storage durability. It's also a classic example of a system that's robust against independent failures, but fragile against dependent failure. [Patterson et al's 1988](http://www.eecs.berkeley.edu/Pubs/TechRpts/1987/CSD-87-391.pdf) paper, which popularised mirroring, even covered the problem:
+Mirrored RAID<sup>[1](#foot1)</sup> is a classic way of increasing storage durability. It's also a classic example of a system that's robust against independent failures, but fragile against dependent failure. [Patterson et al's 1988](http://www.eecs.berkeley.edu/Pubs/TechRpts/1987/CSD-87-391.pdf) paper, which popularized mirroring, even covered the problem:
 
 > As mentioned above we make the same assumptions that disk manufacturers make -- that the failures are exponential and independent. (An earthquake or power surge is a situation where an array of disks might not fail independently.)
 
@@ -32,7 +32,9 @@ In both the load-balancer and RAID cases, a *black box* monitoring of the system
 
 ![](https://s3.amazonaws.com/mbrooker-blog-images/failure_state_space.png)
 
-Presented that way, it seems obvious. However, I think there's something worth paying real attention to hear: complex systems, the kind we tend to build when we want to build failure-tolerant systems, have a property that simple systems don't. Simple systems, like a teacup, are either working or they aren't. There is no reason to invest in maintenance (beyond the occasional cleaning) until a failure happens. Complex systems are different. They need to be constantly maintained to allow them to achieve their optimum safety characteristics. This requires deep understanding of the behavior of the system, and involves complexities that are often missed in planning and management activities.
+Presented that way, it seems obvious. However, I think there's something worth paying real attention to hear: complex systems, the kind we tend to build when we want to build failure-tolerant systems, have a property that simple systems don't. Simple systems, like a teacup, are either working or they aren't. There is no reason to invest in maintenance (beyond the occasional cleaning) until a failure happens. Complex systems are different. They need to be constantly maintained to allow them to achieve their optimum safety characteristics.
+
+This requires deep understanding of the behavior of the system, and involves complexities that are often missed in planning and management activities. If planning for, and allocating resources to, maintenance activities is done without this knowledge (or, worse, only considering external failure rates) then its bound to under-allocate resources to the real problems.
 
 That doesn't mean that all maintenance must, or should, be done by humans. It's possible, and necessary at scale, to automate many of the tasks needed to keep systems far from the failure boundary. You've just got to realize that your automation is now part of the system, and the same conclusions apply.
 
