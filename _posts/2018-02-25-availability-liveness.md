@@ -8,7 +8,7 @@ title: "Availability and availability"
 
 <p class="meta">Translating math into engineering.</p>
 
-It's well know that the term Availability in the CAP theorem (as formally defined by [Gilbert and Lynch](https://dl.acm.org/citation.cfm?id=564601)) means something different from the term *availability* that's commonly used by the designers, builders and operators of distributed systems. Gilbert and Lynch define availability for the CAP theorem as:
+It's well known that the term Availability in the CAP theorem (as formally defined by [Gilbert and Lynch](https://dl.acm.org/citation.cfm?id=564601)) means something different from the term *availability* that's commonly used by the designers, builders and operators of distributed systems. Gilbert and Lynch define availability for the CAP theorem as:
 
 > every request received by a non-failing node in the system must result in a response.
 
