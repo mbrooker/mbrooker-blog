@@ -6,7 +6,7 @@ title: "Telling Stories About Little's Law"
 {{ page.title }}
 ================
 
-<p class="meta">The terms in Little's Law aren't independent.</p>
+<p class="meta">Building Up Intuition with Narrative</p>
 
 [Little's Law](https://en.wikipedia.org/wiki/Little's_law) is widely used as a tool for understanding the behavior of distributed systems. The law says that the mean concurrency in the system (𝐿) is equal to the mean rate at which requests arrive (λ) multiplied by the mean time that each request spends in the system (𝑊):
 
@@ -32,13 +32,13 @@ Arrival rate (λ) also depends on request time (𝑊), and typically in a non-li
 The combination of these effects tends to be that the dynamic behavior of distributed systems has scary cliffs. Systems have plateaus where they behave well where 𝑊, 𝐿 and λ are either close-to-independent or inversely proportional, and cliffs where direct proportionality kicks in and they spiral down to failure. Throttling, admission control, back pressure, backoff and other mechanisms can play a big role in avoiding these cliffs, but they still exist.
 
 ### Arrival Processes and Spiky Behavior
-The mean, [like all descriptive statistics](http://brooker.co.za/blog/2017/12/28/mean.html), doesn't tell the whole story about data. The mean is very convenient in the mathematics of Little's law, but tends to hide effects caused by high-percentile behavior. Little's law's use of long-term means also tends to obscure the fact that real-world statistical processes are frequently non-stationary: they include trends, cycles, spikes and seasonality which are not well-modeled as a single stationary time series. Non-stationary behavior can affect 𝑊, but is most noticeable in the arrival rate λ.
+The mean, [like all descriptive statistics](//brooker.co.za/blog/2017/12/28/mean.html), doesn't tell the whole story about data. The mean is very convenient in the mathematics of Little's law, but tends to hide effects caused by high-percentile behavior. Little's law's use of long-term means also tends to obscure the fact that real-world statistical processes are frequently non-stationary: they include trends, cycles, spikes and seasonality which are not well-modeled as a single stationary time series. Non-stationary behavior can affect 𝑊, but is most noticeable in the arrival rate λ.
 
 There are many causes for changes in λ. Seasonality is a big one: the big gift-giving holidays, big sporting events, and other large correlated events can significantly increase arrival rate during some period of time. Human clients tend to exhibit significant daily, weekly, and yearly cycles. People like to sleep. For many systems, though, the biggest cause of spikes is the combination of human biases and computer precision: *cron* jobs. When humans pick a time for a task to be done (*backup once a day*, *ping once a minute*), they don't tend to pick a uniformly random time. Instead, they cluster the work around the boundaries of months, days, hours, minutes and seconds. This leads to significant spikes of traffic, and pushes the distribution of arrival time away from the Poisson process ideal.
 
 Depending on how you define *long term mean*, these cyclic changes in λ can either show up in the distribution of λ as high percentiles, or show up in λ being non-stationary. Depending on the data and the size of the spikes it's still possible to get useful results out of Little's law, but they will be less precise and potentially more misleading.
 
-### Dynamic Thinking About Dynamic Behavior
+### Telling Stories
 Somewhat inspired by Little's law, we can build up a difference equation that captures more of real-world behavior:
 
 W<sub>n+1</sub> = 𝑊(L<sub>n</sub>, λ<sub>n</sub>, t)
@@ -49,7 +49,7 @@ I find that this is a powerful mental model, even if it's lacking some precision
 
 Telling stories about our systems, for all its potential imprecision, is a powerful way to build and communicate intuition.
 
-*The system was ticking along nicely, then just after midnight a spike of requests from arrived from a flash sale. This caused latency to increase because of increases lock contention on the database, which in turn caused 10% of client calls to time-out and be retried. A bug in backoff in our client meant that this increased call rate to 10x the normal for this time of day, further increasing contention.* And so on...
+*The system was ticking along nicely, then just after midnight a spike of requests from arrived from a flash sale. This caused latency to increase because of increased lock contention on the database, which in turn caused 10% of client calls to time-out and be retried. A bug in backoff in our client meant that this increased call rate to 10x the normal for this time of day, further increasing contention.* And so on...
 
 Each step in the story evolves by understanding the relationship between latency, concurrency and arrival rate. The start of the story is almost always some triggering event that increases latency or arrival rate, and the end is some action or change that breaks the cycle. Each step in the story offers an opportunity to identify something to make the system more robust. Can we reduce the increase in 𝑊 when λ increases? Can we reduce the increase in λ when 𝑊 exceeds a certain bound? Can we break the cycle without manual action?
 
