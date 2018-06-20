@@ -42,7 +42,9 @@ Depending on how you define *long term mean*, these cyclic changes in λ can eit
 Somewhat inspired by Little's law, we can build up a difference equation that captures more of real-world behavior:
 
 W<sub>n+1</sub> = 𝑊(L<sub>n</sub>, λ<sub>n</sub>, t)
+
 λ<sub>n+1</sub> = λ(L<sub>n</sub>, W<sub>n</sub>, t)
+
 L<sub>n+1</sub> = λ<sub>n+1</sub> 𝑊<sub>n+1</sub>
 
 I find that this is a powerful mental model, even if it's lacking some precision and is hard to use for clean closed-form results. Breaking the behavior of the system down into time steps provides a way to tell a story about the way the system behaves in the next time step, and how the long-term behavior of the system emerges. It's also useful for building simple simulations of the dynamics of systems.
