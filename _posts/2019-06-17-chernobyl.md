@@ -44,10 +44,10 @@ From my perspective, the show is spot-on in it's treatment of the "cost of lies"
 
 ## Footnotes
 
- 1. <a name="foot1"></a> https://www.bbc.com/news/world-europe-48580177
- 1. <a name="foot2"></a> Svetlana Alexievich, "Voices from Chernobyl"
- 1. <a name="foot3"></a> Serhii Plokhy, "Chernobyl: The History of a Nuclear Catastrophe"
- 1. <a name="foot4"></a> "INSAG-7 The Chernobyl Accident: Updating of INSAG-1", IAEA, 1992 https://www-pub.iaea.org/MTCD/publications/PDF/Pub913e_web.pdf
- 1. <a name="foot5"></a> Anatoly Dyatlov, "Why INSAG has still got it wrong", NEI, 1995 https://www.neimagazine.com/features/featurewhy-insag-has-still-got-it-wrong
+ 1. <a name="foot1"></a> BBC, [Chernobyl survivors assess fact and fiction in TV series](https://www.bbc.com/news/world-europe-48580177), 2019
+ 1. <a name="foot2"></a> Svetlana Alexievich, "Voices from Chernobyl".
+ 1. <a name="foot3"></a> Serhii Plokhy, "Chernobyl: The History of a Nuclear Catastrophe". This is my favorite book about the disaster (I've probably read over 20 books on it), covering a good breadth of history and people without being too dramatic. There are a couple of minor errors in the book (like confusing GW and GWh in multiple places), but those can be overlooked.
+ 1. <a name="foot4"></a> [INSAG-7 The Chernobyl Accident: Updating of INSAG-1](https://www-pub.iaea.org/MTCD/publications/PDF/Pub913e_web.pdf), IAEA, 1992 
+ 1. <a name="foot5"></a> Anatoly Dyatlov, [Why INSAG has still got it wrong](https://www.neimagazine.com/features/featurewhy-insag-has-still-got-it-wrong), NEI, 1995 
  1. <a name="foot6"></a> Adam Higginbotham, "Midnight in Chernobyl: The Untold Story of the World's Greatest Nuclear Disaster"
- 1. <a name="foot7"></a> Richard Cook, "How Complex Systems Fail", https://web.mit.edu/2.75/resources/random/How%20Complex%20Systems%20Fail.pdf
+ 1. <a name="foot7"></a> Richard Cook, [How Complex Systems Fail](https://web.mit.edu/2.75/resources/random/How%20Complex%20Systems%20Fail.pdf)
