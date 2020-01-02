@@ -46,7 +46,7 @@ When you count all the factors that go into their cost, most computers aren't th
 
 **No magic**
 
-Unfortunately, none of this stuff comes for free. Actually building (and, critically, operating) distributed systems that do better than monolithic systems on all these properties is difficult. The reality is seldom not nearly as attractive as the theory would predict.
+Unfortunately, none of this stuff comes for free. Actually building (and, critically, operating) distributed systems that do better than monolithic systems on all these properties is difficult. The reality is seldom as attractive as the theory would predict.
 
 As an industry, we've made a fantastic amount of progress in making great distributed systems available over the last decade. But, as Carmack's tweet shows, we've still got a lot to do. Despite all the theoretical advantages it's still reasonable for technically savvy people to see monolithic systems as simpler and better. This is a big part of why I'm excited about serverless: it's the start of a big opportunity to make all the magic of distributed systems even more widely and simply available.
 
