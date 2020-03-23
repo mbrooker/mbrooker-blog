@@ -19,9 +19,8 @@ html, body {
 
 body {
     background-color: white;
-    font: 12px helvetica, arial, clean, sans-serif;
-    *font-size: small;
-    text-align: center;
+    font: 1em helvetica, arial, clean, sans-serif;
+    text-align: left;
 }
 
 blockquote {
@@ -114,10 +113,9 @@ ul.pubs span {
 
 .site {
     font-size: 100%;
-    text-align: justify;
     width: 70em;
     margin: 3em auto 2em auto;
-    line-height: 1.6em;
+    line-height: 1.4em;
 }
 
 .title {
