@@ -19,8 +19,9 @@ html, body {
 
 body {
     background-color: white;
-    font: 1em helvetica, arial, clean, sans-serif;
+    font: 1.1em georgia, times new roman, serif;
     text-align: left;
+    hyphens: auto;
 }
 
 blockquote {
@@ -113,9 +114,9 @@ ul.pubs span {
 
 .site {
     font-size: 100%;
-    width: 70em;
+    width: 80em;
     margin: 3em auto 2em auto;
-    line-height: 1.4em;
+    line-height: 1.6em;
 }
 
 .title {
@@ -187,7 +188,7 @@ ul.pubs span {
 }
 
 .site .about h1 {
-    font-size: 120%;
+    font-size: 110%;
     margin-bottom: 0.5em;
     margin-top: 0.5em;
 }
@@ -199,7 +200,7 @@ ul.pubs span {
 /*****************************************************************************/
 
 #post {
-    width: 45em;
+    width: 50em;
     float: left;
 }
 
