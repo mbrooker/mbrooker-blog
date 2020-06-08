@@ -22,6 +22,7 @@ body {
     font: 1.1em georgia, times new roman, serif;
     text-align: left;
     hyphens: auto;
+    margin-left: 1em;
 }
 
 blockquote {

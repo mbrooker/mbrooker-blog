@@ -6,7 +6,8 @@ layout: default
 </div>
 
 <div id="related">
-  <h2>Related Posts</h2>
+  <h2>Other Posts</h2>
+  &laquo; <a href="/blog">Back to the blog index</a><br>
   <ul class="posts">
     {% for post in site.related_posts limit:3 %}
       <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="/blog{{ post.url }}">{{ post.title }}</a></li>
