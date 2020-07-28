@@ -256,3 +256,21 @@ ul.pubs span {
  #related h2 {
      margin-bottom: 1em;
  }
+
+ /* Fix formatting on narrow-screen mobile devices, as suggested by @msjgriffiths on Twitter: https://twitter.com/msjgriffiths/status/1288162056902979585 */
+
+ @media only screen and (max-width: 900px) {
+    .site { 
+        display: flex; 
+        flex-flow: column; 
+        width:100%;
+     }
+     #post {
+         order:1;
+         width:100%;
+         margin-top: -3em;
+     }
+     .about {order: 2; }
+     #related {order: 3;}
+     .footer {order: 4;}
+ }
