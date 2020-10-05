@@ -12,7 +12,7 @@ In his classic paper [How to Build a Highly Available System Using Consensus](ht
 
 The core algorithm behind this paper, Paxos, is famous for its complexity and subtlety. Lampson, like many who came after him<sup>[1](#foot1)</sup>, try to build a framework of specific implementation details around it to make it more approachable. It's effective, but incomplete. The challenge is that Paxos's subtlety is only one of the hard parts of building a consensus system. There are three categories of challenges that I see people completely overlook.
 
-## Determinism
+**Determinism**
 
 > "How  can  we  arrange  for  each  replica  to  do  the  same  thing?  Adopting  a  scheme  first proposed  by  Lamport,  we  build  each  replica  as  a  deterministic  state  machine;  this means that the transition relation is a function from (state, input) to (new state, output). It is customary to call one of these replicas a ‘process’. Several processes that start in the same state and see the same sequence of inputs will do the same thing, that is, end up in the same state and produce the same outputs" - Butler Lampson (from [How to Build a Highly Available System Using Consensus](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.61.8330&rep=rep1&type=pdf)).
 
@@ -28,7 +28,7 @@ And more. There's always more.
 
 Some people will tell you that you can solve these problems by using *byzantine* consensus protocols. Those people are right, of course. They're also the kind of people who solved their rodent problem by keeping a leopard in their house. Other people will tell you that you can solve these problems with blockchain. Those people are best ignored.
 
-### Monitoring and Control
+**Monitoring and Control**
 
 > Although using a single, centralized, server is the simplest way to implement a service, the resulting service can only be as fault tolerant as the processor executing that server. If this level of fault tolerance is unacceptable, then multiple servers that fail independently must be used. - Fred Schneider (from [Implementing Fault-Tolerant Services Using the State Machine Approach: A Tutorial](https://www.cs.cornell.edu/fbs/publications/SMSurvey.pdf))
 
@@ -38,17 +38,23 @@ The whole point of building a highly-available distributed system is to exceed t
 
 Depending on what you mean by *failed*, distributed systems of *f+1*, *2f+1* or *3f+1* nodes can entirely hide the failure of *f* nodes from their clients. This, combined with a process of repairing failed nodes, allows us to build highly-available systems even in the face of significant failure rates. It also leads directly to one of the traps of building a distributed system: clients can't tell the difference between the case where an outage is *f* failures away, and where it's just one failure away. If a system can tolerate *f* failures, then *f-1* failures may look completely healthy.
 
-Consensus systems cannot be monitored entirely *from the outside*. Instead, monitoring needs to be deeply aware of the implementation details of the system, so it can know when nodes are healthy, and can be replaced. If they choose the wrong nodes to replace, disaster will strike.
+Consensus systems cannot be monitored entirely *from the outside* (see [why must systems be operated?](//brooker.co.za/blog/2016/01/03/correlation.html)). Instead, monitoring needs to be deeply aware of the implementation details of the system, so it can know when nodes are healthy, and can be replaced. If they choose the wrong nodes to replace, disaster will strike.
 
-> Control planes provide much of the power of the cloud, but their privileged position also means that they have to act safely, responsibly, and carefully to avoid introducing additional failures. - Brooker, Chen, and Ping (from [Millions of Tiny Databases]([Physalia](https://www.usenix.org/system/files/nsdi20-paper-brooker.pdf))
+> Control planes provide much of the power of the cloud, but their privileged position also means that they have to act safely, responsibly, and carefully to avoid introducing additional failures. - Brooker, Chen, and Ping (from [Millions of Tiny Databases](https://www.usenix.org/system/files/nsdi20-paper-brooker.pdf))
 
-### Do You Really Need Strong Consistency?
+**Do You Really Need Strong Consistency?**
 
 > It is possible to provide high availability and partition tolerance, if atomic consistency is not required. - Gilbert and Lynch
 
 The typical state-machine implementation of consensus provides a strong consistency property called *linearizability*. In exchange, it can't be available for all clients during a network partition. That's probably why you chose it.
 
 Is that why you chose it? Do you need *linearizability*? Or would something else, like *causality* be enough? Using consensus when its properties aren't really needed is a mistake a lot of folks seem to make. Service discovery, configuration distribution, and similar problems can all be handled adequately without strong consistency, and using strongly consistent tools to solve them makes systems less reliable rather than more. Strong consistency is not better consistency.
+
+**Conclusion**
+
+Despite these challenges, consensus is an important building block in building highly-available systems. Distribution [makes building HA systems easier](http://brooker.co.za/blog/2020/01/02/why-distributed.html). It's a tool, not a solution.
+
+Think of using consensus in your system like getting a puppy: it may bring you a lot of joy, but with that joy comes challenges, and ongoing responsibilities. There's a lot more to dog ownership than just getting a dog. There's a lot more to high availability than picking up a Raft library off github.
 
 **Footnotes**
 
