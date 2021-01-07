@@ -28,7 +28,7 @@ What about real practical cluster sizes like *n=3*, 5, and 7? There are three wa
 
 Whichever way you calculate it, what do you expect it to look like? For small *n* you may expect it to be closer in shape to *n=1*, and for large *n* you may expect it to approach the shape of *n=N*. If that's what you expect, you'd be right.
 
-![](https://mbrooker-blog-images.s3.amazonaws.com/quorum_avail_a.png)
+![](https://mbrooker-blog-images.s3.amazonaws.com/quorum_avail_b.png)
 
 I'll admit that I find this result deeply deeply counter-intuitive. I think it's right, because I've approached it multiple ways, but it still kind of bends my mind a little. That may just be me. I've discussed it with friends and colleagues over the years, and they seem to think it matches their intuition. It's counter-intuitive to me because it suggests that smaller *n* (smaller clusters, or smaller cells in Physalia's parlance) is better for high *p*! If you think a lot of your boxes are going to fail, you may get better availability (not durability, though) from smaller clusters.
 
