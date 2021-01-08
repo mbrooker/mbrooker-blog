@@ -46,6 +46,12 @@ In many other kinds of systems, like ones you deploy across multiple datacenters
 
 Availability also isn't the only thing to think about with cluster size for quorum systems. Durability, latency, cost, operations, and contention on leader election also come into play. Those are topics for another post (or section 2.2 of [Millions of Tiny Databases](https://www.usenix.org/conference/nsdi20/presentation/brooker)).
 
+**Updates**
+
+JP Longmore sent me this intuitive explanation, which makes a lot of sense:
+
+> Probability of achieving a quorum will increase when removing 2 nodes from a cluster, each with failure rate p>.5, since on average you're removing 2 bad nodes instead of 2 good nodes. Other cases with 1 good node & 1 bad node don't change the outcome (quorum/not). Repeat reasoning till N=1 or all remaining nodes have p<=.5 (if failure rate isn’t uniform).
+
 **Footnotes**
 
  1. <a name="foot1"></a> Physalia uses a very naive Paxos implementation, intentionally optimized for testability and simplicity. The quorum intersection requirements of Paxos (or Paxos-like protocols) are more subtle than this, and work like Heidi Howard et al's [Flexible Paxos](https://fpaxos.github.io/) has been pushing the envelope here recently. [Flexible Paxos:  Quorum intersection revisited](https://arxiv.org/pdf/1608.06696v1.pdf) is a good place to start.
