@@ -14,9 +14,9 @@ Adverts for old computer hardware, especially hard drives, are a fun staple of c
 
 Apparently from the early '80s, these drives offered seek times of 70ms, access speeds of about 900kB/s, and capacities up to 10MB. Laughable, right? But these same ads hide a really important trend that's informed system design more than any other. To understand what's going on, let's compare this creaky old 10MB drive to a modern competitor. Most consumers don't buy magnetic drives anymore, so we'll throw in an SSD for good measure.
 
-| | XCOMP 10MB | Modern HDD | Change | Modern SSD | Change |
+| | XCOMP 10MB&nbsp;&nbsp;&nbsp; | Modern HDD&nbsp;&nbsp; | Change | Modern SSD | Change |
 | ----------- | ----------- |
-| Capacity | 10MB | 18TiB | 1.8 million times | 2 TiB | 200,000 times |
+| Capacity | 10MB | 18TiB | 1.8 million times&nbsp;&nbsp; | 2 TiB | 200,000 times |
 | Latency  | 70ms | 5ms | 14x | 50μs | 1400x |
 | Throughput | 900kB/s | 220MB/s | 250x | 3000MB/s | 3300x |
 | IOPS/GiB (QD1) | 1400 | 0.00001 | 8x10<sup>-9</sup> | 0.01 | 7x10<sup>-6</sup> |
@@ -42,5 +42,6 @@ The other important thing is parallelism. I pulled a bit of a slight-of-hand up 
 There are two conclusions here for the working systems designer. First, pay attention to hardware trends. Stay curious, and update your internal constants from time to time. Exponential growth may mean that your mental model of hardware performance is completely wrong, even if it's only a couple years of of date. Second, system designs rot. The real-world tradeoffs change, for this reasons as well as many others. The data structures and storage strategies in your favorite textbook likely haven't stood the test of time. The POSIX IO API definitely hasn't.
 
 **Footnotes**
+
  1. <a name="foot1"></a> See, for example, [this Reddit thread](https://www.reddit.com/r/interestingasfuck/comments/ay225x/this_xcomp_hard_disk_advertisement_from_1981_how/), [unraid forums](https://forums.unraid.net/topic/7377-10-mb-xcomp-hard-drive-339800/), [this site](http://mag.metamythic.com/old-hard-disk-drive-adverts/) and so on. They're everywhere.
  2. <a name="foot2"></a> I extracted these numbers from my head, but I think they're more-or-less representative of modern mainstream NVMe and enterprise magnetic drives.
