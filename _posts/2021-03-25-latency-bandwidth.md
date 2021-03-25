@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Latency, Bandwidth, and Storage Capacity"
+title: "What You Can Learn From Old Hard Drive Adverts"
 ---
 
 {{ page.title }}
