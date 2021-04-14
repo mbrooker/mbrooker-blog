@@ -36,6 +36,6 @@ This problem doesn't only apply to event log architectures. Replicated state mac
 
 > Threat modeling answers questions like “Where am I most vulnerable to attack?”, “What are the most relevant threats?”, and “What do I need to do to safeguard against these threats?”.
 
-A few years ago, I experimented with building a [threat modeling framework for distributed system designs], called CALISTO, but I never found something I loved. I do love the way of thinking, though. "What failures am I vulnerable to?", "Which are the most relevant failures?", "What do I need to do to safeguard against those failures?"
+A few years ago, I experimented with building a [threat modeling framework for distributed system designs](https://brooker.co.za/blog/2015/06/20/calisto.html), called CALISTO, but I never found something I loved. I do love the way of thinking, though. "What failures am I vulnerable to?", "Which are the most relevant failures?", "What do I need to do to safeguard against those failures?"
 
 If your answer to "What failures am I vulnerable to?" doesn't include software bugs, you're more optimistic than me.
