@@ -6,7 +6,7 @@ title: "Latency Sneaks Up On You"
 {{ page.title }}
 ================
 
-<p class="meta">It's harder than it looks.</p>
+<p class="meta">And is a bad way to measure efficiency.</p>
 
 As systems get big, people very reasonably start investing more in increasing efficiency and decreasing costs. That's a good thing, for the business, for the environment, and often for the customer. Much of the time efficient systems have lower and more predictable latencies, and everybody enjoys lower and more predictable latencies.
 
@@ -46,8 +46,11 @@ Next, the system grows for a while (increasing λ), or we reduce the number of s
 
 The system we consider above is a gross simplification, both in complexity, and in kinds of systems. Streaming systems will behave differently. Systems with backpressure will behave differently. Systems whose clients *busy loop* will behave differently. These kinds of dynamics are common, though, and worth looking out for.
 
+The bottom line is that high-percentile latency is a bad way to measure efficiency, but a good (leading) indicator of pending overload. If you must use latency to measure efficiency, use [mean (avg) latency](https://brooker.co.za/blog/2017/12/28/mean.html). Yes, average latency<sup>[4](#foot4)</sup>. 
+
 **Footnotes**
 
  1. <a name="foot1"></a> I'm intentionally glossing over the details here. The system I'm considering is M/M/1, with a single server, unbounded queue, Poisson arrival process, and exponentially distributed service time. And yes, real systems aren't like this. I know.
  2. <a name="foot2"></a> In this case according to a Poisson process, which isn't entirely realistic, but isn't so far off the reality either. I'm fudging something else here: single clients don't tend to be Poisson processes, but the sum of very large numbers of independent clients do. If you care about that, sub 'clients' every time I say 'client'.
  3. <a name="foot3"></a> When I say *queue* that may be an explicit actual queue, or could just be a bunch of threads waiting on a lock, or an async task waiting for an IO to complete, or whatever. Implicit queues are everywhere.
+ 4. <a name="foot4"></a> Yes, those people on the internet that tell you never to measure average latency are wrong. And don't get me started on the trimmers and winsorizers.
