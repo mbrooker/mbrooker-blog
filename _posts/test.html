@@ -50,13 +50,12 @@
 
   function updateView(view) {
     let new_data = simulate(view.signal('runs'), view.signal('serial'), view.signal('parallel'), view.signal('quorum'));
-    view.data('points').length = 0;
-    view.change('points', vega.changeset().insert(arrayToData(new_data))).runAsync()
+    view.change('points', vega.changeset().remove(vega.truthy).insert(arrayToData(new_data))).runAsync();
   }
 
 
 
-  var spec = "http://localhost:8000/simulation_vega_spec.json";
+  var spec = "http://localhost:8000/simulation_vega_lite_spec.json";
   vegaEmbed('#vis', spec).then(function(result) {
     result.view.addSignalListener('serial', function(name, value) {
       updateView(result.view);

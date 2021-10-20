@@ -1,0 +1,54 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Area chart using density estimation to show a probability density or cumulative distribution.",
+
+  "padding": 50,
+
+  "params": [
+    { "name": "serial", "value": 1,
+      "bind": {"input": "range", "min": 1, "max": 10, "step": 1} },
+      { "name": "parallel", "value": 1,
+        "bind": {"input": "range", "min": 1, "max": 10, "step": 1} },
+        { "name": "quorum", "value": 1,
+          "bind": {"input": "range", "min": 1, "max": 10, "step": 1} },
+          { "name": "runs", "value": 100,
+            "bind": {"input": "range", "min": 10, "max": 1000, "step": 10} }
+          ],
+
+  "data": {
+    "name": "points"
+  },
+
+  "transform": [{
+    "sort": [{"field": "u"}],
+    "window": [{"op": "count", "field": "count", "as": "Cumulative Count"}],
+    "frame": [null, 0]
+  }],
+  "vconcat": [{
+    "width": 500,
+    "height": 200,
+    "mark": "area",
+    "encoding": {
+      "x": {
+        "field": "u",
+        "type": "quantitative"
+      },
+      "y": {
+        "field": "Cumulative Count",
+        "type": "quantitative"
+      }
+    }
+  },
+  {
+    "width": 500,
+    "height": 200,
+    "mark": "bar",
+    "encoding": {
+      "x": {
+        "bin": true,
+        "field": "u"
+      },
+      "y": {"aggregate": "count"}
+    }
+  }]
+}
