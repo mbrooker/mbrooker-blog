@@ -73,7 +73,7 @@ The knobs are:
 
 
 
-  var spec = "simulation_vega_lite_spec.json";
+  var spec = "https://brooker.co.za/blog/resources/simulation_vega_lite_spec.json";
   vegaEmbed('#vis', spec).then(function(result) {
     updateView(result.view);
     result.view.addSignalListener('serial', function(name, value) {
