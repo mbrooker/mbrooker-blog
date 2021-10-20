@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+  <!-- Import vega-embed -->
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+
+<div id="vis"></div>
+
+<script type="text/javascript">
+
+  function samples(n) {
+    let data = [];
+    for (let i = 0; i < n; i++) {
+      data.push(Math.random());
+    }
+    return data;
+  }
+
+  function makeSerial(n, serial) {
+    let totals = [];
+    for (let i = 0; i < n; i++) {
+      let sample = samples(serial).reduce((a, b) => a + b, 0);
+      totals.push(sample);
+    }
+    return totals;
+  }
+
+  function simulate(n, serial, parallel, quorum) {
+    let results = [];
+    for (let i = 0; i < n; i++) {
+      // Each sample starts with `parallel` serial chains, each of length `serial`
+      let serial_samples = makeSerial(parallel, serial);
+      // Then we sort them, and take the highest `quorum`
+      let sorted_samples = serial_samples.sort().slice(0, quorum);
+      // And the result is the longest remaining sample
+      results.push(sorted_samples[sorted_samples.length - 1]);
+    }
+    return results;
+  }
+
+  function arrayToData(arr) {
+    return arr.map(function(v) { return {"u": v }; });
+  }
+
+
+  function updateView(view) {
+    let new_data = simulate(view.signal('runs'), view.signal('serial'), view.signal('parallel'), view.signal('quorum'));
+    view.data('points').length = 0;
+    view.change('points', vega.changeset().insert(arrayToData(new_data))).runAsync()
+  }
+
+
+
+  var spec = "http://localhost:8000/simulation_vega_spec.json";
+  vegaEmbed('#vis', spec).then(function(result) {
+    result.view.addSignalListener('serial', function(name, value) {
+      updateView(result.view);
+    });
+    result.view.addSignalListener('parallel', function(name, value) {
+      updateView(result.view);
+    });
+    result.view.addSignalListener('quorum', function(name, value) {
+      updateView(result.view);
+    });
+    result.view.addSignalListener('runs', function(name, value) {
+      updateView(result.view);
+    });
+  }).catch(console.error);
+</script>
+</body>
+</html>
