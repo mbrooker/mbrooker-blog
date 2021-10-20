@@ -1,18 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
-  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
-  <!-- Import vega-embed -->
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-</head>
-<body>
+---
+layout: post
+title: "Serial, Parallel, and Quroum Latencies"
+---
 
-<div id="vis"></div>
+{{ page.title }}
+================
+
+<p class="meta">Why are they letting me write Javascript?</p>
+
+I've written [before](https://brooker.co.za/blog/2021/04/19/latency.html) about the latency effects of series (do X, then Y), parallel (do X and Y, wait for them both), and quorum (do X, Y and Z, return when two of them are done) systems. The effects of these different approaches to doing multiple things are quite intuitive. What may not be intuitive, though, is the impact of quorums, and how much quorums can reduce tail latency.
+
+So I put together this little toy simulator.
+
+The knobs are:
+
+ - **serial** The number of things to do in a *chain*.
+ - **parallel** The number of parallel *chains*.
+ - **quorum** The number of chains we wait to complete before being done.
+ - **runs** How many times to sample.
+
+ So, for example, a traditional 3-of-5 Paxos system would have serial=1, parallel=5, and quorum=3. A length-3 chain replication system would have serial=3, parallel=1, quroum=1. The per-node service time distribution is (for now) assumed to be exponentially distributed with mean 1.
+
+ <div id="vis"></div>
+
+  <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+<!-- Import vega-embed -->
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
 <script type="text/javascript">
-
   // Generate `n` samples, exponentially distributed with `lambda = 1.0` (i.e. a mean of 1)
   function samples(n) {
     let data = [];
@@ -73,5 +90,4 @@
     });
   }).catch(console.error);
 </script>
-</body>
-</html>
+

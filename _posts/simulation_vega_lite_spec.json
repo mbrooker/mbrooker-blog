@@ -1,5 +1,5 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
   "description": "Area chart using density estimation to show a probability density or cumulative distribution.",
 
   "padding": 50,
@@ -7,12 +7,12 @@
   "params": [
     { "name": "serial", "value": 1,
       "bind": {"input": "range", "min": 1, "max": 10, "step": 1} },
-      { "name": "parallel", "value": 1,
+      { "name": "parallel", "value": 5,
         "bind": {"input": "range", "min": 1, "max": 10, "step": 1} },
-        { "name": "quorum", "value": 1,
+        { "name": "quorum", "value": 3,
           "bind": {"input": "range", "min": 1, "max": 10, "step": 1} },
-          { "name": "runs", "value": 100,
-            "bind": {"input": "range", "min": 10, "max": 1000, "step": 10} }
+          { "name": "runs", "value": 5000,
+            "bind": {"input": "range", "min": 1000, "max": 50000, "step": 1000} }
           ],
 
   "data": {
@@ -23,15 +23,22 @@
     "sort": [{"field": "u"}],
     "window": [{"op": "count", "field": "count", "as": "Cumulative Count"}],
     "frame": [null, 0]
+  },
+  {
+    "sort": [{"field": "u"}],
+    "window": [{"op": "ntile", "as": "NTile", "param": 100.0 }],
+    "frame": [null, 0]
   }],
   "vconcat": [{
+    "title": "Cumulative Output Latency Density",
     "width": 500,
-    "height": 200,
+    "height": 300,
     "mark": "area",
     "encoding": {
       "x": {
         "field": "u",
-        "type": "quantitative"
+        "type": "quantitative",
+        "title": "Latency"
       },
       "y": {
         "field": "Cumulative Count",
@@ -40,15 +47,26 @@
     }
   },
   {
+    "title": "Output Latency Percentiles",
     "width": 500,
-    "height": 200,
-    "mark": "bar",
+    "height": 300,
+    "mark": {
+      "type": "point",
+      "clip": true
+    },
     "encoding": {
       "x": {
-        "bin": true,
-        "field": "u"
+        "field": "NTile",
+        "type": "quantitative",
+        "title": "Percentile",
+        "scale": {
+          "domain": [90, 100]
+        }
       },
-      "y": {"aggregate": "count"}
+      "y": {"field": "u",
+        "type": "quantitative",
+        "title": "Latency"
+      }
     }
   }]
 }
