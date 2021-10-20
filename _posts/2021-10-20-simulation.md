@@ -91,3 +91,11 @@ The knobs are:
   }).catch(console.error);
 </script>
 
+**Examples to Try**
+
+ - Compare a 3-length chain to a 3-of-5 Paxos system. First, set serial=3, parallel=1, and quorum=1 and see how the 99th percetile latency is somewhere around 8s. Now, try serial=1, parallel=5, quroum=3. Notice how the 99th percentile is now just over 2ms. There's obviously a lot more to chain-vs-quorum in the real world than what is captured here.
+ - Compare a 3-of-5 quorum to 4-of-7. The effect isn't as big here, but the bigger quorum leads to a nice reduction in high-percentile latency.
+ - Check out the non-linear effect of longer serial chains. The 99th percentile doesn't increase by 10x between serial=1 and serial=10. Why?
+ 
+ Have fun!
+
