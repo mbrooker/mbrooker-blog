@@ -19,14 +19,12 @@ The knobs are:
  - **quorum** The number of chains we wait to complete before being done.
  - **runs** How many times to sample.
 
- So, for example, a traditional 3-of-5 Paxos system would have serial=1, parallel=5, and quorum=3. A length-3 chain replication system would have serial=3, parallel=1, quroum=1. The per-node service time distribution is (for now) assumed to be exponentially distributed with mean 1.
+ So, for example, a traditional 3-of-5 Paxos system would have serial=1, parallel=5, and quorum=3. A length-3 chain replication system would have serial=3, parallel=1, quorum=1. The per-node service time distribution is (for now) assumed to be exponentially distributed with mean 1.
 
  <div id="vis"></div>
 
-  <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
 <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
-<!-- Import vega-embed -->
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
 <script type="text/javascript">
@@ -65,13 +63,10 @@ The knobs are:
     return arr.map(function(v) { return {"u": v }; });
   }
 
-
   function updateView(view) {
     let new_data = simulate(view.signal('runs'), view.signal('serial'), view.signal('parallel'), view.signal('quorum'));
     view.change('points', vega.changeset().remove(vega.truthy).insert(arrayToData(new_data))).runAsync();
   }
-
-
 
   var spec = "https://brooker.co.za/blog/resources/simulation_vega_lite_spec.json";
   vegaEmbed('#vis', spec).then(function(result) {
