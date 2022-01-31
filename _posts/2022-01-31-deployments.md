@@ -12,7 +12,7 @@ title: "Software Deployment, Speed, and Safety"
 
 You'll find a lot of opinions about deployments on the internet. Some folks will say that teams have to be able to deploy from commit to global production in minutes. Others will point out that their industry has multi-year product cycles. It's a topic that people feel strongly about, and for good reason. As usual with these kinds of topics, most of the disagreement doesn't come from actual disagreement, but from people with wildly different goals and tradeoffs in mind. Without being explicit about what we're trying to achieve, our risk tolerance, and our desired reward, it's impossible to have a productive conversation on this topic. This post is an attempt to disentangle that argument a little bit, and explain my perspective.
 
-That perspective is clearly focused on the world I work in - offering cloud-based services to large groups of customers. Some of that applies to software more generally, and some applies only to that particular context.
+That perspective is clearly focused on the world I work in - offering cloud-based services to large groups of customers. Some of that applies to software more generally, and some applies only to that particular context. I have also used the word *deployment* here to stand in for all production changes, including both software and configuration changes, and the actions of operators in general.
 
 **Tradeoffs exist**
 
@@ -64,11 +64,12 @@ What makes components fail at the same time? Could just be bad luck. The good ne
 
 To understand what a big deal is, we need to understand the exponential effects of redundancy. Say I have one box, which is down for a month a year, then I have a system with around 92% availability. If I have two boxes (either of which can handle the load), and they fail independently, then I have a system with 99.3% availability! On the other hand, if they tend to fail together, then I'm back to 92%. Three boxes independent gets me 99.95%. Three boxes at the same time get me 92%. And so on. Whether failures happen independently or at the same time matters a lot for availability.
 
-Our deployment practices need to be aware of our redundancy assumptions. If we're betting that failures are uncorrelated, we need to be extremely careful about reintroducing that correlation. Similarly, and even more importantly, our architectures need to be sensitive to the need to deploy safely. This is one of the places that folks working on architecture can have the biggest long-term impact, by designing systems that can be changed safely and frequently with low impact.
+Our deployment practices need to be aware of our redundancy assumptions. If we're betting that failures are uncorrelated, we need to be extremely careful about reintroducing that correlation. Similarly, and even more importantly, our architectures need to be sensitive to the need to deploy safely. This is one of the places that folks working on architecture can have the biggest long-term impact, by designing systems that can be changed safely and frequently with low impact, and isolating critical state-altering logic from other logic which we may want to change more quickly.
 
 **You can't talk about risk without talking about correlation on behalf of customers**
 
 Just like we build highly-available systems out of redundant components, customers of cloud services do too. It's typical practice to build systems which run in multiple availability zones or datacenters. Customers with more extreme availability needs may build architectures which cross regions, or even continents. Those designs only work if the underlying services don't fail at the same time, for all the same reasons that apply to each system in isolation. Making that true requires careful attention to system design, and careful attention to not re-introducing correlated failure modes during deployments.
 
 **Conclusion**
+
 This is a tricky space, because it combines social and organizational concerns with technical concerns with customer concerns, and even things like contractual obligations. Like any similar problem space, it's hard to come up with clear answers to these questions, because the answers are so dependent on context and details of your business. My advice is to write down those tensions explicitly, and be clear about what you're trying to balance and where you think the right balance is for your business or technology.
