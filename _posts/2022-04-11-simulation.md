@@ -28,12 +28,12 @@ It's no secret that I'm a big fan of formal methods. I use [P](https://github.co
 
  It starts off by building a model of each skier, who can be in one of three states: skiing down the hill, queuing, or riding up on the lift:
 
-        +---------------------------------------------+       
-        |                                             |       
-        v                                             +       
-   +-------------+      +-------------+      +-------------+
-   |   Waiting   |----->| Riding Lift |----->|   Skiing    |
-   +-------------+      +-------------+      +-------------+
+          +-------------------------------------------+       
+          |                                           |       
+          v                                           +       
+    +-------------+      +-------------+      +-------------+
+    |   Waiting   |----->| Riding Lift |----->|   Skiing    |
+    +-------------+      +-------------+      +-------------+
 
 Then, it models the chair fairly explicitly, pulling folks from the queue and delivering them to the top of the mountain after a delay. Each skier, lift, and slope creates some events, which the simulation simply reacts to in virtual time order. The whole thing comes out to about 170 lines, with loads of comments.
 
