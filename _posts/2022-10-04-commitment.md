@@ -66,7 +66,7 @@ We haven't mentioned, so far, how we decide which data to put onto which shard. 
 
 But let's put that aside for now, and instead model how *k* changes with the number of rows in each transaction (*N*), and number of shards in the database (*s*). Borrowing from this StackExchange answer, and assuming that each transaction picks uniformly from the key space, we can calculate:
 
-$k = s - s \frac{s-1}{s} ^ N$
+$k = s \left( 1 - \left( \frac{s-1}{s} \right) ^ N \right)$
 
 You can picture that in your head, right? If, like me, you probably can't, it looks like this:
 
