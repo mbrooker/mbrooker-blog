@@ -67,7 +67,7 @@ But let's put that aside for now, and instead model how *k* changes with the num
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-$k = s \left[ 1 - \left( \frac{s-1}{s} \right)^N \right]$
+$k = s [ 1 - ( \frac{s-1}{s} )^N]$
 
 You can picture that in your head, right? If, like me, you probably can't, it looks like this:
 
