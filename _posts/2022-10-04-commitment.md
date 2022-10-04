@@ -18,19 +18,15 @@ title: "Atomic Commitment: The Unscalability Protocol"
 Let's consider a single database system, running on one box, good for 500 requests per second.
 
     ┌───────────────────┐
-    │                   │
     │     Database      │
     │(good for 500 rps) │
-    │                   │
     └───────────────────┘
 
 What if we want to access that data more often than 500 times a second? If by *access* we mean *read*, we have a lot of options. If be *access*, we mean *write* or even *perform arbitrary transactions on*, we're in a trickier situation. Tricky problems aside, we forge ahead by splitting our dataset into two shards:
 
     ┌───────────────────┐  ┌───────────────────┐
-    │                   │  │                   │
     │ Database shard 1  │  │ Database shard 2  │
     │(good for 500 rps) │  │(good for 500 rps) │
-    │                   │  │                   │
     └───────────────────┘  └───────────────────┘
 
 If we're just doing single row reads and writes, we're most of the way there. We just need to add a routing layer that can decide which shard to send each access to, and we're done<sup>[1](#foot1)</sup>:
@@ -42,15 +38,13 @@ If we're just doing single row reads and writes, we're most of the way there. We
                ┌─────────┴───────────┐          
                ▼                     ▼          
     ┌───────────────────┐  ┌───────────────────┐
-    │                   │  │                   │
     │ Database shard 1  │  │ Database shard 2  │
     │(good for 500 rps) │  │(good for 500 rps) │
-    │                   │  │                   │
     └───────────────────┘  └───────────────────┘
 
 But what if we have transactions? To make the complexity reasonable, and speed us on our journey, let's define a *transaction* as an operation that does writes to multiple rows, based on some condition, atomically. By *atomically* we mean that either all the writes happen or none of them do. By *based on some condition* we mean the transactions can express ideas like "reduce my bank balance by R10 as long as it's over R10 already".
 
-But how do we ensure atomicity across multiple machines? This is a classic computer science problem call [Atomic Commitment](https://en.wikipedia.org/wiki/Atomic_commit). The classic solution to this classic problem is [Two-phase commit](https://en.wikipedia.org/wiki/Two-phase_commit_protocol), maybe the most famous of all distributed protocols. There's a *lot* we could say about atomic commitment, or even just about two-phase commit. In this post, I'm going to focus on just one aspect: atomic commitment has weird scaling behavior.
+But how do we ensure atomicity across multiple machines? This is a classic computer science problem called [Atomic Commitment](https://en.wikipedia.org/wiki/Atomic_commit). The classic solution to this classic problem is [Two-phase commit](https://en.wikipedia.org/wiki/Two-phase_commit_protocol), maybe the most famous of all distributed protocols. There's a *lot* we could say about atomic commitment, or even just about two-phase commit. In this post, I'm going to focus on just one aspect: atomic commitment has weird scaling behavior.
 
 **How Fast is our New Database?**
 
@@ -105,7 +99,7 @@ Clearly, only one of T1 and T2 can succeed. They can also, sadly, both fail. If 
 
 ![](https://mbrooker-blog-images.s3.amazonaws.com/paper_synth_with_limit_unif_goodput.png)
 
-In this simulation, with Poisson arrivals, offered load far in excess of the system capacity, and uniform key distribution, goodput for *N = 10* drops significantly as the shard number increases, and doesn't recover until *s = 6*. This effect is surprising, and counter-intuitive. Effects like this make transaction systems somewhat uniquely hard to scale out.
+In this simulation, with Poisson arrivals, offered load far in excess of the system capacity, and uniform key distribution, goodput for *N = 10* drops significantly as the shard number increases, and doesn't recover until *s = 6*. This effect is surprising, and counter-intuitive. Effects like this make transaction systems somewhat uniquely hard to scale out. For example, splitting a single-node database in half could lead to worse performance than the original system.
 
 Fundamentally, this is because scale-out depends on [avoiding coordination](https://brooker.co.za/blog/2021/01/22/cloud-scale.html) and atomic commitment is all about coordination. Atomic commitment is the anti-scalability protocol.
 
