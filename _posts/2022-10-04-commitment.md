@@ -7,6 +7,13 @@ title: "Atomic Commitment: The Unscalability Protocol"
 ================
 
 <p class="meta">2PC is my enemy.</p>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 Let's consider a single database system, running on one box, good for 500 requests per second.
 
@@ -58,14 +65,6 @@ For the next step in our analysis, we want to measure the mean number of shards 
 We haven't mentioned, so far, how we decide which data to put onto which shard. This is a whole complex topic and active research area of its own. The problem is a tough one: we want to spread the data out so about the same number of transactions go to each shard (avoiding *hot shards*), and we want to minimize the number of shards any given transaction touches (minimize *k*). We have to do this in the face of, potentially, very non-uniform access patterns.
 
 But let's put that aside for now, and instead model how *k* changes with the number of rows in each transaction (*N*), and number of shards in the database (*s*). Borrowing from this StackExchange answer, and assuming that each transaction picks uniformly from the key space, we can calculate:
-
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script>
-  MathJax = {
-    tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
-  };
-</script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 $k = s [ 1 - ( \frac{s-1}{s} )^N]$
 
