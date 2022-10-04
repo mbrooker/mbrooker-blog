@@ -78,7 +78,8 @@ $\mathrm{Max TPS} \propto \frac{s}{k}$
 
 Let's consider the example of *N=10*. How does the maximum TPS vary with *s* as we increase the number of shards from 1 to 10:
 
-$\mathrm{Max TPS(s = 1..10)} \propto [1.000000, 1.000978, 1.017648, 1.059674, 1.120290, 1.192614, 1.272359, 1.356991, 1.444974, 1.535340]$
+$\mathrm{Max TPS}(s = 1..10, N=10)
+    \propto [1.000000, 1.000978, 1.017648, 1.059674, 1.120290, 1.192614, 1.272359, 1.356991, 1.444974, 1.535340]$
 
 Oof! For *N = 10*, adding a second shard only increases our throughput by something like 1% for uniformly distributed keys! The classic solution is to hope that your keys aren't uniformly distributed, and that you can keep *k* low without causing hotspots. A nice solution, if you can get it.
 
