@@ -6,7 +6,7 @@ title: "Lambda Snapstart, and snapshots as a tool for system builders"
 {{ page.title }}
 ================
 
-<p class="meta">Durable memory?</p>
+<p class="meta">Clones.</p>
 
 Yesterday, AWS announced [Lambda Snapstart](https://aws.amazon.com/blogs/aws/new-accelerate-your-lambda-functions-with-lambda-snapstart/), which uses VM snapshots to reduce cold start times for Lambda functions that need to do a lot of work on start (starting up a language runtime<sup>[3](#foot3)</sup>, loading classes, running *static* code, initializing caches, etc). Here's a short video about it:
 
@@ -16,7 +16,7 @@ Snapstart is a super useful capability for Lambda customers. I'm extremely proud
 
 Beyond Snapstart in Lambda, I'm particularly excited about the underlying technology (microVM snapshots), and the way they give us (as system builders and researchers) a powerful tool for building new kinds of secure and scalable systems. In this post, I talk about some interesting aspects of Snapstart, and how they point to interesting possible areas for research on systems, storage, and even cryptography.
 
-*What is Snapstart?*
+**What is Snapstart?**
 
 Without snapstart, the *cold start time* of a Lambda function is a combination of time time taken to download the function (or container), to start the language runtime<sup>[3](#foot3)</sup>, and to run any initialization code inside the function (including any *static* code, doing class loading, and even JIT compilation). The cold start time doesn't include MicroVM boot, because that time is not specialized to the application, and can be done in advance. A cold start looks like this<sup>[1](#foot1)</sup>: 
 
