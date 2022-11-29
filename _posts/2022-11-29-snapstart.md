@@ -71,6 +71,14 @@ If the clones are running on the same machine the snapshot was created on, then 
 
 We're going to say more about our particular solution to this problem in the near future, but I believe that there are interesting general challenges here for systems and storage researchers. Loading memory on demand can be done if the data layer offers low-enough latency, close enough to the latency of a local memory read. We can also avoid loading memory on demand by predicting memory access patterns, loading memory contents ahead of when they are needed. This seems hard to do in general, but is significantly simplified by the ability to learn from the behavior of multiple MicroVM clones.
 
+**Layers Upon Layers**
+
+There are multiple places where we can snapshot a MicroVM: just after its booted, after a language runtime has been started, or after customer code initialization. In fact, we don't have to choose just one of these. Instead, we can snapshot after boot, restore that snapshot to start the language runtime, and store just the changes. Then restore that snapshot, run customer initialization, and store just those changes. This has the big benefit of creating a tree of snapshots, where the same Linux kernel or runtime chunks don't need to be downloaded again and again.
+
+![](/blog/images/snapstart_tree.png)
+
+Unlike traditional approaches to memory deduplication (like [Kernel Samepage Merging(https://docs.kernel.org/admin-guide/mm/ksm.html)) there's no memory vs. CPU tradeoff here: identical pages are shared based on their provenance rather than on post-hoc scanning<sup>[6](#foot6)</sup>. This significantly reduces the scope of the data movement challenge, by requiring widely-used components to be downloaded infrequently, reducing data movement by as much as 90% for common workloads.
+
 **Hungry, Hungry Hippos**
 
 Linux, [rather famously](https://www.linuxatemyram.com/), loves to eat all the memory it can lay its hands on. In the traditional single-system setting this is the right thing to do: the marginal cost of making an empty memory page full is very nearly zero, so there's no need to think much about the marginal benefit of keeping around a disk-backed page of memory (whether its an mmap mapping, or an IO buffer, or whatever). However, in cloud settings like Lambda Snapstart, this calculus is significantly different: keeping around disk-backed pages that are unlikely to be used again makes snapshots bigger, with little benefit. The same applies to caches at all layers, whether they're in the language runtime, in application code, or in libraries.
@@ -96,3 +104,4 @@ Most of this post covers material I also covered in this talk, if you'd prefer t
 3. <a name="foot3"></a> In this post I've used the words *language runtime* to refer to language VMs like the JVM, to avoid confusion with virtualization VMs like Firecracker MicroVMs. This isn't quite the right word, but it seemed worth avoiding the potential for confusion.
 4. <a name="foot4"></a> As we covered in detail in *[Firecracker: Lightweight Virtualization for Serverless Applications](https://www.usenix.org/conference/nsdi20/presentation/agache)* at NSDI'20.
 5. <a name="foot5"></a> I really like the *compute cache* framing that Peter uses in this keynote (from 1:00:30 onwards). It's different from the one that I use in this post, but very clearly explains why cold starts exist, and why they matter to customers of systems like Lambda. The discussion of being unwilling to compromise on security is also important, and has been a driving force behind our work in this space for the last seven years.
+6. <a name="foot6"></a> Granted, this does miss some merge opportunities for pages that end up becoming identical over time, but in a world of crypto and ASLR that happens infrequently anyway. 
