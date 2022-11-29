@@ -8,9 +8,13 @@ title: "Lambda Snapstart, and snapshots as a tool for system builders"
 
 <p class="meta">Clones.</p>
 
-Yesterday, AWS announced [Lambda Snapstart](https://aws.amazon.com/blogs/aws/new-accelerate-your-lambda-functions-with-lambda-snapstart/), which uses VM snapshots to reduce cold start times for Lambda functions that need to do a lot of work on start (starting up a language runtime<sup>[3](#foot3)</sup>, loading classes, running *static* code, initializing caches, etc). Here's a short video about it:
+Yesterday, AWS announced [Lambda Snapstart](https://aws.amazon.com/blogs/aws/new-accelerate-your-lambda-functions-with-lambda-snapstart/), which uses VM snapshots to reduce cold start times for Lambda functions that need to do a lot of work on start (starting up a language runtime<sup>[3](#foot3)</sup>, loading classes, running *static* code, initializing caches, etc). Here's a short 1 minute video about it:
 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/AgxvrZLI1mc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+Or, for a lot more context on Lambda and how we got here:
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/R11YgBEZzqE?start=3275" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 Snapstart is a super useful capability for Lambda customers. I'm extremely proud of the work the team did to make it a reality. We've been talking about this work for [over two years](https://www.youtube.com/watch?v=ADOfX2LiEns), and working on it for longer. The team did some truly excellent engineering work to make Snapstart a reality.
 
@@ -29,6 +33,7 @@ With snapstart, a snapshot of the microVM is taken after these initialization st
  - JIT compilation and other *warmup* tasks can be done at initialization time, often avoiding the uneven performance that can be introduced by JITing soon after language runtime<sup>[2](#foot2)</sup> startup.
 
 In diagram form, the snapstart startup regime looks like this<a name="foot1"></a>:
+
 ![](/blog/images/snapstart.png)
 
 **The Problems of Uniqueness**
@@ -54,16 +59,17 @@ Another challenge with working with clones is connection state in protocols like
 - *Time*. If a connection is established during initialization and the clone is used later, it's likely that the remote end has given up on the connection.
 - *State*. Protocols like TCP provide reliable delivery using state at each end of a connection (like a sequence number), with the assumption that there is one client for the lifetime of the connection. If that one client suddenly becomes two clients, the protocol is broken and the connection must be dropped.
 
-The simple solution is to reestablish connections after snapshots are restored. As with reseeding PRNGs, this requires time and work, especially for secure protocols like TLS which somewhat dilutes cold start benefit. There's a significant research and development opportunity here, focusing on fast reestablishment of secure protocols, clone-aware protocols, clone-aware proxies, and even deeply protocol-aware session managers (like RDS proxy).
+The simple solution is to reestablish connections after snapshots are restored. As with reseeding PRNGs, this requires time and work, especially for secure protocols like TLS, which somewhat dilutes cold start benefit. There's a significant research and development opportunity here, focusing on fast reestablishment of secure protocols, clone-aware protocols, clone-aware proxies, and even deeply protocol-aware session managers (like RDS proxy).
 
 **Moving Data**
 
 Let's take another look at this snapstart diagram:
+
 ![](/blog/images/snapstart.png)
 
 If the clones are running on the same machine the snapshot was created on, then this diagram is reasonably accurate. However, if we want to scale snapshot restores out over a system the size of AWS Lambda, then we need to make sure the snapshot data is available where and when it is needed. This hidden work - both in distributing data when it's needed and in sending restores to the right places to meet the data - was the largest challenge of building Snapstart. Turning memory reads into network storage accesses, as would happen with a naive demand-loading system, would very quickly cancel out the latency benefits of Snapstart.
 
-We're going to say more about our particular solution to this problem in the near future, but I believe that there are interesting general challenges here for systems and storage researchers. Loading memory on demand can be done if the data layer offer low-enough latency, close enough to the latency of a local memory read. We can also avoid loading memory on demand by predicting memory access patterns, loading memory contents ahead of when they are needed. This seems hard to do in general, but is significantly simplified by the ability to learn from the behavior of multiple MicroVM clones.
+We're going to say more about our particular solution to this problem in the near future, but I believe that there are interesting general challenges here for systems and storage researchers. Loading memory on demand can be done if the data layer offers low-enough latency, close enough to the latency of a local memory read. We can also avoid loading memory on demand by predicting memory access patterns, loading memory contents ahead of when they are needed. This seems hard to do in general, but is significantly simplified by the ability to learn from the behavior of multiple MicroVM clones.
 
 **Hungry, Hungry Hippos**
 
@@ -72,11 +78,13 @@ Linux, [rather famously](https://www.linuxatemyram.com/), loves to eat all the m
 Tools like [DAMON](https://www.kernel.org/doc/html/v5.17/vm/damon/index.html) provide a good ability to monitor and control the kernel's behavior. I think, though, that there will be a major change in thinking required as systems like Snapstart become more popular. There seems to be an open area of research here, in adapting caching behaviors (perhaps dynamically) to handle changing marginal costs of full and empty memory pages. Linux's behavior - and the one most programmers build into their applications - is one behavior on a larger spectrum, that is only optimal at the point of zero marginal cost.
 
 **Snapshots Beyond Snapstart**
+
 I can't say anything here about future plans for using MicroVM snapshots at AWS. But I do believe that they are a powerful tool for system designers and researchers, which I think are currently under-used. Firecracker has the ability to restore a MicroVM snapshot in as little as 4ms (or about 10ms for a full decent-sized Linux system), and it's no doubt possible to optimize this further. I expect that sub-millisecond restore times are possible, as are restore times with a CPU cost not much higher than a traditional fork (or even a traditional thread start). This reality changes the way we think about what VMs can be used for - making them useful for much smaller, shorter-lived, and transient applications than most would assume.
 
 Firecracker's full and incremental snapshot support [is already open source](https://github.com/firecracker-microvm/firecracker/blob/main/docs/snapshotting/snapshot-support.md), and already offers great performance and density<a name="foot4"></a>. But Firecracker is far from the last word in restore-optimized VMMs. I would love to see more research in this area, exploring what is possible from user space and kernel space, and even how hardware virtualization support can be optimized for fast restores.
 
 **In Video Form**
+
 Most of this post covers material I also covered in this talk, if you'd prefer to consume it in video form.
 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ADOfX2LiEns" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
