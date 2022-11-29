@@ -12,13 +12,13 @@ Yesterday, AWS announced [Lambda Snapstart](https://aws.amazon.com/blogs/aws/new
 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/AgxvrZLI1mc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Or, for a lot more context on Lambda and how we got here:
+Or, for a lot more context on Lambda and how we got here<sup>[5](#foot5)</sup>:
 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/R11YgBEZzqE?start=3275" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 Snapstart is a super useful capability for Lambda customers. I'm extremely proud of the work the team did to make it a reality. We've been talking about this work for [over two years](https://www.youtube.com/watch?v=ADOfX2LiEns), and working on it for longer. The team did some truly excellent engineering work to make Snapstart a reality.
 
-Beyond Snapstart in Lambda, I'm particularly excited about the underlying technology (microVM snapshots), and the way they give us (as system builders and researchers) a powerful tool for building new kinds of secure and scalable systems. In this post, I talk about some interesting aspects of Snapstart, and how they point to interesting possible areas for research on systems, storage, and even cryptography.
+Beyond Snapstart in Lambda, I'm also excited about the underlying technology (microVM snapshots), and the way they give us (as system builders and researchers) a powerful tool for building new kinds of secure and scalable systems. In this post, I talk about some interesting aspects of Snapstart, and how they point to interesting possible areas for research on systems, storage, and even cryptography.
 
 **What is Snapstart?**
 
@@ -32,7 +32,7 @@ With snapstart, a snapshot of the microVM is taken after these initialization st
  - The time taken by execution no longer accrues to the cold-start time, significantly reducing cold start latency for applications that do a lot of work on startup (which is typically applications that use large language runtimes like the JVM, or large frameworks and libraries).
  - JIT compilation and other *warmup* tasks can be done at initialization time, often avoiding the uneven performance that can be introduced by JITing soon after language runtime<sup>[2](#foot2)</sup> startup.
 
-In diagram form, the snapstart startup regime looks like this<a name="foot1"></a>:
+In diagram form, the snapstart startup regime looks like this<sup>[1](#foot1)</sup>:
 
 ![](/blog/images/snapstart.png)
 
@@ -81,7 +81,7 @@ Tools like [DAMON](https://www.kernel.org/doc/html/v5.17/vm/damon/index.html) pr
 
 I can't say anything here about future plans for using MicroVM snapshots at AWS. But I do believe that they are a powerful tool for system designers and researchers, which I think are currently under-used. Firecracker has the ability to restore a MicroVM snapshot in as little as 4ms (or about 10ms for a full decent-sized Linux system), and it's no doubt possible to optimize this further. I expect that sub-millisecond restore times are possible, as are restore times with a CPU cost not much higher than a traditional fork (or even a traditional thread start). This reality changes the way we think about what VMs can be used for - making them useful for much smaller, shorter-lived, and transient applications than most would assume.
 
-Firecracker's full and incremental snapshot support [is already open source](https://github.com/firecracker-microvm/firecracker/blob/main/docs/snapshotting/snapshot-support.md), and already offers great performance and density<a name="foot4"></a>. But Firecracker is far from the last word in restore-optimized VMMs. I would love to see more research in this area, exploring what is possible from user space and kernel space, and even how hardware virtualization support can be optimized for fast restores.
+Firecracker's full and incremental snapshot support [is already open source](https://github.com/firecracker-microvm/firecracker/blob/main/docs/snapshotting/snapshot-support.md), and already offers great performance and density<sup>[4](#foot4)</sup>. But Firecracker is far from the last word in restore-optimized VMMs. I would love to see more research in this area, exploring what is possible from user space and kernel space, and even how hardware virtualization support can be optimized for fast restores.
 
 **In Video Form**
 
@@ -94,4 +94,5 @@ Most of this post covers material I also covered in this talk, if you'd prefer t
 1. <a name="foot1"></a> Diagram from Brooker et al, *[Restoring Uniqueness in MicroVM Snapshots](https://arxiv.org/pdf/2102.12892.pdf)*, 2021.
 2. <a name="foot2"></a> I particularly enjoyed Laurence Tratt's recent look at VM startup in [More Evidence for Problems in VM Warmup](https://tratt.net/laurie/blog/2022/more_evidence_for_problems_in_vm_warmup.html).
 3. <a name="foot3"></a> In this post I've used the words *language runtime* to refer to language VMs like the JVM, to avoid confusion with virtualization VMs like Firecracker MicroVMs. This isn't quite the right word, but it seemed worth avoiding the potential for confusion.
-4. <a name="foot4"></a> As we covered in detail in *[Firecracker: Lightweight Virtualization for Serverless Applications](https://www.usenix.org/conference/nsdi20/presentation/agache)* as NSDI'20.
+4. <a name="foot4"></a> As we covered in detail in *[Firecracker: Lightweight Virtualization for Serverless Applications](https://www.usenix.org/conference/nsdi20/presentation/agache)* at NSDI'20.
+5. <a name="foot5"></a> I really like the *compute cache* framing that Peter uses in this keynote (from 1:00:30 onwards). It's different from the one that I use in this post, but very clearly explains why cold starts exist, and why they matter to customers of systems like Lambda. The discussion of being unwilling to compromise on security is also important, and has been a driving force behind our work in this space for the last seven years.
