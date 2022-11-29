@@ -77,7 +77,9 @@ There are multiple places where we can snapshot a MicroVM: just after its booted
 
 ![](/blog/images/snapstart_tree.png)
 
-Unlike traditional approaches to memory deduplication (like [Kernel Samepage Merging(https://docs.kernel.org/admin-guide/mm/ksm.html)) there's no memory vs. CPU tradeoff here: identical pages are shared based on their provenance rather than on post-hoc scanning<sup>[6](#foot6)</sup>. This significantly reduces the scope of the data movement challenge, by requiring widely-used components to be downloaded infrequently, reducing data movement by as much as 90% for common workloads.
+Unlike traditional approaches to memory deduplication (like [Kernel Samepage Merging](https://docs.kernel.org/admin-guide/mm/ksm.html)) there's no memory vs. CPU tradeoff here: identical pages are shared based on their provenance rather than on post-hoc scanning<sup>[6](#foot6)</sup>. This significantly reduces the scope of the data movement challenge, by requiring widely-used components to be downloaded infrequently, reducing data movement by as much as 90% for common workloads.
+
+Incremental snapshotting also allows us to use seperate cryptographic keys for different levels of data, including service keys for common components, and per-customer and customer-controlled keys for customer data.
 
 **Hungry, Hungry Hippos**
 
