@@ -40,7 +40,7 @@ In diagram form, the snapstart startup regime looks like this<sup>[1](#foot1)</s
 
 Perhaps the biggest challenge with clones is that they're, well, clones. They contain the same CPU, the same memory, and even the same CPU registers. [Being too alike can cause problems](https://www.youtube.com/watch?v=nuW0pUG3PrQ). For example, as we say in [Restoring Uniqueness in MicroVM Snapshots](https://arxiv.org/pdf/2102.12892.pdf):
 
-> Most modern distributed systems depend on the ability of nodes to generate unique or random values. RFC4122 [20] version 4 UUIDs are widely used as unique database keys, and as request IDs used for log correlation and distributed tracing. ...
+> Most modern distributed systems depend on the ability of nodes to generate unique or random values. RFC4122 version 4 UUIDs are widely used as unique database keys, and as request IDs used for log correlation and distributed tracing. ...
 
 and
 
@@ -59,7 +59,7 @@ Another challenge with working with clones is connection state in protocols like
 - *Time*. If a connection is established during initialization and the clone is used later, it's likely that the remote end has given up on the connection.
 - *State*. Protocols like TCP provide reliable delivery using state at each end of a connection (like a sequence number), with the assumption that there is one client for the lifetime of the connection. If that one client suddenly becomes two clients, the protocol is broken and the connection must be dropped.
 
-The simple solution is to reestablish connections after snapshots are restored. As with reseeding PRNGs, this requires time and work, especially for secure protocols like TLS, which somewhat dilutes cold start benefit. There's a significant research and development opportunity here, focusing on fast reestablishment of secure protocols, clone-aware protocols, clone-aware proxies, and even deeply protocol-aware session managers (like RDS proxy).
+The simple solution is to reestablish connections after snapshots are restored. As with reseeding PRNGs, this requires time and work, especially for secure protocols like TLS, which somewhat dilutes cold start benefit. There's a significant research and development opportunity here, focusing on fast reestablishment of secure protocols, clone-aware protocols, clone-aware proxies, and even deeply protocol-aware session managers (like RDS proxy)<sup>[7](#foot7)</sup>.
 
 **Moving Data**
 
@@ -107,3 +107,4 @@ Most of this post covers material I also covered in this talk, if you'd prefer t
 4. <a name="foot4"></a> As we covered in detail in *[Firecracker: Lightweight Virtualization for Serverless Applications](https://www.usenix.org/conference/nsdi20/presentation/agache)* at NSDI'20.
 5. <a name="foot5"></a> I really like the *compute cache* framing that Peter uses in this keynote (from 1:00:30 onwards). It's different from the one that I use in this post, but very clearly explains why cold starts exist, and why they matter to customers of systems like Lambda. The discussion of being unwilling to compromise on security is also important, and has been a driving force behind our work in this space for the last seven years.
 6. <a name="foot6"></a> Granted, this does miss some merge opportunities for pages that end up becoming identical over time, but in a world of crypto and ASLR that happens infrequently anyway. 
+7. <a name="foot7"></a> One interesting approach is the one described by Erika Hunhoff and Eric Rozner in *[Network Connection Optimization for Serverless Workloads](http://ericrozner.com/papers/nsdi2020-poster.pdf)*. Unfortunately, they don't seem to have taken this work further.
