@@ -23,6 +23,7 @@ In [the last installment](https://brooker.co.za/blog/2023/02/07/hot-keys.html), 
 Unfortunately for us, this nice static distribution of key heat doesn't seem to happen often. Instead, what we see is that popularity of keys changes over time. Popular products come and go. Events come and go. The 1966 FIFA world cup came and went<sup>[1](#foot1)</sup>. If the distribution of which keys are popular *right now* changes often enough, then moving around data to balance shard heat becomes rather difficult and expensive to do.
 
 **Even Sharding and False Sharing**
+
 At the extreme end, where there is no stability in the key heat distribution, we may not be able to shard our database better than evenly (or, somewhat equivalently, randomly). This might work out well, with the hottest key on one shard, the second hottest on another, third hottest on another, and so on. It also might work out poorly, with the hottest and second hottest keys on the same shard. This leads to a kind of *false sharing* problem, where shards are hotter than they strictly need to be, just by getting unlucky.
 
 How likely are we to get unlucky in this way?
@@ -40,6 +41,14 @@ Ah, that's much worse. We can see that there are some runs for the two-shard cas
 ![Simulation results for false sharing on zipf keys, cumulative](/blog/images/zipf_false_sharing.png)
 
 Here, for example, we can see in the 5 shard case that nearly 15% of the time the hottest shard is getting double the traffic we would ideally expect.
+
+**The Trend**
+
+My instinct, when I started looking at the simulation results, is that the amount of false sharing would decrease significantly as the database size gets larger, because there would be more "dilution" of the hot keys. Defining the amount of false sharing as the mean hot shard load divided by the ideal shard load, this is exactly what we see happen:
+
+![Simulation results for false sharing on zipf keys, trend](/blog/images/zipf_false_sharing_trend.png)
+
+However, this drop is relatively slow, and so doesn't save us from the underlying problem until database sizes become very big indeed, and size never truly solves the problem. But this is still one of those luxury problems where scale makes things (slightly) easier.
 
 **Does it matter?**
 
