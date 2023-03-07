@@ -48,6 +48,7 @@ Whether this false sharing effect is important or not depends on other factors i
 This doesn't only affect databases. The same effect will happen with sharded microservices, queues, network paths, compute hardware, or whatever else. In all these cases, this effect is practically important because it makes uniform or random sharding significantly less effective than it might be (and so require more elaborate sharding approaches), and might make sharding much less effective for heat distributions that are highly variable.
 
 **Temporal and Spatial Locality**
+
 The distributions above assume that the heat is spread out over the key space evenly, and not in a way that is aligned with the sharding scheme.
 
 For example, consider a database table with an `SERIAL` or `AUTO_INCREMENT` primary key, and the common pattern that recently-created rows tend to be accessed more often than older rows (customers are more likely to check on the status of recent orders, or add additional settings to new cloud resources, etc). If the sharding scheme is based on key ranges, all this heat may be focused on the shard that owns the range of most recent keys, leading to even worse shard heat distributions than the simulations above. Schemes with shard based on hashes (or other non-range schemes) avoid this problem, but introduce other problems by losing what may be valuable locality.
@@ -55,5 +56,3 @@ For example, consider a database table with an `SERIAL` or `AUTO_INCREMENT` prim
 **Footnotes**
 
 1. <a name="foot1"></a> Don't tell the English. If they ask you about it, tell them it's still the most important sporting event in history, then run.
-1. <a name="foot2"></a> I feel like this problem has been stalking me my entire career.
-1. <a name="foot3"></a> A fair number of sources (including database papers and textbooks) use names as an example of Zipf-distributed (or otherwise powerlaw-distributed) data. Looking at this graph doesn't seem to support that claim.
