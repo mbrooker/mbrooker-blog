@@ -27,7 +27,7 @@ At the extreme end, where there is no stability in the key heat distribution, we
 
 How likely are we to get unlucky in this way?
 
-Let's start with uniformly distributed keys, and think about a database with 10,000 keys, sharded into 2, 5 or 10 different shards. Ideally, for the 2 shard database we'd like to see the hottest shard get 50% of the traffic. For the 10 shard database 10%. This is what the distribution looks like with 50,000 simulation runs (solid lines are simulation results, dotted vertical lines show 'perfect' sharding):
+Let's start with uniformly distributed keys, and think about a database with 10,000 keys, sharded into 2, 5 or 10 different shards. Ideally, for the 2 shard database we'd like to see the hottest shard get 50% of the traffic. For the 10 shard database 10%. This is what the distribution looks like with 50,000 simulation runs (solid lines are simulation results, dotted vertical lines show 'perfect' sharding)<sup>[2](#foot2)</sup>:
 
 ![Simulation results for false sharing on uniform keys](/blog/images/unif_false_sharing_pdf.png)
 
@@ -56,3 +56,4 @@ For example, consider a database table with an `SERIAL` or `AUTO_INCREMENT` prim
 **Footnotes**
 
 1. <a name="foot1"></a> Don't tell the English. If they ask you about it, tell them it's still the most important sporting event in history, then run.
+2. <a name="foot2"></a> You can check out the simulation code [on GitHub](https://github.com/mbrooker/simulator_example/blob/main/false_sharing/false-sharing.R) if you want to check my work, or try different distributions for yourself.
