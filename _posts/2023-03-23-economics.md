@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The Surprising Economics of Multitenancy"
+title: "Surprising Scalability of Multitenancy"
 ---
 
 {{ page.title }}
@@ -66,7 +66,7 @@ Xth percentile represents cost. Multi-tenancy is a powerful
 tool for reducing this ratio, which naturally drops approximately with $\sqrt{N}$ when running $N$ uncorrelated workloads on
 a worker.
 
-And, of course, for this to work we need to be sure that the different workloads don't all spike up at the same time, which requires that workloads are not correlated.
+And, of course, for this to work we need to be sure that the different workloads don't all spike up at the same time, which requires that workloads are not correlated. Again, this is not only an economic effect, but also a scalability one. By working this way, Lambda can absorb both long and short spikes in load for any single workload very economically, allowing it to offer scalability that is difficult to match with traditional infrastructure.
 
 > Keeping these workloads uncorrelated requires that
 they are unrelated: multiple workloads from the same application, and to an extent from the same customer or industry,
@@ -75,6 +75,7 @@ behave as a single workload for these purposes.
 This last point is very important, because it illustrates the difference between our real-world setting and idealized models.
 
 **Poisson Processes and the Real World**
+
 What I said above is true for Poisson processes, but not nearly as powerful as what we see in the real world, which is interesting because Poisson processes are widely used to model the economics and scalability of systems. To understand why, we need to think a little bit about the sum of two Poisson processes. Say we have two customers of the system, one being a Poisson process with a mean arrival rate of 1 tps ($\lambda_1 = 1$), and one with a mean arrival rate of 4 tps ($\lambda_2 = 4$). The sum of the two is a Poisson process with an arrival rate of 5 tps ($\lambda_t = \lambda_1 + \lambda_2 = 1 + 4$)<sup>[3](#foot3)</sup>. This keeps going: no matter how many Poisson customers you add, you keep having a Poisson arrival process.
 
 That's still good, because as you scale the system to handle the higher-rate process, the $c$ in the *M/M/c* system goes up, and [utilization increases](https://brooker.co.za/blog/2020/08/06/erlang.html).
