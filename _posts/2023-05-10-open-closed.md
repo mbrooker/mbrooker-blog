@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The Four Hobbies, and Apparent Expertise"
+title: "Open and Closed, Omission and Collapse"
 ---
 
 {{ page.title }}
