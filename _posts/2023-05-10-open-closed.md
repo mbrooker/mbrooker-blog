@@ -28,7 +28,7 @@ While the paper does a good job explaining why it's so important, I don't think 
 
 **Some Examples**
 
-Let's consider a very simple system, along the lines of the one in the image above: a single server, an unbounded queue, and either *open* or *closed* customer arrival processes. First, we'll consider an easy case, where the server latency is exponentially distributed with a mean of 0.1ms. What does the client-observed latency look like for a single-client closed system, closed system with 10 clients, or an open system with a Poisson arrival process?
+Let's consider a very simple system, along the lines of the one in the image above: a single server, an unbounded queue, and either *open* or *closed* customer arrival processes. First, we'll consider an easy case, where the server latency is exponentially distributed with a mean of 0.1ms. What does the client-observed latency look like for a single-client closed system, closed system with 10 clients, or an open system with a Poisson arrival process?<sup>[6](#foot6)</sup>
 
 To answer that question, we need to pick a value for the server utilization ($\rho$), the proportion of the time the server is busy. Here, we consider the case where the server is busy 80% of the time ($\rho = 0.8$)<sup>[2](#foot2)</sup>:
 
@@ -80,7 +80,7 @@ The closed loop one is the one I'd probably write if I wasn't thinking about it.
 
 Coordinated omission and misleading benchmark results aren't even the most important thing about open loop systems. In my mind, the most important thing to understand is *congestive collapse*. Probably the simplest version to understand has to do with client behavior, specifically timeouts and retries. The open loop model is optimistic. In the real world of timeouts and retries, its optimistic to believe that jobs arrive independently of job completions. Indeed, even if the underlying arrival rate is Poisson, there is also some additional rate of traffic that arrives due to timeouts.
 
-Let's go back to our bimodal example from earlier, and look at the queue length over the simulation time for the open and closed cases. As expected, the closed cases drive shorter queues, and the open case's latency is driven by the queue growing and shrinking as long server-side latencies drive short periods where requests are coming in faster than they can be served.
+Let's go back to our bimodal example from earlier, and look at the queue length over the simulation time for the open and closed cases. As expected, the closed cases drive shorter queues, and the open case's latency is driven by the queue growing and shrinking as long server-side latency drives short periods where requests are coming in faster than they can be served.
 
 ![](/blog/images/oc_bimod_qlen.png)
 
@@ -98,4 +98,5 @@ Closed systems don't suffer from this kind of catastrophe, unless they have clie
 2. <a name="foot2"></a> For more on the importance of $\rho$ see [Latency Sneaks Up on You](https://brooker.co.za/blog/2021/08/05/utilization.html)
 3. <a name="foot3"></a> [On Coordinated Omission](https://www.scylladb.com/2021/04/22/on-coordinated-omission/) by Ivan Prisyazhynyy is a good introduction.
 4. <a name="foot4"></a> For a more general look at retry-related problems, and one solution, check out [Fixing retries with token buckets and circuit breakers](https://brooker.co.za/blog/2022/02/28/retries.html)
-4. <a name="foot5"></a> One of the best decisions we made early on in building AWS Lambda was to make *concurrency* the unit of scaling rather than *arrival rate*. This makes it significantly easier both for the provider and the customer to avoid congestive collapse behaviors in their systems.
+5. <a name="foot5"></a> One of the best decisions we made early on in building AWS Lambda was to make *concurrency* the unit of scaling rather than *arrival rate*. This makes it significantly easier both for the provider and the customer to avoid congestive collapse behaviors in their systems. The way Lambda uses concurrency is [describe in the documentation](https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html).
+6. <a name="foot6"></a> These results were generate with a [simple simulation](https://brooker.co.za/blog/2022/04/11/simulation.html). If you would like to check my work, the simulator code that generated these results is [available on Github](https://github.com/mbrooker/simulator_example/tree/main/omission). The code is less than 200 lines of Python, and should be accessible without any knowledge of queue theory.
