@@ -52,6 +52,8 @@ The next big chunk of our architecture is that tiered cache: local, AZ-level, an
 
 It's not a surprise to anybody who builds computer systems that caches are effective, but the extreme effectiveness of this one surprised us somewhat. The per-AZ cache is extremely effective (perhaps too effective, which I'll talk about in a future post).
 
+Another interesting property of our cache is that we're careful not to keep exactly one copy of the most common keys in the cache. We mix a little time-varying data, a *salt*, into the function that chooses the content-based names for chunks. This means that we cache a little more data than we need to, and lose a little bit of hit rate, but in exchange we reduce the *blast radius* of bad chunks. If we keep exactly one copy of the most popular chunks, corruption of that chunk could affect nearly all functions. With *salt*, the worst case of chunk loss touches only a small percentage of functions.
+
 **Erasure Coding**
 
 The architecture of our shared AZ-level cache is a fairly common one: a fleet of cache machines, a variant of [consistent hashing](https://en.wikipedia.org/wiki/Consistent_hashing) to map chunk names onto caches, and an HTTP interface<sup>[2](#foot2)</sup>. One thing that's fairly unusual is that we're using erasure coding to bring down tail latency and reduce the impact of cache node failures. I covered the tail latency angle in my post on [Erasure Coding versus Tail Latency](https://brooker.co.za/blog/2023/01/06/erasure.html), but the operational angle is also important.
@@ -61,6 +63,7 @@ The architecture of our shared AZ-level cache is a fairly common one: a fleet of
 Think about what happens in a classic consistent hashed cache with 20 nodes when a node failure happens. Five percent of the data is lost. The hit rate drops to a maximum of 95%, which is a more than 5x increase in misses given that our normal hit rate is over 99%. At large scale machines fail all the time, and we don't want big changes in behavior when that happens. So we use a technique called erasure coding to completely avoid the impact. In erasure coding, we break each chunk up into $M$ parts in a way that it can be recreated from any $k$. As long as $k - M > 1$ we can survive the failure of any node with zero hit rate impact (because the other $k$ nodes will pick up the slack).
 
 That makes software deployments easier too. We can just deploy to the fleet a box at a time, without carefully making sure that data has moved to new machines before we touch them. It's a little bit of code complexity on the client side, in exchange for a lot of operational simplicity and fault tolerance.
+
 
 **On Architecture**
 
@@ -77,7 +80,10 @@ As [Werner Vogels says](https://www.allthingsdistributed.com/2023/05/monoliths-a
 > However, I want to reiterate, that there is not one architectural pattern to rule them all. How you choose to develop, deploy, and manage services will always be driven by the product you’re designing, the skillset of the team building it, and the experience you want to deliver to customers (and of course things like cost, speed, and resiliency).
 
 **Conclusion**
+
 I loved writing this paper (with my co-authors) because it's a perfect illustration of what excites me about the work I do. We identified a real problem for our customers, thought through solutions, and applied a mix of architecture, algorithms, and existing tools to solve the problem. Building systems like this, and watching them run, is immensely rewarding. Building, operating, and improving something like this is a real team effort, and this paper reflects deep work from across the Lambda team and our partner teams.
+
+This system gets performance by doing as little work as possible (deduplication, caching, lazy loading), and then gets resilience by doing slightly more work than needed (erasure coding, salted deduplication, etc). This is a tension worth paying attention to in all system designs.
 
 **Footnotes**
 
