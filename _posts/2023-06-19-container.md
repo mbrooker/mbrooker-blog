@@ -8,9 +8,9 @@ title: "What is a container?"
 
 <p class="meta">What are words, anyway?</p>
 
-A common cause of confusion and miscommunication I see is different people using different definitions of words. Sometimes the definitions are subtly different (as with [availability](https://brooker.co.za/blog/2018/02/25/availability-liveness.html)). Sometimes they're completely different, and we're just talking about different things entirely. A very common example is the word *container*, a popular term for a popular technology that means at least four different things.
+A common cause of confusion and miscommunication I see is different people using different definitions of words. Sometimes the definitions are subtly different (as with [availability](https://brooker.co.za/blog/2018/02/25/availability-liveness.html)). Sometimes they're completely different, and we're just talking about different things entirely. A common example is the word *container*, a popular term for a popular technology that means at least four different things.
 
- 1. An approach to packaging an application along with its dependencies (sometimes a whole operating system user space), that can then run on a minimal runtime environment with a clear contract.
+ 1. An approach to packaging an application along with its dependencies (sometimes a whole operating system user space), that can then run on a minimal runtime environment with a clear contract<sup>[4](#foot4)</sup>.
  2. A set of development, deployment, architectural, and operational approaches built around applications packaged this way.
  3. A set of operational, security, and performance isolation tools that allow multiple applications to share an operating system without interfering with each other. On Linux, this tools include *chroot*, *cgroups*, *namespaces*, *[seccomp](https://man7.org/linux/man-pages/man2/seccomp.2.html)*, and others.
  4. A set of implementations of the practices (the proper nouns, Docker, Kubernetes, ECS, etc).
@@ -28,3 +28,4 @@ When you use the word *container*, consider whether your audience is using the s
 1. <a name="foot1"></a> For example, with MicroVMs like [Firecracker](https://github.com/firecracker-microvm/firecracker).
 2. <a name="foot2"></a> Those people include me.
 3. <a name="foot3"></a> If you'd like to dive into the details, check out [our paper about adding container support to AWS Lambda](https://arxiv.org/abs/2305.13162) or my [blog post summary of it](https://brooker.co.za/blog/2023/05/23/snapshot-loading.html).
+4. <a name="foot4"></a> This question of reducing the size of the contract between the container and the runtime is an interesting one. In most typical container implementations, this contract still includes hundreds of APIs, and other complex interaction points like filesystems. Only on the more extreme end, like MicroVMs *virtio* interfaces (see the [Firecracker paper](https://www.usenix.org/conference/nsdi20/presentation/agache) for our approach there) and things like *SECCOMP_SET_MODE_STRICT* do these APIs become truly small. However, across the whole container spectrum they're smaller and simpler than those presented by *libc* and *openssl* and the other thousands of libraries you'll commonly find in a default Linux user space.
