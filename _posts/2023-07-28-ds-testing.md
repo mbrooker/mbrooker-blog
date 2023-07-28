@@ -69,6 +69,7 @@ When working on AWS Lambda's container loading system (which I've [blogged about
 > Past experience with distributed garbage collection has taught us that the problem is both complex (because the tree of chunk references is changing dynamically) and uniquely risky (because it is the one place in our system where we delete customer data).
 
 Despite this complexity, the system invariants turn out to be relatively simple:
+
 * All new chunks are written into a root in the *active* state.
 * All read chunks are under roots in either then *active* or *retired* state.
 * Roots move monotonically through the *active*, *retired*, *expired*, and *deleted* states. They never move backwards through this state chain.
