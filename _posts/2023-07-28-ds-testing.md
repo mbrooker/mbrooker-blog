@@ -44,7 +44,7 @@ either (a) no acceptor in S has accepted any proposal numbered less
 than n, or (b) v is the value of the highest-numbered proposal among
 all proposals numbered less than n accepted by the acceptors in S.
 
-Multipaxos, Raft, and pretty much every other distributed protocol has invariant like these. Reasoning about them and testing them automatically is, in my mind, an under-appreciated superpower.
+Multipaxos, Raft, and pretty much every other distributed protocol have invariants like these. Reasoning about them and testing them automatically is, in my mind, an under-appreciated superpower.
 
 **Example: HNSW**
 
@@ -60,7 +60,7 @@ For example:
 * All nodes appear in layer 0.
 * Each layer is approximately *e* times larger than the one above it.
 
-Some of these invariants are rather expensive to test for, such as the last one which requires *O(N log N)* work. They aren't practical to assert on each step in a production implementation, but are very practical to test for in a set of unit tests. My experience has been that reasoning about, listing, and then testing for invariants like this is a much better way to test data structures like this than testing through the interfaces.
+Some of these invariants are rather expensive to test for, such as the last one which requires *O(N log N)* work. They aren't always practical to assert on each step in a production implementation, but are very practical to test for in a set of unit tests. My experience has been that reasoning about, listing, and then testing for invariants like this is a much better way to test data structures like this than testing through the interfaces.
 
 **Example: Systems Design**
 
@@ -71,7 +71,7 @@ When working on AWS Lambda's container loading system (which I've [blogged about
 Despite this complexity, the system invariants turn out to be relatively simple:
 
 * All new chunks are written into a root in the *active* state.
-* All read chunks are under roots in either then *active* or *retired* state.
+* All read chunks are under roots in either the *active* or *retired* state.
 * Roots move monotonically through the *active*, *retired*, *expired*, and *deleted* states. They never move backwards through this state chain.
 * Chunks can only be deleted if they are referenced only by *expired* roots.
 * A root can only move to *deleted* once all its chunks have been deleted.
