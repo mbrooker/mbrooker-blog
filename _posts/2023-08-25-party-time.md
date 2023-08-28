@@ -60,7 +60,7 @@ And, in [Metastable Failures in Distributed Systems](https://dl.acm.org/doi/pdf/
 
 > Metastable failures occur in open systems with an uncontrolled source of load where a trigger causes the system to enter a bad state that persists even when the trigger is removed. 
 
-MacLean's cocktail parties exhibit this same phenomenon. When the number of guests exceeds $N_0$ and the party becomes loud, it is not sufficient for the number of guests to merely drop below $N_0$ for it to become quiet again. The background noise has become *stuck* in a high state, and only tapping a glass or a significant reduction in party goers is sufficient for the party to become loud again.
+MacLean's cocktail parties exhibit this same phenomenon. When the number of guests exceeds $N_0$ and the party becomes loud, it is not sufficient for the number of guests to merely drop below $N_0$ for it to become quiet again. The background noise has become *stuck* in a high state, and only tapping a glass or a significant reduction in party goers is sufficient for the party to become quiet again.
 
 **Are Cocktail Parties Metastable?**
 
