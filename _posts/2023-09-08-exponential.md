@@ -73,7 +73,7 @@ Which doesn't look nearly as good.
 <div id="vis2"></div>
 
 <script type="text/javascript">
-  function updateView(view) {
+  function updateView2(view) {
     let new_data = make_data(view.signal('Hosts'), view.signal('HostAvail'), view.signal('DCAvail'));
     view.change('points', vega.changeset().remove(vega.truthy).insert(new_data)).runAsync();
   }
@@ -82,13 +82,13 @@ Which doesn't look nearly as good.
   vegaEmbed('#vis2', spec).then(function(result) {
     updateView(result.view);
     result.view.addSignalListener('HostAvail', function(name, value) {
-      updateView(result.view);
+      updateView2(result.view);
     });
     result.view.addSignalListener('Hosts', function(name, value) {
-      updateView(result.view);
+      updateView2(result.view);
     });
     result.view.addSignalListener('DCAvail', function(name, value) {
-      updateView(result.view);
+      updateView2(result.view);
     });
   }).catch(console.error);
 </script>

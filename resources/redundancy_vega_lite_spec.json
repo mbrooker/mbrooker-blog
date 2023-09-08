@@ -19,7 +19,11 @@
     "title": "System Availability",
     "width": 500,
     "height": 300,
-    "mark": "line",
+    "mark": {
+      "type": "line",
+      "interpolate": "linear",
+      "strokeWidth": 2.0
+    },
     "encoding": {
       "x": {
         "field": "x",
