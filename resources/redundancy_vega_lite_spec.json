@@ -22,7 +22,8 @@
     "mark": {
       "type": "line",
       "interpolate": "linear",
-      "strokeWidth": 2.0
+      "strokeWidth": 2.0,
+      "point": true
     },
     "encoding": {
       "x": {
