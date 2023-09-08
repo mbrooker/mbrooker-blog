@@ -19,7 +19,7 @@
     "title": "System Availability",
     "width": 500,
     "height": 300,
-    "mark": "area",
+    "mark": "line",
     "encoding": {
       "x": {
         "field": "x",
