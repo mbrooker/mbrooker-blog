@@ -25,7 +25,7 @@ Here's another important one: redundancy.
 
 If we have $N$ hosts, each with availability $A$, any one of which can handle the full load of the system, the availability of the total system is:
 
-$A\_{system} = 1 - (1 - A)^N$
+$A_{system} = 1 - (1 - A)\^N$
 
 It's hard to overstate how powerful this mechanism is, and how important it has been to the last couple decades of computer systems design. From RAID to cloud services, this is the core idea that makes them work. It's also a little hard to think about, because our puny human brains just can't comprehend the awesome power of exponents (mine can't at least).
 
@@ -47,7 +47,7 @@ If you want to try some numbers, give this a whirl:
 
   function updateView(view) {
     let new_data = make_data(view.signal('Hosts'), view.signal('HostAvail'), 1.0);
-    view.change('points', vega.changeset().remove(vega.truthy).insert(arrayToData(new_data))).runAsync();
+    view.change('points', vega.changeset().remove(vega.truthy).insert(new_data)).runAsync();
   }
 
   var spec = "https://brooker.co.za/blog/resources/redundancy_vega_lite_spec.json";
@@ -66,7 +66,7 @@ What you'll realize pretty quickly is that this effect is very hard to compete w
 
 Unfortunately it's not all good news. This exponentially powerful effect only works when all these hosts fail independently. Let's extend the model just a little bit to include the effect of them being in the same datacenter, and that datacenter having availability $D$. We can easily show that the availability of the total system then becomes:
 
-$A\_{system} = D * (1 - (1 - A)^N)$
+$A_{system} = D * (1 - (1 - A)\^N)$
 
 Which doesn't look nearly as good.
 
@@ -75,7 +75,7 @@ Which doesn't look nearly as good.
 <script type="text/javascript">
   function updateView(view) {
     let new_data = make_data(view.signal('Hosts'), view.signal('HostAvail'), view.signal('DCAvail'));
-    view.change('points', vega.changeset().remove(vega.truthy).insert(arrayToData(new_data))).runAsync();
+    view.change('points', vega.changeset().remove(vega.truthy).insert(new_data)).runAsync();
   }
 
   var spec = "https://brooker.co.za/blog/resources/redundancy_2_vega_lite_spec.json";
