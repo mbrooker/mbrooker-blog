@@ -38,7 +38,7 @@ If you want to try some numbers, give this a whirl:
       let data = [];
       for (let i = 0; i < n; i++) {
         data.push({
-          "x": n,
+          "x": i,
           "y": dc_avail * (1 - (1 - host_avail)**n),
         });
       }
