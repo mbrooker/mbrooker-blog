@@ -94,3 +94,5 @@ Which doesn't look nearly as good.
 </script>
 
 Which goes to show how quickly things go wrong when there's some correlation between the failures of redundant components. System designers must pay careful attention to ensuring that designs consider this effect, almost beyond all others, when designing distributed systems. Exponential goodness is our most powerful ally. Correlated failures are its kryptonite.
+
+This observation is obviously fairly basic. It's also critically important.
