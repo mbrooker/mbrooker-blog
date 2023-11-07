@@ -1,3 +1,3 @@
-markdown: rdiscount
-pygments: true
+markdown: kramdown
+pygments: false
 baseurl: /blog
