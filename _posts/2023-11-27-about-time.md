@@ -28,9 +28,9 @@ In hopes of understanding the controversy over using real time in systems, let's
 
 When we try understand how a system works, or why it's not working, the first task is to establish *causality*. Thing A caused thing B. Here in our weird little universe, we need thing A to have *happened before* thing B for A to have caused B. Time is useful for this. 
 
-*Prosecutor*: Why, Mr Load Balancer, did you stop sending traffic to Mrs Server?
-*Mr LB*: Simply, sir, because she stopped processing my traffic!
-*Mrs Server, from the gallery*: Liar! Liar! I only stopped processing because you stopped sending!
+*Prosecutor*: Why, Mr Load Balancer, did you stop sending traffic to Mrs Server?  
+*Mr LB*: Simply, sir, because she stopped processing my traffic!  
+*Mrs Server, from the gallery*: Liar! Liar! I only stopped processing because you stopped sending!  
 
 If we can't trust the order of our logs (or other events), finding causality is difficult. If our logs are accurately timestamped the task becomes much easier. If we can expect our logs to be timestamped so accurately that a A having a lower timestamp than B implies that A happened before B, then our ordering task becomes trivial.
 
@@ -38,8 +38,8 @@ We'll get back to talking about clock error later, but for now the important poi
 
 **Level 1: A Little Smarter about Wasted Work**
 
-> He's worth no more;
-> They say he parted well, and paid his score,
+> He's worth no more;  
+> They say he parted well, and paid his score,  
 > And so, God be with him! Here comes newer comfort.<sup>[7](#foot7)</sup>
 
 Have you ever worked on something, then once you got it done you were told it wasn't needed anymore? Distributed systems feel like that all the time. Clients give us work, then time out, or wander off, and the work still gets done. One solution to this problem is to give each piece of work a Time To Live (TTL), where each item of work is marked with an expiry time. "If you're still working on this after twelve thirty, don't bother finishing it because I won't be waiting anymore". TTLs have traditionally been implemented using relative time (*in 10 seconds*, or in steps as with [IP](https://datatracker.ietf.org/doc/html/rfc791)) rather than absolute time (*until 09:54:10 UTC*) because comparing absolute times across machines is risky. The downside of the relative approach is that everybody needs to measure the time taken and remember to decrease the TTL, which adds complexity. High quality clocks fix the drift problem, and allow us to use absolute time TTLs.
@@ -50,34 +50,34 @@ Here on Level 1 clock quality matters more than Level 0, because the operational
 
 **Level 2: Rates and Leases**
 
-> Gambling's wrong and so is cheating, so is forging phony I.O.U.s.
-> Let's let Lady Luck decide what type of torture's justified,
+> Gambling's wrong and so is cheating, so is forging phony I.O.U.s.  
+> Let's let Lady Luck decide what type of torture's justified,  
 > I'm pit boss here on level two!<sup>[8](#foot8)</sup>
 
 [Leases](https://dl.acm.org/doi/10.1145/74851.74870) are a nearly ubiquitous, go-to, mutual exclusion mechanism in distributed systems. The core idea is simple: have a client *lease* the right to exclude other clients for a period of time, and allow them to periodically renew their lease to keep excluding others. Leases, unlike more naive locks, allow the system to recover if a client fails while holding onto exclusivity: the lease isn't renewed, it times out, and other clients are allowed to play. It's this fault tolerance property that makes leases so popular.
 
 Did you notice those words *a period of time*? Leases make a very specific assumption: that the lease provider's clock moves at about the same speed as the lease holder's clock. They don't have to have the same absolute value, but they do need to mostly agree on how long a second is. If the lease holder's clock is running fast, that's mostly OK because they'll just renew too often. If the lease provider's clock is moving fast, they might allow another client to take the lease while the first one still thinks they're holding it. That's less OK.
 
-Robust lease implementations fix this problem with a *safety time* ($\Delta_{safety}$). Instead of allowing the lease provider to immediately when the lease expires ($\T \langle expiry \rangle$), they need to wait an extra amount of time (until $\T \langle expiry \rangle + \Delta_{safety}$) before handing out the lease to somebody else, while the lease holder tries to ensure that they renew comfortably before $\T \langle expiry \rangle$.
+Robust lease implementations fix this problem with a *safety time* ($\Delta_{safety}$). Instead of allowing the lease provider to immediately when the lease expires ($T \langle expiry \rangle$), they need to wait an extra amount of time (until $T \langle expiry \rangle + \Delta_{safety}$) before handing out the lease to somebody else, while the lease holder tries to ensure that they renew comfortably before $T \langle expiry \rangle$.
 
-Robust lease implementations also need to ensure that lease holders don't keep assuming they hold the lease beyond $\T \langle expiry \rangle$. This sounds trivial, but in a world of pauses from GC and IO and multithreading and whatnot it's harder than it looks. Being able to reason about the expiry time with absolute time may make this simpler.
+Robust lease implementations also need to ensure that lease holders don't keep assuming they hold the lease beyond $T \langle expiry \rangle$. This sounds trivial, but in a world of pauses from GC and IO and multithreading and whatnot it's harder than it looks. Being able to reason about the expiry time with absolute time may make this simpler.
 
 Whatever the implementation, leases fundamentally make assumptions about clock rate. Historically, clock rates have been more reliable than clock absolute values, but still aren't entirely foolproof. Better clocks make leases more reliable.
 
 **Level 3: Getting Real about Time**
 
-> I am the very model of a modern Major-General,
-> I've information vegetable, animal, and mineral,
-> I know the kings of England, and I quote the fights historical
+> I am the very model of a modern Major-General,  
+> I've information vegetable, animal, and mineral,  
+> I know the kings of England, and I quote the fights historical  
 > From Marathon to Waterloo, in order categorical;<sup>[9](#foot9)</sup>
 
 When a client asks a database for *consistent* data, they're typically asking something very specific: make sure the answer reflects all the facts that were known *before I started this request* (or, even more specifically, at some point between this request was started and when it completed). They might also be asking for an *isolated snapshot* of the facts, but they can't ask for facts that haven't come along yet. Just the facts so far, please.
 
-In other words, they're asking the database to pick a time $T \langle now \rangle$ such that $\T \langle request start \rangle \leq \T \langle now \rangle \leq \T \langle request end \rangle$ and all facts that were committed before $T \langle now \rangle$ are visible. They might also be asking that facts committed after $T \langle now \rangle$ are not visible, but that's more a matter of isolation than of consistency.
+In other words, they're asking the database to pick a time $T \langle now \rangle$ such that $T \langle request start \rangle \leq \T \langle now \rangle \leq \T \langle request end \rangle$ and all facts that were committed before $T \langle now \rangle$ are visible. They might also be asking that facts committed after $T \langle now \rangle$ are not visible, but that's more a matter of isolation than of consistency.
 
 In a single-system database, this is trivial. In a sharded database, the isolation part is a little tricky but the per-key consistency part is easy. Replication, when we have multiple copies of any individual fact in the database, is when things get tricky. What we want is for a client to be able to go to any replica independently, and not require any coordination between replicas when these reads occur, because this allows us to scale reads horizontally.
 
-There are many, many, variants on solutions to this problem. High-quality absolute time gives us a rather simple one: the client picks its $\T \langle request start \rangle$, then goes to a replica and says "wait until you're sure you've seen all the writes before $\T \langle request start \rangle$, then do this read for me". This complicates writes somewhat (writes need to be totally ordered in an order consistent with physical time), but makes consistent reads easy.
+There are many, many, variants on solutions to this problem. High-quality absolute time gives us a rather simple one: the client picks its $T \langle request start \rangle$, then goes to a replica and says "wait until you're sure you've seen all the writes before $T \langle request start \rangle$, then do this read for me". This complicates writes somewhat (writes need to be totally ordered in an order consistent with physical time), but makes consistent reads easy.
 
 We're starting to form a picture of a tradeoff now. Relying on physical time allows distributed systems to avoid coordination in some cases where it would have otherwise been necessary. However, if that time is wrong, the result will also likely be wrong.
 
@@ -111,7 +111,7 @@ But clocks aren't perfect. Every oscillator has some amount of jitter and some a
 
 To avoid getting too confused, and riffing off Lamport<sup>[4](#foot4)</sup>, we can establish some notation. Let's say $T \langle A \rangle$ is the time that event $A$ happens. But $T \langle A \rangle$ is a secret to us: instead we can only know that it lies somewhere between $T \langle A \rangle_{low}$ and $T \langle A \rangle_{high}$. Alternatively, we can say that we can know $T \langle A \rangle + \epsilon$ where $\epsilon$ is chosen from some asymmetrical error distribution. Improving clock quality is both about driving $E[\epsilon]$ to zero, and about putting tight bounds on the range of $\epsilon$. 
 
-If our bounds are accurate enough we can say that $T \langle A \rangle_{high} < T \langle B \rangle_{low}$ implies that $B$ *happens before* $A$. We can write this as $A \rightarrow B$. The full statement is then $T \langle A \rangle_{high} < T \langle B \rangle_{low} \Rightarrow A \rightarrow B$ <sup>[5](#foot5)</sup>, and $A \rightarrow B \Rightarrow T \langle A \rangle_{high} < T \langle B \rangle_{low}$ (here, we're using $\Rightangle$ to mean *implies*).
+If our bounds are accurate enough we can say that $T \langle A \rangle_{high} < T \langle B \rangle_{low}$ implies that $B$ *happens before* $A$. We can write this as $A \rightarrow B$. The full statement is then $T \langle A \rangle_{high} < T \langle B \rangle_{low} \Rightarrow A \rightarrow B$ <sup>[5](#foot5)</sup>, and $A \rightarrow B \Rightarrow T \langle A \rangle_{high} < T \langle B \rangle_{low}$ (here, we're using $\Rightarrow$ to mean *implies*).
 
 There's something qualitative and important that happens when the error on $T \langle A \rangle$ (aka $\epsilon$) is smaller than the amount of time it would take event $A$ to cause anything to happen (e.g. smaller than one network latency): that means that we can be sure that events that are timestamped before $T \langle A \rangle$ *cannot have been caused by A*. This is a rather magical property.
 
@@ -119,7 +119,7 @@ I'm suspicious of any distributed system design that uses time without talking a
 
 **Paradiso**
 
-> But already my desire and my will 
+> But already my desire and my will  
 > were being turned like a wheel, all at one speed<sup>[13](#foot13)</sup>
 
 If you're still with me, brave and intrepid to have made it this far, I'd like to offer a tool for thinking about how to use physical time in your distributed systems: start by thinking about what can go wrong.
