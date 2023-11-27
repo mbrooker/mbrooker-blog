@@ -24,7 +24,7 @@ In hopes of understanding the controversy over using real time in systems, let's
 
 **Level 0: Observability, and the Amusement of Humans**
 
-> *... reality, the name we give to the common experience<sup>[3](#foot3)</sup>*
+> ... reality, the name we give to the common experience<sup>[3](#foot3)</sup>
 
 When we try understand how a system works, or why it's not working, the first task is to establish *causality*. Thing A caused thing B. Here in our weird little universe, we need thing A to have *happened before* thing B for A to have caused B. Time is useful for this. 
 
@@ -38,9 +38,9 @@ We'll get back to talking about clock error later, but for now the important poi
 
 **Level 1: A Little Smarter about Wasted Work**
 
-> *He's worth no more;
+> He's worth no more;
 > They say he parted well, and paid his score,
-> And so, God be with him! Here comes newer comfort.<sup>[7](#foot7)</sup>*
+> And so, God be with him! Here comes newer comfort.<sup>[7](#foot7)</sup>
 
 Have you ever worked on something, then once you got it done you were told it wasn't needed anymore? Distributed systems feel like that all the time. Clients give us work, then time out, or wander off, and the work still gets done. One solution to this problem is to give each piece of work a Time To Live (TTL), where each item of work is marked with an expiry time. "If you're still working on this after twelve thirty, don't bother finishing it because I won't be waiting anymore". TTLs have traditionally been implemented using relative time (*in 10 seconds*, or in steps as with [IP](https://datatracker.ietf.org/doc/html/rfc791)) rather than absolute time (*until 09:54:10 UTC*) because comparing absolute times across machines is risky. The downside of the relative approach is that everybody needs to measure the time taken and remember to decrease the TTL, which adds complexity. High quality clocks fix the drift problem, and allow us to use absolute time TTLs.
 
@@ -50,9 +50,9 @@ Here on Level 1 clock quality matters more than Level 0, because the operational
 
 **Level 2: Rates and Leases**
 
-> *Gambling's wrong and so is cheating, so is forging phony I.O.U.s.
+> Gambling's wrong and so is cheating, so is forging phony I.O.U.s.
 > Let's let Lady Luck decide what type of torture's justified,
-> I'm pit boss here on level two!<sup>[8](#foot8)</sup>*
+> I'm pit boss here on level two!<sup>[8](#foot8)</sup>
 
 [Leases](https://dl.acm.org/doi/10.1145/74851.74870) are a nearly ubiquitous, go-to, mutual exclusion mechanism in distributed systems. The core idea is simple: have a client *lease* the right to exclude other clients for a period of time, and allow them to periodically renew their lease to keep excluding others. Leases, unlike more naive locks, allow the system to recover if a client fails while holding onto exclusivity: the lease isn't renewed, it times out, and other clients are allowed to play. It's this fault tolerance property that makes leases so popular.
 
@@ -66,10 +66,10 @@ Whatever the implementation, leases fundamentally make assumptions about clock r
 
 **Level 3: Getting Real about Time**
 
-*I am the very model of a modern Major-General,
-I've information vegetable, animal, and mineral,
-I know the kings of England, and I quote the fights historical
-From Marathon to Waterloo, in order categorical;<sup>[9](#foot9)</sup>*
+> I am the very model of a modern Major-General,
+> I've information vegetable, animal, and mineral,
+> I know the kings of England, and I quote the fights historical
+> From Marathon to Waterloo, in order categorical;<sup>[9](#foot9)</sup>
 
 When a client asks a database for *consistent* data, they're typically asking something very specific: make sure the answer reflects all the facts that were known *before I started this request* (or, even more specifically, at some point between this request was started and when it completed). They might also be asking for an *isolated snapshot* of the facts, but they can't ask for facts that haven't come along yet. Just the facts so far, please.
 
@@ -83,7 +83,7 @@ We're starting to form a picture of a tradeoff now. Relying on physical time all
 
 **Level 4: Consistent Snapshots**
 
-*Life is not about significant details, illuminated in a flash, fixed forever.<sup>[10](#foot10)</sup>*
+> Life is not about significant details, illuminated in a flash, fixed forever.<sup>[10](#foot10)</sup>
 
 Just like we can use absolute time to get consistent reads, we can use absolute time to take consistent snapshots. Classic algorithms like [Chandy-Lamport](https://www.microsoft.com/en-us/research/publication/distributed-snapshots-determining-global-states-distributed-system/) have to deal with the fact that distributed systems can't easily tell everybody to do something at the same time (e.g. "write down everything you know and send it to me"). With high-quality absolute time we can. "At 12:00:00 exactly, write down everything you know and send it to me". With a perfect clock, this is trivial.
 
@@ -91,7 +91,7 @@ Even excellent clocks, however, aren't perfect. Even with only tens of microseco
 
 **Level 5: Ordering Updates**
 
-*Effective leadership is putting first things first.<sup>[11](#foot11)</sup>*
+> Effective leadership is putting first things first.<sup>[11](#foot11)</sup>
 
 Last Writer Wins (LWW) is a very popular, and effective, way to avoid coordination in a multi-writer distributed database. It provides a simple rule for dealing with conflicts: the one with the higher timestamp overwrites the one with the lower timestamp. LWW has two big advantages. First, it doesn't require coordination, and therefore allows for low latency, high availability, and high scalability. The second is that it's really super simple. CRDTs (and other generalizations of monotonicity) have the same first advantage, but not typically the second. They are seldom *super simple*.
 
@@ -101,7 +101,7 @@ Using physical clocks to order writes is, for good reasons, controversial. In fa
 
 **When Things Go Wrong**
 
-*They're funny things, Accidents. You never have them till you're having them.<sup>[6](#foot6)</sup>*
+> They're funny things, Accidents. You never have them till you're having them.<sup>[6](#foot6)</sup>
 
 So far, I've been talking about time as though programs can know what the current time is. This is obviously impossible.
 
