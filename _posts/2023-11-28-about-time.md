@@ -52,14 +52,52 @@ Here on Level 1 clock quality matters more than Level 0, because the operational
 
 **Level 2: Rates and Leases**
 
-*Gambling's wrong and so is cheating, so is forging phony I.O.U.s. Let's let Lady Luck decide what type of torture's justified, I'm pit boss here on level two!<sup>[8](#foot8)</sup>*
+*Gambling's wrong and so is cheating, so is forging phony I.O.U.s.
+Let's let Lady Luck decide what type of torture's justified,
+I'm pit boss here on level two!<sup>[8](#foot8)</sup>*
 
 [Leases](https://dl.acm.org/doi/10.1145/74851.74870) are the nearly ubiquitous, go-to, time-based mutual exclusion mechanism in distributed systems. The core idea is simple: have a client *lease* the right to exclude other clients for a period of time, and allow them to periodically renew their lease to keep excluding others. Leases, unlike more naive locks, allow the system to recover if a client fails while holding onto exclusivity: the lease isn't renewed, it times out, and other clients are allowed to play. It's this fault tolerance property that makes leases so popular.
 
 Did you notice those words *a period of time*? Leases make a very specific assumption: that the lease provider's clock moves at about the same speed as the lease holder's clock. They don't have to have the same absolute value, but they do need to mostly agree on how long a second is. If the lease holder's clock is running fast, that's mostly OK because they'll just renew too often. If the lease provider's clock is moving fast, they might allow another client to take the lease while the first one still thinks they're holding it. That's less OK.
 
-Robust lease implementations fix this problem with a *safety time* ($\Delta_{safety}$). Instead of allowing the lease provider to immediately when the lease expires ($\T \langle expiry \rangle$), they need to wait an extra amount of time (until $\T \langle expiry \rangle + \Delta_{safety}$)
+Robust lease implementations fix this problem with a *safety time* ($\Delta_{safety}$). Instead of allowing the lease provider to immediately when the lease expires ($\T \langle expiry \rangle$), they need to wait an extra amount of time (until $\T \langle expiry \rangle + \Delta_{safety}$) before handing out the lease to somebody else, while the lease holder tries to ensure that they renew comfortably before $\T \langle expiry \rangle$.
 
+Robust lease implementations also need to ensure that lease holder's don't keep assuming they hold the lease beyond $\T \langle expiry \rangle$. This sounds trivial, but in a world of pauses from GC and IO and multithreading and whatnot it's harder than it looks. Being able to reason about the expiry time with absolute time may make this simpler.
+
+Whatever the implementation, leases fundamentally make assumptions about clock rate. Historically, clock rates have been more reliable than clock absolute values, but still aren't entirely foolproof. Better clocks make leases more reliable.
+
+**Level 3: Getting Real about Time**
+
+*I am the very model of a modern Major-General,
+I've information vegetable, animal, and mineral,
+I know the kings of England, and I quote the fights historical
+From Marathon to Waterloo, in order categorical;<sup>[9](#foot9)</sup>*
+
+When a client asks a database for *consistent* data, they're typically asking something very specific: make sure the answer reflects all the facts that were known *before I started this request* (or, even more specifically, at some point between this request was started and when it completed). They might also be asking for an *isolated snapshot* of the facts, but they can't ask for facts that haven't come along yet. Just the facts so far, please.
+
+In other words, they're asking the database to pick a time $T \langle now \rangle$ such that $\T \langle request start \rangle \leq \T \langle now \rangle \leq \T \langle request end \rangle$ and all facts that were committed before $T \langle now \rangle$ are visible. They might also be asking that facts committed after $T \langle now \rangle$ are not visible, but that's more a matter of isolation than of consistency.
+
+In a single-system database, this is trivial. In a sharded database, the isolation part is a little tricky but the per-key consistency part is easy. Replication, when we have multiple copies of any individual fact in the database, is when things get tricky. What we want is for a client to be able to go to any replica independently, and not require any coordination between replicas when these reads occur, because this allows us to scale reads horizontally.
+
+There are many, many, variants on solutions to this problem. High-quality absolute time gives us a rather simple one: the client picks its $\T \langle request start \rangle$, then goes to a replica and says "wait until you're sure you've seen all the writes before $\T \langle request start \rangle$, then do this read for me". This complicates writes somewhat (writes need to be totally ordered in an order consistent with physical time), but makes consistent reads easy.
+
+**Level 4: Consistent Snapshots**
+
+*Life is not about significant details, illuminated in a flash, fixed forever.<sup>[10](#foot10)</sup>*
+
+Just like we can use absolute time to get consistent reads, we can use absolute time to take consistent snapshots. Classic algorithms like [Chandy-Lamport](https://www.microsoft.com/en-us/research/publication/distributed-snapshots-determining-global-states-distributed-system/) have to deal with the fact that distributed systems can't easily tell everybody to do something at the same time (e.g. "write down everything you know and send it to me"). With high-quality absolute time we can. "At 12:00:00 exactly, write down everything you know and send it to me". With a perfect clock, this is trivial.
+
+Even excellent clocks, however, aren't perfect. Even with only tens of microseconds of time error, things can change during the uncertainty interval and make the snapshot inconsistent. This is where having a bound on clock error (such as what you can get with [clock-bound](https://github.com/aws/clock-bound)) becomes useful: it provides a bounded window of time when a snapshot can be captured along with a window of changes that are relatively easy to fix with a full view of the system. The smaller the window, the less post-repair work is needed.
+
+**Level 5: Last Writer Wins**
+
+*Effective leadership is putting first things first.<sup>[11](#foot11)</sup>*
+
+Last Writer Wins (LWW) is a very popular, and effective, way to avoid coordination in a multi-writer distributed database. It provides a simple rule for dealing with conflicts: the one with the higher timestamp overwrites the one with the lower timestamp. LWW has two big advantages. First, it doesn't require coordination, and therefore allows for low latency, high availability, and high scalability. The second is that it's really super simple. CRDTs (and other generalizations of monotonicity) have the same first advantage, but not typically the second. They are seldom *super simple*.
+
+LWW also has two disadvantages. First, the semantics of "clobber this write with that one" aren't great, making it difficult to make internally consistent changes to complex databases (ACID's *C*) or data structures. Second, the definition of *last* may not always match what the clients expect. In fact, they may do write *A* then write *B* and see *A* take precedence over *B* just because it landed on a server with a slightly faster clock. High quality clocks help us solve this second problem. For example, if the clock error is less than the client round-trip time, then the client can never observe this kind of anomaly. They can still happen, but the client can never prove they happened.
+
+Using physical clocks to order writes is, for good reasons, controversial. In fact, most experienced distributed system builders would consider it a sin. But high quality clocks allow us to avoid one of the major downsides of LWW, and make its attractive properties even more attractive in the right applications.
 
 **When Things Go Wrong**
 
@@ -79,3 +117,6 @@ Robust lease implementations fix this problem with a *safety time* ($\Delta_{saf
 6. <a name="foot6"></a> A. A. Milne, of course.
 7. <a name="foot7"></a> Shakespeare, from Macbeth. This line is followed with the greatest stage direction of all "Enter Macduff, with Macbeth's head."
 8. <a name="foot8"></a> From the delightful Futurama episode "Hell is Other Robots", credited to Ken Keeler and Eric Kaplan.
+9. <a name="foot9"></a> For my military knowledge, though I'm plucky and adventury, Has only been brought down to the beginning of the century.
+10. <a name="foot10"></a> From Sontag's *On Photography*. "One can't possess reality, one can possess images" is nearly as fitting.
+11. <a name="foot11"></a> From Stephen Covey, I think from the book of the same name. You thought you'd make it this far without 
