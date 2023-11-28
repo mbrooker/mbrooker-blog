@@ -34,7 +34,7 @@ When we try understand how a system works, or why it's not working, the first ta
 
 If we can't trust the order of our logs (or other events), finding causality is difficult. If our logs are accurately timestamped the task becomes much easier. If we can expect our logs to be timestamped so accurately that a A having a lower timestamp than B implies that A happened before B, then our ordering task becomes trivial.
 
-We'll get back to talking about clock error later, but for now the important point is that sufficiently accurate clocks make observing systems significantly easier, because they make establishing causality significantly easier. 
+We'll get back to talking about clock error later, but for now the important point is that sufficiently accurate clocks make observing systems significantly easier, because they make establishing causality significantly easier. This is a big deal. If we get nothing else out of good clocks, just the observability benefits are probably worth it.
 
 **Level 1: A Little Smarter about Wasted Work**
 
@@ -99,6 +99,8 @@ LWW also has two disadvantages. First, the semantics of "clobber this write with
 
 Using physical clocks to order writes is, for good reasons, controversial. In fact, most experienced distributed system builders would consider it a sin. But high quality clocks allow us to avoid one of the major downsides of LWW, and make its attractive properties even more attractive in the right applications.
 
+If you're thinking about ordering writes or doing consistent snapshots using physical time, it's worth checking out hybrid approaches (like [Hybrid Logical Clocks](http://muratbuffalo.blogspot.com/2014/07/hybrid-logical-clocks.html) or [physiological time order](https://people.csail.mit.edu/devadas/pubs/tardis.pdf)) that offer properties that degrade more gracefully in the face of time error.
+
 **When Things Go Wrong**
 
 > They're funny things, Accidents. You never have them till you're having them.<sup>[6](#foot6)</sup>
@@ -111,7 +113,7 @@ But clocks aren't perfect. Every oscillator has some amount of jitter and some a
 
 To avoid getting too confused, and riffing off Lamport<sup>[4](#foot4)</sup>, we can establish some notation. Let's say $T \langle A \rangle$ is the time that event $A$ happens. But $T \langle A \rangle$ is a secret to us: instead we can only know that it lies somewhere between $T \langle A \rangle_{low}$ and $T \langle A \rangle_{high}$. Alternatively, we can say that we can know $T \langle A \rangle + \epsilon$ where $\epsilon$ is chosen from some asymmetrical error distribution. Improving clock quality is both about driving $E[\epsilon]$ to zero, and about putting tight bounds on the range of $\epsilon$. 
 
-If our bounds are accurate enough we can say that $T \langle A \rangle_{high} < T \langle B \rangle_{low}$ implies that $B$ *happens before* $A$. We can write this as $A \rightarrow B$. The full statement is then $T \langle A \rangle_{high} < T \langle B \rangle_{low} \Rightarrow A \rightarrow B$ <sup>[5](#foot5)</sup>, and $A \rightarrow B \Rightarrow T \langle A \rangle_{high} < T \langle B \rangle_{low}$ (here, we're using $\Rightarrow$ to mean *implies*).
+If our bounds are accurate enough we can say that $T \langle A \rangle_{high} < T \langle B \rangle_{low}$ implies that $A$ *happens before* $B$. We can write this as $A \rightarrow B$. The full statement is then $T \langle A \rangle_{high} < T \langle B \rangle_{low} \Rightarrow A \rightarrow B$ <sup>[5](#foot5)</sup>, and $A \rightarrow B \Rightarrow T \langle A \rangle_{high} < T \langle B \rangle_{low}$ (here, we're using $\Rightarrow$ to mean *implies*).
 
 There's something qualitative and important that happens when the error on $T \langle A \rangle$ (aka $\epsilon$) is smaller than the amount of time it would take event $A$ to cause anything to happen (e.g. smaller than one network latency): that means that we can be sure that events that are timestamped before $T \langle A \rangle$ *cannot have been caused by A*. This is a rather magical property.
 
@@ -126,7 +128,7 @@ If you're still with me, brave and intrepid to have made it this far, I'd like t
 
 *What if the clock I use for my log timestamps are wrong?* Operators and customers will likely be confused. This is unlikely to have any first-order effects on the operations of your system, but could make it more difficult to operate and increase downtime in that way.
 
-*What if the clock I use to do reads is wrong?* Perhaps your design, like [DynamoDB's transaction design](https://www.usenix.org/system/files/atc23-idziorek.pdf) would retain serializability but lose linearizability and see a lower transaction rate.
+*What if the clock I use to do reads is wrong?* Perhaps your design, like [DynamoDB's transaction design](https://www.usenix.org/system/files/atc23-idziorek.pdf) would retain serializability but lose linearizability and see a lower transaction rate. Keeping some properties in the face of clock error is where approaches like [Hybrid Logical Clocks](http://muratbuffalo.blogspot.com/2014/07/hybrid-logical-clocks.html) come in super handy.
 
 And so on. If you can come up with a good explanation for what will happen when time is wrong, and you're OK with that happening with some probability, then you should feel OK using physical time. If arbitrarily bad things happen when time is wrong, you're probably going to have a bad time. If you don't consider it all, then you may consider yourself lost.
 
