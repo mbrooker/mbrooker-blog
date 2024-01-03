@@ -40,7 +40,7 @@ $S^2 = \frac{ ( \frac{D}{d_0} )^2 + 1}{\frac{N}{K} - 1}$
 
 Finally, introducing the minimum comfortable listener SNR $S_m$, we can calculate the critical number of guests $N_0$ where the party transitions from a quiet one (comfortable speaking in loose groups) to a loud one (shouting in uncomfortably tight groups).
 
-$N \< N_0 = K ( 1 + \frac{D\^2 + d_0\^2}{d_0\^2 S_m\^2} )$
+$N \< N_0 = K ( 1 + \frac{D^2 + d_0^2}{d_0^2 S_m^2} )$
 
 MacLean goes on to show<sup>[5](#foot5)</sup> that even if the speakers are interrupted by silence (a speech from the host, perhaps), the party will become loud again in a finite time so long as $N \geq N_0$.
 
