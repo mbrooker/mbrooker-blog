@@ -36,7 +36,7 @@ $D = \sqrt{\frac{\alpha V}{4 \pi h}}$
 
 where $V$ is the volume of the room, $\alpha$ is the average sound absorption coefficient ($a < 1$), and $h$ mean free path of a *ray of sound* through the room<sup>[4](#foot4)</sup>. Then he works out the signal-to-noise ratio (SNR) that each listener observes:
 
-$S\^2 = \frac{ ( \frac{D}{d_0} )\^2 + 1}{\frac{N}{K} - 1}$
+$S^2 = \frac{ ( \frac{D}{d_0} )^2 + 1}{\frac{N}{K} - 1}$
 
 Finally, introducing the minimum comfortable listener SNR $S_m$, we can calculate the critical number of guests $N_0$ where the party transitions from a quiet one (comfortable speaking in loose groups) to a loud one (shouting in uncomfortably tight groups).
 
