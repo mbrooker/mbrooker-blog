@@ -36,4 +36,6 @@ Our last example is a *serverless* system, like Lambda, or S3, or DynamoDB. In t
 
 This linearity of marginal cost is super important, and the key customer benefit of serverless pricing models. Scalability works both *down* (by not having an initial spike), and *up* (by not having spikes at particular loads). The downside is that the *floor* is a constant rather than being near-zero, which requires a fundamentally different approach to thinking about unit economics.
 
+For this to work, you need to have a rather holistic view of *cost*. For example, you could achieve the serverless cost model, looking only at price, by using an existing serverless offering or by building your own. However, with a more realistic view of cost, building your own would come with a significant initial spike. All the cost to design, build, debug, etc the first version really adds up. The same is true of sharded or load balanced systems - their initial spikes tend to be larger. This is a key reason I prefer serverless as a base for systems building, where I can get it.
+
 These examples aren't anywhere near exhaustive. The definition, and this form of graphing it out, is a useful tool that I reach for all the time when thinking about system designs.
