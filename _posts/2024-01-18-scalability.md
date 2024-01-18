@@ -26,14 +26,14 @@ The place people run into trouble with these single-box systems is either overes
 
 Our second example is a classic multi-machine architecture, which could be a sharded database, or a load-balanced application. As with a single box, we have an initial spike where we have to buy the first box/container/etc. Then there are periods where the marginal cost is low, with periodic spikes related to adding another fixed-size unit. Depending on the kind of application, the size of that initial spike may be the same size as the single-box case (some apps are trivial to load-balance), or it could be much higher (because you need to figure out how to shard).
 
-![](/blog/images/scalabilty_sharded.png)
+![](/blog/images/scalability_sharded.png)
 
 This diagram is being very optimistic for sharded databases, essentially assuming the workload requires no cross-shard coordination. If it does, then the marginal costs once we pass a single machine are no longer constant, and there's a significant stairstep as the need for coordination crosses more machines. [I've written about this effect before](https://brooker.co.za/blog/2022/10/04/commitment.html).
 
 Our last example is a *serverless* system, like Lambda, or S3, or DynamoDB. In these models, the marginal cost of additional work (or additional storage) is nearly constant across the entire range. Work is billed per-unit, and if there are stair steps they're usually downwards (as with S3's tiered pricing).
 
-![](/blog/images/scalabilty_serverless.png)
+![](/blog/images/scalability_serverless.png)
 
 This linearity of marginal cost is super important, and the key customer benefit of serverless pricing models. Scalability works both *down* (by not having an initial spike), and *up* (by not having spikes at particular loads). The downside is that the *floor* is a constant rather than being near-zero, which requires a fundamentally different approach to thinking about unit economics.
 
-These examples don't capture all the subtlety 
+These examples aren't anywhere near exhaustive. The definition, and this form of graphing it out, is a useful tool that I reach for all the time when thinking about system designs.
