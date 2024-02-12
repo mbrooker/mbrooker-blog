@@ -66,7 +66,7 @@ add a slider that allows the user to change the value of the p parameter" -->
 <canvas id="graphCanvas" width="600" height="600"></canvas><br>
 $p$ parameter: <input type="range" id="pSlider" min="0" max="1" step="0.01" value="0"><br>
 degree: <input type="range" id="degSlider" min="2" max="10" step="2" value="0"><br>
-Zipf exponent: <input type="range" id="zipfSlider" min="1.0" max="1.5" step="0.01" value="0"><br>
+Zipf exponent: <input type="range" id="zipfSlider" min="1.0" max="2.0" step="0.01" value="0"><br>
 
 <script>
 const canvas = document.getElementById('graphCanvas');
@@ -79,7 +79,8 @@ const radius = 250; // Radius for nodes layout in a circle
 const centerX = canvas.width / 2;
 const centerY = canvas.height / 2;
 
-// This is an extremely inefficient O(N^2) way to make Zipf-distributed numbers, but it works OK
+// This is an extremely inefficient O(N^2) way to make Zipf-distributed numbers, but it works OK. This approach
+//  is based on generating the empirical CDF, then sampling from it directly using the O(N) method.
 function generateZipf(s, N) {
     // Calculate Zipfian constants for normalization
     let c = 0;
@@ -98,7 +99,7 @@ function generateZipf(s, N) {
     const random = Math.random();
     for (let i = 1; i <= N; i++) {
         if (random <= cdf[i]) {
-            return i - 1; // Adjust if you want 0 to 20 range, otherwise it gives 1 to 20
+            return i - 1; // Adjust if you want 0 to N-1 range, otherwise it gives 1 to N
         }
     }
     return N - 1; // In case of rounding errors, return the last element
@@ -136,7 +137,7 @@ function generateGraph(p, degree, z_exp) {
                 let oldNeighbor = neighbor;
                 let newNeighbor;
                 do {
-                    newNeighbor = generateZipf(z_exp, 20);
+                    newNeighbor = generateZipf(z_exp, nodeCount);
                 } while (newNeighbor === key || edges.get(key).has(newNeighbor));
                 edges.get(key).delete(oldNeighbor);
                 edges.get(key).add(newNeighbor);
