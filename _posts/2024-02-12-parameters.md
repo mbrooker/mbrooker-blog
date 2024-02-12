@@ -63,18 +63,21 @@ draw a 20 node graph, follows the "small world networks" model
 add a slider that allows the user to change the value of the p parameter" -->
 
 <div markdown="0">
-<canvas id="graphCanvas" width="600" height="600"></canvas>
-<input type="range" id="pSlider" min="0" max="1" step="0.01" value="0">
+<canvas id="graphCanvas" width="600" height="600"></canvas><br>
+$p$ parameter: <input type="range" id="pSlider" min="0" max="1" step="0.01" value="0"><br>
+degree: <input type="range" id="degSlider" min="2" max="10" step="2" value="0"><br>
+
 <script>
 const canvas = document.getElementById('graphCanvas');
 const ctx = canvas.getContext('2d');
 const slider = document.getElementById('pSlider');
+const degSlider = document.getElementById('degSlider');
 const nodeCount = 20;
 const radius = 250; // Radius for nodes layout in a circle
 const centerX = canvas.width / 2;
 const centerY = canvas.height / 2;
 
-function generateGraph(p) {
+function generateGraph(p, degree) {
     let nodes = [];
     let edges = new Map();
 
@@ -88,7 +91,7 @@ function generateGraph(p) {
     }
 
     // Create a ring lattice with k/2 neighbors each side
-    let k = 4; // Number of nearest neighbors (assumed even for simplicity)
+    let k = degree; // Number of nearest neighbors (assumed even for simplicity)
     for (let i = 0; i < nodeCount; i++) {
         for (let j = 1; j <= k / 2; j++) {
             let neighbor = (i + j) % nodeCount;
@@ -141,7 +144,8 @@ function drawGraph(graph) {
 
 function updateGraph() {
     const p = parseFloat(slider.value);
-    const graph = generateGraph(p);
+    const degree = parseInt(slider.value);
+    const graph = generateGraph(p, degree);
     drawGraph(graph);
 }
 
