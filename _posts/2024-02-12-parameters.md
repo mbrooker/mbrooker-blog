@@ -63,8 +63,8 @@ draw a 20 node graph, follows the "small world networks" model
 add a slider that allows the user to change the value of the p parameter" -->
 
 <canvas id="graphCanvas" width="600" height="600"></canvas>
-    <input type="range" id="pSlider" min="0" max="1" step="0.01" value="0">
-    <script>
+<input type="range" id="pSlider" min="0" max="1" step="0.01" value="0">
+<script>
         const canvas = document.getElementById('graphCanvas');
         const ctx = canvas.getContext('2d');
         const slider = document.getElementById('pSlider');
@@ -148,7 +148,7 @@ add a slider that allows the user to change the value of the p parameter" -->
 
         // Initial drawing
         updateGraph();
-    </script>
+</script>
 
 **Footnotes**
 
