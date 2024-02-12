@@ -66,18 +66,45 @@ add a slider that allows the user to change the value of the p parameter" -->
 <canvas id="graphCanvas" width="600" height="600"></canvas><br>
 $p$ parameter: <input type="range" id="pSlider" min="0" max="1" step="0.01" value="0"><br>
 degree: <input type="range" id="degSlider" min="2" max="10" step="2" value="0"><br>
+Zipf exponent: <input type="range" id="zipfSlider" min="1.0" max="1.5" step="0.01" value="0"><br>
 
 <script>
 const canvas = document.getElementById('graphCanvas');
 const ctx = canvas.getContext('2d');
 const slider = document.getElementById('pSlider');
 const degSlider = document.getElementById('degSlider');
+const zipfSlider = document.getElementById('zipfSlider');
 const nodeCount = 20;
 const radius = 250; // Radius for nodes layout in a circle
 const centerX = canvas.width / 2;
 const centerY = canvas.height / 2;
 
-function generateGraph(p, degree) {
+// This is an extremely inefficient O(N^2) way to make Zipf-distributed numbers, but it works OK
+function generateZipf(s, N) {
+    // Calculate Zipfian constants for normalization
+    let c = 0;
+    for (let i = 1; i <= N; i++) {
+        c += 1.0 / (i ** s);
+    }
+    c = 1 / c;
+
+    // Generate CDF (cumulative distribution function)
+    let cdf = [0]; // CDF starts with 0
+    for (let i = 1; i <= N; i++) {
+        cdf[i] = cdf[i - 1] + c / (i ** s);
+    }
+
+    // Use random number to find corresponding value
+    const random = Math.random();
+    for (let i = 1; i <= N; i++) {
+        if (random <= cdf[i]) {
+            return i - 1; // Adjust if you want 0 to 20 range, otherwise it gives 1 to 20
+        }
+    }
+    return N - 1; // In case of rounding errors, return the last element
+}
+
+function generateGraph(p, degree, z_exp) {
     let nodes = [];
     let edges = new Map();
 
@@ -109,7 +136,7 @@ function generateGraph(p, degree) {
                 let oldNeighbor = neighbor;
                 let newNeighbor;
                 do {
-                    newNeighbor = Math.floor(Math.random() * nodeCount);
+                    newNeighbor = generateZipf(z_exp, 20);
                 } while (newNeighbor === key || edges.get(key).has(newNeighbor));
                 edges.get(key).delete(oldNeighbor);
                 edges.get(key).add(newNeighbor);
@@ -145,11 +172,14 @@ function drawGraph(graph) {
 function updateGraph() {
     const p = parseFloat(slider.value);
     const degree = parseInt(degSlider.value);
-    const graph = generateGraph(p, degree);
+    const z_exp = parseFloat(zipfSlider.value);
+    const graph = generateGraph(p, degree, z_exp);
     drawGraph(graph);
 }
 
 slider.addEventListener('input', updateGraph);
+degSlider.addEventListener('input', updateGraph);
+zipfSlider.addEventListener('input', updateGraph);
 
 // Initial drawing
 updateGraph();
