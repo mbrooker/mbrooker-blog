@@ -144,7 +144,7 @@ function drawGraph(graph) {
 
 function updateGraph() {
     const p = parseFloat(slider.value);
-    const degree = parseInt(slider.value);
+    const degree = parseInt(degSlider.value);
     const graph = generateGraph(p, degree);
     drawGraph(graph);
 }
