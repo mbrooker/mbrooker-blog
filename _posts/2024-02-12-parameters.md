@@ -62,7 +62,7 @@ large square canvas
 draw a 20 node graph, follows the "small world networks" model
 add a slider that allows the user to change the value of the p parameter" -->
 
-{::comment}
+<div markdown="0">
 <canvas id="graphCanvas" width="600" height="600"></canvas>
 <input type="range" id="pSlider" min="0" max="1" step="0.01" value="0">
 <script>
@@ -150,7 +150,7 @@ slider.addEventListener('input', updateGraph);
 // Initial drawing
 updateGraph();
 </script>
-{:/comment}
+</div>
 
 **Footnotes**
 
