@@ -50,7 +50,9 @@ In the procedure for creating these Watts-Strogatz graph, the targets of the *re
 
 ![](/blog/images/wsz_wsz.png)
 
-Notice how we have introduced a hot key (near the bottom right). Even if we start our random walk uniformly at random, we're quite likely to end up there. This kind of internal hot key is fairly common in relational transactional workloads (for example, secondary indexes with low cardinality, or dense auto-increment keys).
+Notice how we have introduced a hot key (near the bottom right). Even if we start our random walk uniformly, we're quite likely to end up there. This kind of internal hot key is fairly common in relational transactional workloads (for example, secondary indexes with low cardinality, or dense auto-increment keys).
+
+This approach to generating benchmark loads has turned out to be very useful. I like how flexible it is, how we can generate workloads with nearly any characteristics, and how well it maps to other graph-based ways of thinking about databases. I don't love how the relationship between the parameters and the output characteristics is non-linear in a potentially surprising way. Overall, this post and talk were just scratching the surface of a deep topic, and there's a lot more we could talk about.
 
 **Footnotes**
 
