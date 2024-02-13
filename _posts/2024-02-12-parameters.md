@@ -64,7 +64,7 @@ add a slider that allows the user to change the value of the p parameter" -->
 
 <div markdown="0">
 <canvas id="graphCanvas" width="600" height="600"></canvas><br>
-$p$ parameter: <input type="range" id="pSlider" min="0" max="1" step="0.01" value="0"><br>
+$p$ parameter: <input type="range" id="pSlider" min="0" max="0.6" step="0.01" value="0"><br>
 degree: <input type="range" id="degSlider" min="2" max="5" step="1" value="0"><br>
 Zipf exponent: <input type="range" id="zipfSlider" min="0.1" max="2.0" step="0.01" value="0"><br>
 
