@@ -6,7 +6,7 @@ title: "The Builder's Guide to Better Mousetraps"
 {{ page.title }}
 ================
 
-<p class="meta">Slap shot?</p>
+<p class="meta">A little rubric for making a tough decision.</p>
 
 *Some people who ask me for advice at work get very long responses. Sometimes, those responses aren't specific to my particular workplace, and so I share them here. In the past, I've written about [writing](https://brooker.co.za/blog/2022/11/08/writing.html), [writing for an audience](https://brooker.co.za/blog/2023/09/21/audience.html), [heuristics](https://brooker.co.za/blog/2022/12/15/thumb.html), [getting big things done](https://brooker.co.za/blog/2020/10/19/big-changes.html), and [how to spend your time](https://brooker.co.za/blog/2024/02/06/time.html). This is another of those emails.*
 
