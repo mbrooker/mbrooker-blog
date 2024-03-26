@@ -18,7 +18,7 @@ title: "Container Loading in AWS Lambda"
 
 Back in 2019, we started thinking about how allow Lambda customers to use container images to deploy their Lambda functions. In theory this is easy enough: a container image is an image of a filesystem, just like the *zip* files we already supported. The difficulty, as usual with big systems, was performance. Specifically latency. More specifically *cold start* latency. For eight years *cold start* latency has been one of our biggest investment areas in Lambda, and we wanted to support container images without increasing latency.
 
-But how do you take the biggest contributor to latency (downloading the image), increase the work it needs to do 40x (up to 10GiB from 256MiB), without increasing latency? The answer to that question is in our new paper [On-demand Container Loading in AWS Lambda](https://arxiv.org/pdf/2305.13162.pdf), which will be appearing at Usenix ATC'23.
+But how do you take the biggest contributor to latency (downloading the image), increase the work it needs to do 40x (up to 10GiB from 256MiB), without increasing latency? The answer to that question is in our new paper [On-demand Container Loading in AWS Lambda](https://arxiv.org/pdf/2305.13162.pdf), which [appeared at Usenix ATC'23](https://www.usenix.org/conference/atc23/presentation/brooker).
 
 In this post, I'll pull out some highlights from the paper that I think folks might find particularly interesting.
 
@@ -84,6 +84,12 @@ As [Werner Vogels says](https://www.allthingsdistributed.com/2023/05/monoliths-a
 I loved writing this paper (with my co-authors) because it's a perfect illustration of what excites me about the work I do. We identified a real problem for our customers, thought through solutions, and applied a mix of architecture, algorithms, and existing tools to solve the problem. Building systems like this, and watching them run, is immensely rewarding. Building, operating, and improving something like this is a real team effort, and this paper reflects deep work from across the Lambda team and our partner teams.
 
 This system gets performance by doing as little work as possible (deduplication, caching, lazy loading), and then gets resilience by doing slightly more work than needed (erasure coding, salted deduplication, etc). This is a tension worth paying attention to in all system designs.
+
+**In Video**
+
+If you'd prefer to consume this blog post as a video, here's the talk I have at ATC'23.
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/Wden61jKWvs?si=8qs-S6LFmEI-WY-E" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 **Footnotes**
 
