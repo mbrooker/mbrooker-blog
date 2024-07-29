@@ -48,15 +48,31 @@ Cluster-level resource management is where the real cloud magic happens. With a 
  * *Statins* When one host is running too hot, and its resources are too low to provide a great customer experience, we live migrate one or more workloads elsewhere in the fleet. Live migration is seamless from a customer perspective, but a lot of data motion, so we try avoid it when we can.
  * *Surgery* When local resources are running low, *deciders* and *policy* may limit the growth of one or more workloads, ensuring stability for those workloads and the system overall. Surgery may be life-saving and necessary, but is a situation best avoided.
 
- This is more-or-less how Aurora Serverless V2's resource management at the cluster level works: a mix of smart placement, live migration, and local limits when absolutely needed. Here's an example from the paper:
+This is more-or-less how Aurora Serverless V2's resource management at the cluster level works: a mix of smart placement, live migration, and local limits when absolutely needed. Here's an example from the paper:
 
  ![](/blog/images/asv2_fig4.png)
 
- Live migration, the ability to move a running VM from one physical host to another, is another great example of innovation across multiple levels of the system. The mechanism of live migration is an extremely low-level one (down to the point of copying CPU registers over the network), but the policy of when to apply it in Aurora Serverless can only be made well at the large-scale cluster level. 
+To get an idea of how effective the *diet and exercise* step is, here's some data from the paper:
+
+> Collectively, these instances exhibited 16,440,024 scale-up events. Of these, only 2,923 scale-up events needed one or more live migrations ... while the vast majority (99.98%) were satisfied completely via our in-place scaling mechanism.
+
+Live migration, the ability to move a running VM from one physical host to another, is another great example of innovation across multiple levels of the system. The mechanism of live migration is an extremely low-level one (down to the point of copying CPU registers over the network), but the policy of when to apply it in Aurora Serverless can only be made well at the large-scale cluster level. 
+
+*Broader Lessons*
+
+One section of systems papers I often flip to first is the *key take aways* or *lessons learned* sections. There are a few in ours that seem worth highlighting:
+
+> Designing for a predictable resource elasticity experience has been a second central tenet ... on occasion, we do not let an instance grow as fast as the available headroom on its host would theoretically allow.
+
+Database customers love performance, and love low cost. But, perhaps more than anything else, they love predictability. Optimizing for *predictable performance*, even when it means leaving absolute scalability on the table, isn't the best thing for benchmarks but we believe it's what our customers want.
+
+> We found it effective to have the fleet-wide vs. host-level aspects of resource management operate largely independently of each other. ... This significantly simplifies our resource management algorithms and allows them to be more scalable than the alternative.
+
+This, again, is a case where we're leaving potential absolute performance on the table to optimize for another goal. In this case, to optimize for *simplicity*. More directly, this decision allowed us to optimize for *static stability*: the vast majority of scale needs can still be met even when the cluster-wide control plane is unavailable. This is the kind of trade-off that system designers face all the time: making globally optimal decisions is very attractive, but requires that decisions degrade when the global optimizer isn't available or can't be contacted.
 
 *Conclusion*
 
-Please check out our paper [Resource management in Aurora Serverless](https://www.amazon.science/publications/resource-management-in-aurora-serverless). It goes into a lot more detail about the system and how we designed it, and the interesting challenges of teaching traditional database engines to scale.
+Please check out our paper [Resource management in Aurora Serverless](https://www.amazon.science/publications/resource-management-in-aurora-serverless). It goes into a lot more detail about the system and how we designed it, and the interesting challenges of teaching traditional database engines to scale. This was a super fun project to work on, with an extremely talented group of people. We're super happy with how customers have received Aurora Serverless V2, and the team's working every day to make it better.
 
 *Footnotes*
 
