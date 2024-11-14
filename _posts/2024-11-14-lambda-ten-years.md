@@ -33,7 +33,7 @@ We should have noticed this earlier, because the same thing happened with EC2 ne
 
 > Applications in steady use have typical latencies in the range of 20-50ms, determined by timing a simple “echo” application from a client hosted in Amazon EC2.
 
-Today, Lambda invoked are much faster than this. We've written a lot over the years about optimizing tail latencies for Lambda, but in a lot of ways the *median* latency was a much bigger deal for customers. Especially customers building microservice and SoA architectures, where median latencies stack up. 
+Today, Lambda invokes are much faster than this. We've written a lot over the years about optimizing tail latencies for Lambda, but in a lot of ways the *median* latency was a much bigger deal for customers and somewhere we've invested just as much. Especially customers building microservice and SoA architectures, where median latencies stack up. 
 
 In [our talk at reInvent 2018](https://www.youtube.com/watch?v=QdzV04T_kec) Holly Mesrobian talked about Lambda's *worker manager*, the core component that allocates incoming Lambda invokes to available capacity. The original 2014 worker manager was an entirely in-memory process, which was great for latency and allowed it to optimize across a broad segment of the workload. The downside to it was that if a worker manager machine failed all that in-memory state was lost, and it was very expensive to reconstruct. We ended up redesigning *worker manager* to be persistent across AZs, and doing that while decreasing median latency was really challenging. It's one of the places we use AWS's internal Journal service<sup>[1](#foot1)</sup> to great effect.
 
