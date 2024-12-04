@@ -56,7 +56,7 @@ To do that, we start every transaction by picking a transaction start time, $\ta
 
 At the storage level, these *as of* reads are implemented using a classic database technique called multiversion concurrency control (MVCC)<sup>[5](#foot5)</sup>, or multiversioning. The storage engine keeps multiple versions of each row, allowing access to old versions (such as the versions most recent as of $\tau_{start}$) without blocking the creation of new versions. In DSQL's disaggregated distributed architecture this allows us to entirely avoid coordination between replicas on the read path, have as many replicas as we like, and never block other readers or writers on ongoing reads, or readers on ongoing writes.
 
-![](/blog/images/1204_mv.png)
+![](/blog/images/1204_mv.jpg)
 
 Another key benefit of this coordination-free approach is that we can send reads to the nearest read replica (in the same region, and generally AZ) to reduce cost and latency. Reads never have to go to a leader or a primary to be sequenced or have their lock state maintained, simply because they don't have any lock state. This is true in read-only transactions, read-write transactions, and even for the reads triggered by writes (e.g. `UPDATE` is a read-modify-write).
 
