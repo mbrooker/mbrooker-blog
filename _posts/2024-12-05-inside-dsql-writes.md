@@ -22,7 +22,7 @@ As I wrote about yesterday, reads in Aurora DSQL are done using a multiversion c
 
 The story of writes in Xanadu is how and when that coordination happens.
 
-![](/blog/images/1204_read_arch.jpg)
+![](/blog/images/1205_read_arch.jpg)
 
 Let's consider an example transaction:
 
@@ -43,11 +43,13 @@ The really interesting thing start with the `COMMIT`. We need to do three things
 
 First, we pick a commit time for our transaction (we'll call it $\tau_{commit}$). To achieve our desired isolation level (snapshot isolation<sup>[1](#foot1)</sup>), we need to know if, for every key this transaction wants to write, any other transaction wrote the same key between $\tau_{start}$ and $\tau_{commit}$<sup>[2](#foot2)</sup>. We don't need to worry about transactions that committed before $\tau_{start}$, because we've seen all their effects. We don't need to worry about transactions that commit after $\tau_{commit}$, because we don't see any of their effects (although they may end up not being able to commit because of the changes we made).
 
+![](/blog/images/1205_adj.jpg)
+
 In DSQL, this task of looking for conflicts is also disaggregated. It's implemented in a service we call *the adjudicator*. Like all parts of DSQL, the adjudicator is a scale-out component that can scale horizontally, but by breaking this out into a separate service we can optimize that service for checking conflicts with minimal latency and maximum throughput. If a transaction writes rows that span multiple *adjudicators*, we run a cross-adjudicator coordination protocol, which I won't talk about in detail here.
 
-![](/blog/images/1204_write_arch.jpg)
-
 Once the adjudicator has decided we can commit our transaction, we write it to the Journal for replication. Journal is an internal component we've been building at AWS for nearly a decade, optimized for ordered data replication across hosts, AZs, and regions. At this point, our transaction is durable and atomically committed, and we can tell the client the good news about their `COMMIT`. In parallel with sending that good news, we can start applying the results of the transaction to all the relevant storage replicas (making new versions of rows as they come in).
+
+![](/blog/images/1205_write_arch.jpg)
 
 *Optimism*
 
