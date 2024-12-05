@@ -20,7 +20,7 @@ In today's post, I'm going to look at the other half of what's under the covers 
 
 As I wrote about yesterday, reads in Aurora DSQL are done using a multiversion concurrency control (MVCC), allowing them to scale out across many replicas of many storage shards, and across a scalable SQL layer, with no contention or coordination between readers. We'd love to be able to achieve the same properties for writes, but the need to ensure that transactions are isolated from each other (the *I* in ACID), and ordered relative to each other (needed to get strong consistency) requires that we do some amount of coordination.
 
-The story of writes in Xanadu is how and when that coordination happens.
+The story of writes in Aurora DSQL is how and when that coordination happens.
 
 ![](/blog/images/1205_read_arch.jpg)
 
