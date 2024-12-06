@@ -24,7 +24,7 @@ In yesterday's post, I mentioned that Aurora DSQL is designed to remain availabl
 
 Let's start by dipping into Aurora DSQL's multi-region architecture. We'll focus on multi-region clusters here, because they highlight the trade-offs best, but the same rules apply to single region clusters if we substitute *AZ* for *region*. In a multi-region DSQL cluster<sup>[1](#foot1)</sup> each of two regions runs a nearly complete copy of the cluster's infrastructure: a full copy of storage, enough Query Processors (QPs) to handle the load, and so on. The exception is the *adjudicator*: the leader adjudicator for each shard exists in only one region at a time. We'll come back to that, because it's a key part of the story.
 
-![](/blog/images/1205_mr_arch.jpg) 
+![](/blog/images/1206_mr_arch.jpg) 
 
 What benefits does this architecture offer?
 
@@ -39,7 +39,7 @@ You'll notice there are three regions here: two regions with DSQL endpoints and 
 
 Next, we'll turn our attention to what happens during the time when one of the three regions is disconnected and not available. In the case it's the witness region that's disconnected, nothing customer-observable happens (except a small increase in `COMMIT` latency for some configurations<sup>[3](#foot3)</sup>). However, if one of the two full regions because uncontactable, then DSQL makes an important decision.
 
-![](/blog/images/1205_mr_arch_failure.jpg)
+![](/blog/images/1206_mr_arch_failure.jpg)
 
 When one of the two full regions becomes unavailable (*partitioned off* if you like the CAP terminology), the DSQL endpoint in that region becomes unavailable for both reads and writes. The endpoint in the other region (the one on the *majority side*) remains available, and continues to offer strong consistency, isolation, and multi-region durability. Applications can send their customers to the healthy region, and end customers can observe no unavailability.
 
