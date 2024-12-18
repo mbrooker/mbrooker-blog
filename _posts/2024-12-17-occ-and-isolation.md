@@ -65,15 +65,16 @@ But that's well documented, and not what I'm focussing on. What I'm focussing on
 Let's abstract `T1` and `T2` a step further: into read sets and write sets. We'll simplify everything more here by pretending our database has a single table (`food`).
 
 `T1` then has the read set $R_1 = {1,2}$ and the write set $W_1 = {1}$
+
 `T2` then has the read set $R_2 = {1,2}$ and the write set $W_2 = {2}$
 
-Under serializability, once `T1` is committed, `T2` can only commit if `R_2 \cap W_1 = \emptyset` (or, more generally, the set of all writes accepted between `t2_start` and `t2_commit` does not intersect with `R_2`<sup>[1](#foot1)</sup>).
+Under serializability, once `T1` is committed, `T2` can only commit if $R_2 \cap W_1 = \emptyset$ (or, more generally, the set of all writes accepted between `t2_start` and `t2_commit` does not intersect with `R_2`<sup>[1](#foot1)</sup>).
 
-Under snapshot isolation, once `T1` is committed, `T2` can only commit if `W_2 \cap W_1 = \emptyset` (or, more generally, the set of all writes accepted between `t2_start` and `t2_commit` does not intersect with `W_2`).
+Under snapshot isolation, once `T1` is committed, `T2` can only commit if $W_2 \cap W_1 = \emptyset$ (or, more generally, the set of all writes accepted between `t2_start` and `t2_commit` does not intersect with `W_2`).
 
 Ok?
 
-Notice how similar those two statements are: one about `R_2 \cap W_1` and one about `W_2 \cap W_1`. That's the only real difference in the rules.
+Notice how similar those two statements are: one about $R_2 \cap W_1$ and one about $W_2 \cap W_1$. That's the only real difference in the rules.
 
 But it's a *crucial* difference.
 
