@@ -50,7 +50,7 @@ We'll go a step further and explicitly interleave these transactions (as though 
     SELECT amnt FROM food WHERE id = 1 OR id = 2; -- T1
     SELECT amnt FROM food WHERE id = 1 OR id = 2; -- T2
     UPDATE food SET amnt = amnt - 1 WHERE id = 1; -- T1
-    UPDATE food SET amnt = amnt - 1 WHERE id = 1; -- T2
+    UPDATE food SET amnt = amnt - 1 WHERE id = 2; -- T2
     COMMIT; -- T1, t1_commit
     COMMIT; -- T2, t2_commit, WHAT HAPPENS HERE?
 
