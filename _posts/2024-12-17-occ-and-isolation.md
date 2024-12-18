@@ -43,7 +43,7 @@ The forth point here is critical in real systems, but let's ignore it for now an
     UPDATE food SET amnt = amnt - 1 WHERE id = 2;
     COMMIT;
 
-We'll go a step further and explicitly interleave these transactions (as though they were happening at the same time on two different connections to the same database), taking a page from [Hermitage](https://github.com/ept/hermitage/blob/master/postgres.md).
+We'll go a step further and explicitly interleave these transactions (as though they were happening at the same time on two different connections to the same database), taking a page from [Hermitage](https://github.com/ept/hermitage/blob/master/postgres.md)<sup>[4](#foot4)</sup>.
 
     BEGIN; -- T1, t1_start
     BEGIN; -- T2, t2_start
@@ -113,3 +113,4 @@ As with SI versus serializability, the story of trade-offs between optimistic an
 1. <a name="foot1"></a> This general framing is my OCC backward validation bias showing, but it extends to most pessimistic approaches too.
 2. <a name="foot2"></a> These special cases, like the catalog and `FOR UPDATE`, don't fit nicely into the academic framework of SI, and most databases will need to handle them differently from regular key accesses.
 3. <a name="foot3"></a> You will find, typically online, folks who deny that these trade-offs exist. Those people are wrong, both theoretically and practically.
+4. <a name="foot4"></a> You can find Aurora DSQL's [hermitage SQL test set here](https://github.com/marcbrooker/hermitage/blob/master/dsql.md). You may notice that it's very similar to PostgreSQL's `repeatable read` set, but non-blocking instead of blocking.
