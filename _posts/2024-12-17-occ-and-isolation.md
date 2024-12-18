@@ -88,7 +88,7 @@ The trouble is that isolation primarily exists to simplify the lives of applicat
 
 This is the cause of my belief that snapshot isolation, combined with strong consistency, is the right default for most applications and most teams of application programmers: it provides a useful minimum in the sum of worries about anomalies and performance.
 
-Fundamentally, it does that by observing that read sets are smaller than write sets, for the majority of OLTP applications.
+Fundamentally, it does that by observing that write sets are smaller than read sets, for the majority of OLTP applications (often MUCH smaller).
 
 *How Low Can We Go? How Low Should We Go?*
 
