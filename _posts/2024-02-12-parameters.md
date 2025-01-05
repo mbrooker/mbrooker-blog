@@ -8,7 +8,7 @@ title: "Better Benchmarks Through Graphs"
 
 <p class="meta">Isn't the ambiguity in the word *graphs* fun?</p>
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
 <script>
   MathJax = {
     tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}

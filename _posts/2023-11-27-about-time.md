@@ -8,7 +8,7 @@ title: "It's About Time!"
 
 <p class="meta">What's the time? Time to get a watch.</p>
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
 <script>
   MathJax = {
     tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}

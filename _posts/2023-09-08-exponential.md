@@ -8,7 +8,7 @@ title: "Exponential Value at Linear Cost"
 
 <p class="meta">What a deal!</p>
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
 <script>
   MathJax = {
     tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}

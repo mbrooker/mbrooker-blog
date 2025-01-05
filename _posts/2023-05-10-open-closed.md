@@ -8,7 +8,7 @@ title: "Open and Closed, Omission and Collapse"
 
 <p class="meta">Were you born in a cave?</p>
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
 <script>
   MathJax = {
     tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}

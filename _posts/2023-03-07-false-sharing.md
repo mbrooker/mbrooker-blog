@@ -8,7 +8,7 @@ title: "False Sharing versus Perfect Placement"
 
 <p class="meta"></p>
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
 <script>
   MathJax = {
     tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}

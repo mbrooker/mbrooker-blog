@@ -8,7 +8,7 @@ title: "On The Acoustics of Cocktail Parties"
 
 <p class="meta">Only parties of well-mannered guests will be considered.</p>
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
 <script>
   MathJax = {
     tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
