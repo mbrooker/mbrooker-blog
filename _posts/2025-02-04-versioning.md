@@ -27,8 +27,7 @@ commit; -- T0
 
 So far so good. We've inserted two rows into our database. Next, we're going to run two concurrent transactions (from two different connections, call them `T1` and `T2`), like so:
 
-<pre><code class="language-sql">
-begin; -- T2
+<pre><code class="language-sql">begin; -- T2
 begin; -- T1
 select * from test where id = 1; -- T1. A: We want this to show 1 => 10.
 update test set value = value + 2; -- T2
@@ -56,7 +55,7 @@ traditional synchronization mechanisms, such as semaphores, locking, monitors, s
 do not give a tool for representing or naming consistent states -- one can deduce the states
 assumed by the system by timing relationships among the execution of steps of programs.
 
-Versions are the differencing between knowing consistent states and having to *deduce* consistent states! That's a powerful idea.
+Versions are the difference between knowing consistent states and having to *deduce* consistent states! That's a powerful idea.
 
 *Picking A Version, Serving A Version*
 
@@ -64,8 +63,7 @@ Above, I mentioned that `T1` requests it's reads *as-of* a particular version. T
 
 How to pick a version depends a lot on the properties you want. Serializability, in one common definition, would allow read-only transactions to pick almost any version (including *the beginning of time*, returning empty results for all reads). This definition is silly. Let's go back to SQL to think about the results we want:
 
-<pre><code class="language-sql">
-begin; -- T2
+<pre><code class="language-sql">begin; -- T2
 begin; -- T1
 select * from test where id = 1; -- T1. A: We want this to show 1 => 10.
 update test set value = value + 2; -- T2
@@ -91,8 +89,7 @@ before going on to note that Lamport clocks allow the system to do better. The 1
 
 The next question is how to keep track of all those versions. This is a deep question of its own, with tons of interesting trade-offs and different approaches. I won't dive into those here, but instead take a different tack. Let's isolate `T1` from our last example:
 
-<pre><code class="language-sql">
-begin; -- T1
+<pre><code class="language-sql">begin; -- T1
 select * from test where id = 1; -- T1. A: We want this to show 1 => 10.
 select * from test where id = 3; -- T1. C: We want this to show 3 => 30.
 commit; -- T1
@@ -100,8 +97,7 @@ commit; -- T1
 
 which we can then *rewrite* as:
 
-<pre><code class="language-sql">
-begin; -- T1 (gets timestamp 't1_v')
+<pre><code class="language-sql">begin; -- T1 (gets timestamp 't1_v')
 select * from test where id = 1 and hidden_version <= t1_v order by version desc limit 1;
 select * from test where id = 3 and hidden_version <= t1_v order by version desc limit 1;
 commit; -- T1
