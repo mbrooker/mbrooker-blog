@@ -18,8 +18,7 @@ Today, we're going to build a little database system. For availability, latency,
 
 Next, borrowing heavily from [Hermitage](https://github.com/ept/hermitage), we're going to run some SQL.
 
-<pre><code class="language-sql">
-begin; -- T0
+<pre><code class="language-sql">begin; -- T0
 create table test (id int primary key, value int); -- T0
 insert into test (id, value) values (1, 10), (2, 20), (3, 30); -- T0
 commit; -- T0
@@ -29,10 +28,12 @@ So far so good. We've inserted two rows into our database. Next, we're going to 
 
 <pre><code class="language-sql">begin; -- T2
 begin; -- T1
+
 select * from test where id = 1; -- T1. A: We want this to show 1 => 10.
 update test set value = value + 2; -- T2
 select * from test where id = 2; -- T1. B: We want this to show 2 => 20.
 commit; -- T2
+
 select * from test where id = 3; -- T1. C: We want this to show 3 => 30.
 commit; -- T1
 </code></pre>
@@ -68,9 +69,11 @@ begin; -- T1
 select * from test where id = 1; -- T1. A: We want this to show 1 => 10.
 update test set value = value + 2; -- T2
 commit; -- T2
+
 begin; -- T3
 select * from test where id = 3; -- T3. D: We want this to show 3 => 32.
 commit; -- T3
+
 select * from test where id = 3; -- T1. C: We want this to show 3 => 30.
 commit; -- T1
 </code></pre>
