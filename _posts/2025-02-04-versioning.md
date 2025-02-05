@@ -101,8 +101,8 @@ commit; -- T1
 which we can then *rewrite* as:
 
 <pre><code class="language-sql">begin; -- T1 (gets timestamp 't1_v')
-select * from test where id = 1 and hidden_version <= t1_v order by version desc limit 1;
-select * from test where id = 3 and hidden_version <= t1_v order by version desc limit 1;
+select * from test where id = 1 and version <= t1_v order by version desc limit 1;
+select * from test where id = 3 and version <= t1_v order by version desc limit 1;
 commit; -- T1
 </code></pre>
 
