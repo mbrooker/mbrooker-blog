@@ -24,7 +24,7 @@ insert into test (id, value) values (1, 10), (2, 20), (3, 30); -- T0
 commit; -- T0
 </code></pre>
 
-So far so good. We've inserted two rows into our database. Next, we're going to run two concurrent transactions (from two different connections, call them `T1` and `T2`), like so:
+So far so good. We've inserted three rows into our database. Next, we're going to run two concurrent transactions (from two different connections, call them `T1` and `T2`), like so:
 
 <pre><code class="language-sql">begin; -- T2
 begin; -- T1
@@ -38,7 +38,7 @@ select * from test where id = 3; -- T1. C: We want this to show 3 => 30.
 commit; -- T1
 </code></pre>
 
-There's only one valid serializable<sup>[1](#foot1)</sup> ordering of these transactions: at line `A`, `T1` has seen the world before `T2` commits, and so must see that same pre-`T2` world 
+There's only one valid serializable<sup>[1](#foot1)</sup> ordering of these transactions: at line `A`, `T1` has seen the world before `T2` commits, and so must see that same pre-`T2` world until it commits. Therefore `T1` must happen before `T2` in the serial order.
 
 How might we implement this requirement in our distributed architecture?
 

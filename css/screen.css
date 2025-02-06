@@ -214,7 +214,7 @@ ul.pubs span {
 
  #post pre {
     border: 1px solid #ddd;
-    background-color: #f3f3f3;
+    background-color: #f8f8f8;
     padding: 0 .4em;
  }
 
@@ -226,7 +226,7 @@ ul.pubs span {
  #post code {
      border: 1px solid #ddd;
      background-color: #f3f3f3;
-     font-size: 100%;
+     font-size: 80%;
      padding: 0 .2em;
  }
  
