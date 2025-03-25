@@ -34,7 +34,7 @@ First, let's look at the results of wait time versus utilization (utilization $\
 
 ![](/blog/images/arrival_rate_avg_wait.png)
 
-At low utilization, as expected, the queue length remains short and both systems offer reasonable service times. However, as utilization approaches 100%, the mean wait times for single queue variant increase much more quickly than the multi-queue variant. Keep in mind there's some bias on the mean here - because the utilization of each variant is calculated independently, there are a lot more total arrivals for a quicker visit.
+At low utilization, as expected, the queue length remains short and both systems offer reasonable service times (see [my 2021 post on this topic to dive a bit deeper here](https://brooker.co.za/blog/2021/08/05/utilization.html)). However, as utilization approaches 100%, the mean wait times for single queue variant increase much more quickly than the multi-queue variant. Keep in mind there's some bias on the mean here - because the utilization of each variant is calculated independently, there are a lot more total arrivals for a quicker visit.
 
 Another way to think about it is how the result changes with the ratio of visit service times (i.e. the ratio between the mean latency of a standing or sitting visit). Perhaps counter-intuitively, the single queue variant is slower even when the service times are equal, and things degrade from there (with loads of simulation noise).
 
