@@ -10,7 +10,6 @@
 
 * {
   margin: 0; 
-
 }
 
 html, body {
@@ -269,6 +268,9 @@ ul.pubs span {
          order:1;
          width:100%;
          margin-top: -3em;
+     }
+     #post code {
+        font-size: 100%;
      }
      .about {order: 2; }
      #related {order: 3;}
