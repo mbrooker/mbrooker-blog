@@ -16,7 +16,7 @@ title: "One or Two? How Many Queues?"
 
 <p class="meta">Very applied queue theory.</p>
 
-There's a well-known rule of thumb that one queue is better than two. When you've got or people waiting to check out at the supermarket, having a single shared queue improves utilization and reduces wait times. The reason for this is pretty simple: it avoids the case where somebody is waiting in a queue while there's a checker available to do the work. It also saves the sanity of the person standing behind a cheque writer or expired coupon negotiator.
+There's a well-known rule of thumb that one queue is better than two. When you've got people waiting to check out at the supermarket, having a single shared queue improves utilization and reduces wait times. The reason for this is pretty simple: it avoids the case where somebody is waiting in a queue while there's a checker available to do the work. It also saves the sanity of the person standing behind a cheque writer or expired coupon negotiator.
 
 But one queue isn't always better than two.
 
