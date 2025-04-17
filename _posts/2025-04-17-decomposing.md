@@ -35,7 +35,7 @@ Aurora DSQL executes transactions on a horizontally scalable fleet of Firecracke
 > *Ordering* a transaction means assigning the transaction some notion of a time at which it occurred.
 > *Validating* a transaction means enforcing concurrency control, or more rarely, domain-specific semantics.
 
-In DSQL, ordering and validating happen in parallel, done by the adjudicators involved in the transaction. Each adjudicator provides a range of possible orderings (not after, not before), and one final adjudicator makes the final ordering decision. Similarly, each involved adjudicator weighs in on validation, with one final adjudicator checking that everybody says yes. See this post for more](https://brooker.co.za/blog/2024/12/05/inside-dsql-writes.html). Strictly, the final-final order is chosen only after validation completes, but the ordering and validation protocols run in parallel.
+In DSQL, ordering and validating happen in parallel, done by the adjudicators involved in the transaction. Each adjudicator provides a range of possible orderings (not after, not before), and one final adjudicator makes the final ordering decision. Similarly, each involved adjudicator weighs in on validation, with one final adjudicator checking that everybody says yes. Strictly, the final-final order is chosen only after validation completes, but the ordering and validation protocols run in parallel. [See this post for more](https://brooker.co.za/blog/2024/12/05/inside-dsql-writes.html).
 
 > *Persisting* a transaction makes making it durable, generally to disk.
 
@@ -43,4 +43,4 @@ The transaction is persisted by writing it to a replication log (the Journal). A
 
 DSQL then goes through another step, which is applying that persisted change to the storage nodes to make it available to reads. This happens after the transaction is committed, and isn't actually required for durability, just visibility. This slightly breaks Miller's model, but it can be rolled into *persisting* without too much stretching of the truth.
 
-![](/blog/images/speed_ratio_avg_wait_linear.png)
+![](/blog/images/dsql_txn_order.png)
