@@ -44,3 +44,5 @@ The transaction is persisted by writing it to a replication log (the Journal). A
 DSQL then goes through another step, which is applying that persisted change to the storage nodes to make it available to reads. This happens after the transaction is committed, and isn't actually required for durability, just visibility. This slightly breaks Miller's model, but it can be rolled into *persisting* without too much stretching of the truth.
 
 ![](/blog/images/dsql_txn_order.png)
+
+One way that Alex Miller's model is interesting is thinking about which steps require coordination. Execution doesn't (or, at least, coordination can be replaced with synchrony during execution using MVCC and physical time). Ordering doesn't strictly (physical time again, though you have to be super careful here). Validation does seem to require coordination. Persistence requires replication (at least in distributed databases), but that doesn't imply it requires coordination. So, if coordination is what you're optimizing for (such as because you're running across multiple regions), then optimization for the validation phase makes sense.
