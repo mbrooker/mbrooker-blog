@@ -60,7 +60,7 @@ DSQL's MVCC scheme does exactly this, establishing two *orderings*. One is a rea
 
 ![](/blog/images/dsql_txn_order_2.png)
 
-Finally, and again because of the MVCC scheme and use of physical clocks, DSQL doesn't require a *validate* step on read-only transactions, or the second *ordering* step. Like most databases, it also doesn't require a *persist* step following a read-only commit. Transactions that do only writes have an even simpler breakdown.
+Finally, and again because of the MVCC scheme and use of physical clocks, DSQL doesn't require a *validate* step on read-only transactions, or the second *ordering* step. Like most databases, it also doesn't require a *persist* step following a read-only commit. Transactions that only do reads have an even simpler breakdown.
 
 ![](/blog/images/dsql_txn_order_ro.png)
 
