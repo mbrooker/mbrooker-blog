@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Is there a CAP theorem for Durability?"
+
+
 related_posts:
   - "/2018/02/25/availability-liveness"
   - "/2014/10/12/harvest-yield"

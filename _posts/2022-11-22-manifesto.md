@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Amazon's Distributed Computing Manifesto"
+
+
 related_posts:
   - "/2023/01/30/nosql"
   - "/2019/03/17/control"

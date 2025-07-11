@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Redundant against what?"
+
+
 related_posts:
   - "/2021/01/22/cloud-scale"
   - "/2022/01/31/deployments"

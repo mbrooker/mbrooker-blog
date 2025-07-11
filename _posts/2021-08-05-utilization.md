@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Latency Sneaks Up On You"
+
+
 related_posts:
   - "/2020/08/06/erlang"
   - "/2021/08/27/caches"

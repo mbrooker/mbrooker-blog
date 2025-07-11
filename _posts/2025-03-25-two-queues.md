@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "One or Two? How Many Queues?"
+
+
 related_posts:
   - "/2023/05/10/open-closed"
   - "/2022/10/04/commitment"

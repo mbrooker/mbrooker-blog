@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Consensus is Harder Than It Looks"
+
+
 related_posts:
   - "/2018/02/25/availability-liveness"
   - "/2021/01/22/cloud-scale"

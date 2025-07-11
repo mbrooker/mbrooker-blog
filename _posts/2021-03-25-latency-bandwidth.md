@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "What You Can Learn From Old Hard Drive Adverts"
+
+
 related_posts:
   - "/2020/01/02/why-distributed"
   - "/2012/02/11/latency-lags-bandwidth"

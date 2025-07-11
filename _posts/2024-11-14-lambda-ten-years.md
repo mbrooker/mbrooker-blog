@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Ten Years of AWS Lambda"
+
+
 related_posts:
   - "/2023/05/23/snapshot-loading"
   - "/2022/11/29/snapstart"

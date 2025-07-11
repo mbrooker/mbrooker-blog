@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "The Builder's Guide to Better Mousetraps"
+
+
 related_posts:
   - "/2020/01/02/why-distributed"
   - "/2024/06/04/scale"

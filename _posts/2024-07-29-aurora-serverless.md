@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Resource Management in Aurora Serverless"
+
+
 related_posts:
   - "/2022/11/29/snapstart"
   - "/2024/12/03/aurora-dsql"

@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "False Sharing versus Perfect Placement"
+
+
 related_posts:
   - "/2023/02/07/hot-keys"
   - "/2022/10/04/commitment"

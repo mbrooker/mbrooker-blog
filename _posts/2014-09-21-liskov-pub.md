@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "The Essential Barbara Liskov"
+
+
 related_posts:
   - "/2014/03/30/lamport-pub"
   - "/2014/05/19/vr"

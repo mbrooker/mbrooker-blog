@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "On The Acoustics of Cocktail Parties"
+
+
 related_posts:
   - "/2021/05/24/metastable"
   - "/2024/03/25/needles"

@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Availability and availability"
+
+
 related_posts:
   - "/2015/09/26/cap-durability"
   - "/2021/01/22/cloud-scale"

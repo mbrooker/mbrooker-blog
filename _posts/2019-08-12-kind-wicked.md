@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Kindness, Wickedness and Safety"
+
+
 related_posts:
   - "/2019/04/03/learning"
   - "/2016/01/03/correlation"

@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Software Deployment, Speed, and Safety"
+
+
 related_posts:
   - "/2024/06/04/scale"
   - "/2023/05/23/snapshot-loading"

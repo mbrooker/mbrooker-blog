@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Snark, Chord, and Trust in Algorithms"
+
+
 related_posts:
   - "/2022/07/29/getting-into-tla"
   - "/2014/03/30/lamport-pub"

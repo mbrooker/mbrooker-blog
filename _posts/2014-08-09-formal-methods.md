@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Use of Formal Methods at Amazon Web Services"
+
+
 related_posts:
   - "/2015/03/29/formal"
   - "/2014/03/08/model-checking"

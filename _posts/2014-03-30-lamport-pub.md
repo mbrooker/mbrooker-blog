@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "The Essential Leslie Lamport"
+
+
 related_posts:
   - "/2014/05/10/lynch-pub"
   - "/2014/09/21/liskov-pub"

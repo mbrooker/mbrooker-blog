@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Quorum Availability"
+
+
 related_posts:
   - "/2021/01/22/cloud-scale"
   - "/2022/10/04/commitment"

@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Serial, Parallel, and Quorum Latencies"
+
+
 related_posts:
   - "/2023/09/08/exponential"
   - "/2025/03/25/two-queues"

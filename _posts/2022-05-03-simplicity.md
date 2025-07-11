@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "What is a simple system?"
+
+
 related_posts:
   - "/2020/01/02/why-distributed"
   - "/2022/02/16/circuit-breakers"

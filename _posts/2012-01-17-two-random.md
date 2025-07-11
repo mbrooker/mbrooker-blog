@@ -1,6 +1,8 @@
 ---
 layout: post
 title: The power of two random choices
+
+
 related_posts:
   - "/2022/02/28/retries"
   - "/2024/03/25/needles"

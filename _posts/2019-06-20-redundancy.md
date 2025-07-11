@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "When Redundancy Actually Helps"
+
+
 related_posts:
   - "/2020/01/02/why-distributed"
   - "/2022/01/31/deployments"

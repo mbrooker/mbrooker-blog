@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Snapshot Isolation vs Serializability"
+
+
 related_posts:
   - "/2025/04/17/decomposing"
   - "/2024/12/05/inside-dsql-writes"

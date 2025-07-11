@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "DynamoDB's Best Feature: Predictability"
+
+
 related_posts:
   - "/2021/08/27/caches"
   - "/2024/12/06/inside-dsql-cap"

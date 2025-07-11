@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "DSQL Vignette: Aurora DSQL, and A Personal Story"
+
+
 related_posts:
   - "/2024/12/04/inside-dsql"
   - "/2024/12/05/inside-dsql-writes"

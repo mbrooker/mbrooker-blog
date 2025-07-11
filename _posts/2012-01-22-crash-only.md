@@ -1,6 +1,8 @@
 ---
 layout: post
 title: The properties of crash-only software
+
+
 related_posts:
   - "/2012/09/02/expect-less"
   - "/2024/03/25/needles"

@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Two Farmers and Common Knowledge"
+
+
 related_posts:
   - "/2014/10/25/ice-cream"
   - "/2014/04/14/failure-detectors"

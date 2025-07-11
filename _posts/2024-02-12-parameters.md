@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Better Benchmarks Through Graphs"
+
+
 related_posts:
   - "/2024/01/23/big-deal"
   - "/2024/12/05/inside-dsql-writes"

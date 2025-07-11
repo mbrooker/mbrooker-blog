@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Harvest and Yield: Not A Natural Cure for Tradeoff Confusion"
+
+
 related_posts:
   - "/2018/02/25/availability-liveness"
   - "/2014/07/16/pacelc"

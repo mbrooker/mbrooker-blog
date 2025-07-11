@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "What is a container?"
+
+
 related_posts:
   - "/2023/05/23/snapshot-loading"
   - "/2021/01/22/cloud-scale"

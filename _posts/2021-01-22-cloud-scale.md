@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "The Fundamental Mechanism of Scaling"
+
+
 related_posts:
   - "/2018/02/25/availability-liveness"
   - "/2019/05/01/emergent"

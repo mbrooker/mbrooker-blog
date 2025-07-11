@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Surprising Scalability of Multitenancy"
+
+
 related_posts:
   - "/2024/06/04/scale"
   - "/2022/11/29/snapstart"

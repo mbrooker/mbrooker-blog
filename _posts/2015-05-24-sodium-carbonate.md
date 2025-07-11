@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Sodium Carbonate, and Ramenized Pasta"
+
+
 related_posts:
   - "/2019/04/03/learning"
   - "/2022/11/08/writing"

@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Java's Atomic and volatile, under the hood on x86
+
+
 related_posts:
   - "/2012/09/10/volatile"
   - "/2013/01/06/volatile"

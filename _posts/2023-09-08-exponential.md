@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Exponential Value at Linear Cost"
+
+
 related_posts:
   - "/2021/10/20/simulation"
   - "/2025/05/20/icpe"

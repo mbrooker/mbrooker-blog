@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Some Patterns of Engineering Design Meetings
+
+
 related_posts:
   - "/2023/04/20/hobbies"
   - "/2022/01/31/deployments"

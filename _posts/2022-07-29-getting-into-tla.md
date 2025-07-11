@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Getting into formal specification, and getting my team into it too"
+
+
 related_posts:
   - "/2022/04/11/simulation"
   - "/2024/04/17/formal"

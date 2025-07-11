@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Incident Response Isn't Enough"
+
+
 related_posts:
   - "/2021/04/14/redundancy"
   - "/2024/03/04/mousetrap"

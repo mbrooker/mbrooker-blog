@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Latency lags bandwidth
+
+
 related_posts:
   - "/2021/03/25/latency-bandwidth"
   - "/2014/07/04/iostat-pct"

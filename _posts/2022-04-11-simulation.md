@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Simple Simulations for System Builders"
+
+
 related_posts:
   - "/2022/06/02/formal"
   - "/2022/07/29/getting-into-tla"

@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Invariants: A Better Debugger?"
+
+
 related_posts:
   - "/2024/12/03/aurora-dsql"
   - "/2022/07/29/getting-into-tla"

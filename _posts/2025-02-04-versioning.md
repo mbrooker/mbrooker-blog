@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Versioning versus Coordination"
+
+
 related_posts:
   - "/2024/12/05/inside-dsql-writes"
   - "/2024/12/04/inside-dsql"

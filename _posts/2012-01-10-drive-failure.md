@@ -1,6 +1,8 @@
 ---
 layout: post
 title: The benefits of having data
+
+
 related_posts:
   - "/2014/01/12/ben-or"
   - "/2014/04/14/failure-detectors"
