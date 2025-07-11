@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Beyond iostat: Storage performance analysis with blktrace"
----
-
-{{ page.title }}
+related_posts:
+  - "/2014/07/04/iostat-pct"
+  - "/2013/12/14/intel-hle"
+  - "/2018/01/01/balls-into-bins"
+---{{ page.title }}
 ================
 
 <p class="meta">An under appreciated set of IO analysis tools.</p>

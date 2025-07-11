@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Simple Simulations for System Builders"
----
-
-{{ page.title }}
+related_posts:
+  - "/2022/06/02/formal"
+  - "/2022/07/29/getting-into-tla"
+  - "/2018/01/01/balls-into-bins"
+---{{ page.title }}
 ================
 
 <p class="meta">Even the most basic numerical methods can lead to surprising insights.</p>

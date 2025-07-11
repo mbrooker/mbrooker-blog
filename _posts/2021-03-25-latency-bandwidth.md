@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "What You Can Learn From Old Hard Drive Adverts"
----
-
-{{ page.title }}
+related_posts:
+  - "/2020/01/02/why-distributed"
+  - "/2012/02/11/latency-lags-bandwidth"
+  - "/2023/01/30/nosql"
+---{{ page.title }}
 ================
 
 <p class="meta">The single most important trend in systems.</p>

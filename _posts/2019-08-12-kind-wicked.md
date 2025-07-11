@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Kindness, Wickedness and Safety"
----
-
-{{ page.title }}
+related_posts:
+  - "/2019/04/03/learning"
+  - "/2016/01/03/correlation"
+  - "/2014/05/10/lynch-pub"
+---{{ page.title }}
 ================
 
 <p class="meta">We must build kind systems.</p>

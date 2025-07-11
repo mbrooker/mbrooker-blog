@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Metastability and Distributed Systems"
----
-
-{{ page.title }}
+related_posts:
+  - "/2022/01/31/deployments"
+  - "/2020/01/02/why-distributed"
+  - "/2023/01/30/nosql"
+---{{ page.title }}
 ================
 
 <p class="meta">What if computer science had different parents?</p>
@@ -62,4 +64,3 @@ If you build, operate, or research large-scale distributed systems, you should r
  2. <a name="foot2"></a> Of course I'm heavily biased, but the big advantage of serverless is that most applications are small relative to the larger serverless systems they run on, and so have a lot of headroom to deal with sudden changes in efficiency. In practice, I think that building on higher-level abstractions is going to be the best way for *most* people to avoid problems like those described in the paper, most of the time.
  3. <a name="foot3"></a> Specifically the discussion of the "error margin" in [Risk Management in a Dynamic Society](https://lewebpedagogique.com/audevillemain/files/2014/12/maint-Rasmus-1997.pdf), and how economic and labor forces push systems closer to the boundary of acceptable performance. 
  4. <a name="foot4"></a> An organization and an economy. As we saw with supply-side shortages of things like masks early in the Covid pandemic, real-world systems are optimized for little excess capacity too, and optimized for the happy case.
-

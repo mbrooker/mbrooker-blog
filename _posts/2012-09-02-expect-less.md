@@ -1,9 +1,11 @@
 ---
 layout: post
 title: Expect Less, Get More?
----
-
-{{ page.title }}
+related_posts:
+  - "/2019/04/03/learning"
+  - "/2020/06/23/code"
+  - "/2023/09/21/audience"
+---{{ page.title }}
 ================
 
 <p class="meta">On what newly hired engineers think they need to do.</p>

@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Why Must Systems Be Operated?"
----
-
-{{ page.title }}
+related_posts:
+  - "/2020/01/02/why-distributed"
+  - "/2021/05/24/metastable"
+  - "/2022/02/16/circuit-breakers"
+---{{ page.title }}
 ================
 
 <p class="meta">Latent Failures and the Safety Margin of Systems</p>

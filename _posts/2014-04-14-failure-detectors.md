@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Failure Detectors, and Non-Blocking Atomic Commit"
----
-
-{{ page.title }}
+related_posts:
+  - "/2014/01/12/ben-or"
+  - "/2014/05/10/lynch-pub"
+  - "/2018/02/25/availability-liveness"
+---{{ page.title }}
 ================
 
 <p class="meta">Non-blocking atomic commit is harder than uniform consensus. Why would that be?</p>

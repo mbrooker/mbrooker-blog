@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Redundant against what?"
----
-
-{{ page.title }}
+related_posts:
+  - "/2021/01/22/cloud-scale"
+  - "/2022/01/31/deployments"
+  - "/2019/03/17/control"
+---{{ page.title }}
 ================
 
 <p class="meta">Threat modeling thinking to distributed systems.</p>

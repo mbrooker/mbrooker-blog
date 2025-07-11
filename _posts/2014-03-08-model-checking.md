@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Snark, Chord, and Trust in Algorithms"
----
-
-{{ page.title }}
+related_posts:
+  - "/2022/07/29/getting-into-tla"
+  - "/2014/03/30/lamport-pub"
+  - "/2014/05/19/vr"
+---{{ page.title }}
 ================
 
 <p class="meta">Good journals, well-known authors and informal proofs are not sufficient.</p>

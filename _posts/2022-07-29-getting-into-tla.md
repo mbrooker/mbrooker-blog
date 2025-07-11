@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Getting into formal specification, and getting my team into it too"
----
-
-{{ page.title }}
+related_posts:
+  - "/2022/04/11/simulation"
+  - "/2024/04/17/formal"
+  - "/2024/12/03/aurora-dsql"
+---{{ page.title }}
 ================
 
 <p class="meta">Getting started is the hard part</p>

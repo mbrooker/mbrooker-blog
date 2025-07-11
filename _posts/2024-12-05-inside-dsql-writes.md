@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "DSQL Vignette: Transactions and Durability"
----
-
-{{ page.title }}
+related_posts:
+  - "/2024/12/04/inside-dsql"
+  - "/2024/12/06/inside-dsql-cap"
+  - "/2025/02/04/versioning"
+---{{ page.title }}
 ================
 
 

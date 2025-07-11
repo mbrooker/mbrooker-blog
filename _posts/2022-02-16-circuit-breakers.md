@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Will circuit breakers solve my problems?"
----
-
-{{ page.title }}
+related_posts:
+  - "/2018/02/25/availability-liveness"
+  - "/2022/02/28/retries"
+  - "/2022/01/31/deployments"
+---{{ page.title }}
 ================
 
 <p class="meta">Maybe, but you need to know what problem you're trying to solve first.</p>

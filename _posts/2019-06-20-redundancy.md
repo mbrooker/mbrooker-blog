@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "When Redundancy Actually Helps"
----
-
-{{ page.title }}
+related_posts:
+  - "/2020/01/02/why-distributed"
+  - "/2022/01/31/deployments"
+  - "/2024/06/04/scale"
+---{{ page.title }}
 ================
 
 <p class="meta">Redundancy can harm more than it helps.</p>
@@ -44,7 +46,3 @@ When systems suffer partial failure, it's often hard to tell what's *healthy* an
 ## The system must be able to return to fully redundant mode
 
 If your redundancy is a single shot, it's not going to add much availability in the long term. So you need to make sure the system can safely get from one to two, or N to N+1, or N to 2N. This is relatively easy in some kinds of systems, but anything with a non-zero RPO or asynchronous replication or periodic backups can make it extremely difficult. In small systems, human judgement can help. In larger systems, you need an automated plan. Most likely, you're going to make a better automated plan during daylight in the middle of the week during your design phase than at 3AM on a Saturday while trying to fix the outage.
-
-
-
-

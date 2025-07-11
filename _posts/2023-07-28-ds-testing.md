@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Invariants: A Better Debugger?"
----
-
-{{ page.title }}
+related_posts:
+  - "/2024/12/03/aurora-dsql"
+  - "/2022/07/29/getting-into-tla"
+  - "/2022/11/08/writing"
+---{{ page.title }}
 ================
 
 <p class="meta">🎵Some things never change🎵</p>

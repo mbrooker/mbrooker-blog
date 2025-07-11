@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Serial, Parallel, and Quorum Latencies"
----
-
-{{ page.title }}
+related_posts:
+  - "/2023/09/08/exponential"
+  - "/2025/03/25/two-queues"
+  - "/2021/04/19/latency"
+---{{ page.title }}
 ================
 
 <p class="meta">Why are they letting me write Javascript?</p>
@@ -93,4 +95,3 @@ The knobs are:
  - Check out the non-linear effect of longer serial chains. The 99th percentile doesn't increase by 10x between serial=1 and serial=10. Why?
  
  Have fun!
-

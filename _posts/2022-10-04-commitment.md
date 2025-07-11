@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Atomic Commitment: The Unscalability Protocol"
----
-
-{{ page.title }}
+related_posts:
+  - "/2023/02/07/hot-keys"
+  - "/2024/03/25/needles"
+  - "/2022/02/28/retries"
+---{{ page.title }}
 ================
 
 <p class="meta">2PC is my enemy.</p>
@@ -108,4 +110,3 @@ Fundamentally, this is because scale-out depends on [avoiding coordination](http
 1. <a name="foot1"></a> Obviously not *done done*. Building scale-out databases even for single-row accesses turns out to be super hard in other ways. For a good discussion of that, check out the 2022 [DynamoDB paper](https://www.usenix.org/conference/atc22/presentation/vig).
 2. <a name="foot2"></a> Because of thread limits, or concurrency limits, or connection limits, or anything else that limits the total number of outstanding transactions that the shard can handle. The details matter a whole lot in practice, but matter little in this simple model.
 3. <a name="foot3"></a> You might be thinking that we could just queue both of them up. Which we *could*, but that would have other bad impacts. In general, long queues are really bad for system stability.
-

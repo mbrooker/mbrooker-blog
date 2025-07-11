@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "The Space Between Theory and Practice in Distributed Systems"
----
-
-{{ page.title }}
+related_posts:
+  - "/2019/04/03/learning"
+  - "/2020/05/25/reading"
+  - "/2014/07/16/pacelc"
+---{{ page.title }}
 ================
 
 <p class="meta">How do we learn synthesis?</p>
@@ -30,5 +32,3 @@ Despite these 'obvious' answers, it's actually a really interesting question. On
 That's the gap I am talking about: material that explains how the practice is synthesized from the theory, and how the theory is based off analysis of the practice. The exercise of synthesis is very seldom straight forward, but we too frequently leave it to the imagination. In this context, I use *synthesis* to mean the process of gathering ideas from the literature and putting them together into a whole working system. Related processes include analysis of other systems, where we break them down into their consistuent parts and see what makes them work (or [not work](http://aphyr.com/tags/Jepsen)). These are among the most important processes behind successful engineering, but are written about least.
 
 I would love to see more material focused on exactly this synthesis problem in distributed systems, because I think it would help improve the quality of practice, and strengthen the dialog between practitioners and researchers. That's good for all of us.
-
- 

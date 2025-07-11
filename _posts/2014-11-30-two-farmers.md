@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Two Farmers and Common Knowledge"
----
-
-{{ page.title }}
+related_posts:
+  - "/2014/10/25/ice-cream"
+  - "/2014/04/14/failure-detectors"
+  - "/2014/01/12/ben-or"
+---{{ page.title }}
 ================
 
 <p class="meta">A legislative solution to a technical problem.</p>

@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Getting Big Things Done"
----
-
-{{ page.title }}
+related_posts:
+  - "/2022/11/08/writing"
+  - "/2024/02/06/time"
+  - "/2022/01/31/deployments"
+---{{ page.title }}
 ================
 
 <p class="meta">In one particular context.</p>
@@ -67,4 +69,3 @@ Finally, find yourself a small group of people you trust, and ask them to keep y
 **Be willing to adapt**
 
 You will learn, at some point into doing your big project, that your solution is bullshit. You completely misunderstood the problem. You may feel like this leaves you back at the beginning, where you started. It doesn't. Instead, you've stepped up your level of expertise. Most likely, you can adapt that carefully-considered solution to the new problem, but you might need to throw it out entirely. Again, write it down. Be specific. What have you learned, and what did it teach you? Look for things you can recover, and don't throw things out prematurely.
-

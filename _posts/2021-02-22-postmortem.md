@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Incident Response Isn't Enough"
----
-
-{{ page.title }}
+related_posts:
+  - "/2021/04/14/redundancy"
+  - "/2024/03/04/mousetrap"
+  - "/2016/01/03/correlation"
+---{{ page.title }}
 ================
 
 <p class="meta">Single points of failure become invisible.</p>

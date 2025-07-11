@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "What is Scalability Anyway?"
----
-
-{{ page.title }}
+related_posts:
+  - "/2023/03/23/economics"
+  - "/2024/06/04/scale"
+  - "/2024/03/04/mousetrap"
+---{{ page.title }}
 ================
 
 <p class="meta">Do words mean things? Why?</p>

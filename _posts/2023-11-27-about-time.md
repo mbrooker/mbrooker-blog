@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "It's About Time!"
----
-
-{{ page.title }}
+related_posts:
+  - "/2024/12/03/aurora-dsql"
+  - "/2024/12/05/inside-dsql-writes"
+  - "/2023/10/18/optimism"
+---{{ page.title }}
 ================
 
 <p class="meta">What's the time? Time to get a watch.</p>

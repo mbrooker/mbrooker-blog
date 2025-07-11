@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "The Builder's Guide to Better Mousetraps"
----
-
-{{ page.title }}
+related_posts:
+  - "/2020/01/02/why-distributed"
+  - "/2024/06/04/scale"
+  - "/2024/02/06/time"
+---{{ page.title }}
 ================
 
 <p class="meta">A little rubric for making a tough decision.</p>

@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "DSQL Vignette: Aurora DSQL, and A Personal Story"
----
-
-{{ page.title }}
+related_posts:
+  - "/2024/12/04/inside-dsql"
+  - "/2024/12/05/inside-dsql-writes"
+  - "/2023/01/30/nosql"
+---{{ page.title }}
 ================
 
 <p class="meta">It's happening.</p>

@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "False Sharing versus Perfect Placement"
----
-
-{{ page.title }}
+related_posts:
+  - "/2023/02/07/hot-keys"
+  - "/2022/10/04/commitment"
+  - "/2023/05/10/open-closed"
+---{{ page.title }}
 ================
 
 <p class="meta"></p>

@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Use of Formal Methods at Amazon Web Services"
----
-
-{{ page.title }}
+related_posts:
+  - "/2015/03/29/formal"
+  - "/2014/03/08/model-checking"
+  - "/2023/09/21/audience"
+---{{ page.title }}
 ================
 
 <p class="meta">How we're using TLA+ at AWS</p>

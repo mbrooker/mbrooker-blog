@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "DynamoDB's Best Feature: Predictability"
----
-
-{{ page.title }}
+related_posts:
+  - "/2021/08/27/caches"
+  - "/2024/12/06/inside-dsql-cap"
+  - "/2024/12/03/aurora-dsql"
+---{{ page.title }}
 ================
 
 <p class="meta">Happy birthday!</p>

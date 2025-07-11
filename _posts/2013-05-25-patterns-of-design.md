@@ -1,9 +1,11 @@
 ---
 layout: post
 title: Some Patterns of Engineering Design Meetings
----
-
-{{ page.title }}
+related_posts:
+  - "/2023/04/20/hobbies"
+  - "/2022/01/31/deployments"
+  - "/2014/01/12/ben-or"
+---{{ page.title }}
 ================
 
 <p class="meta">On discussing designs.</p>
@@ -45,4 +47,3 @@ So far, I've mostly written about these patterns of disagreement in context of m
 The outcome of a bad design meeting is a false compromise, where various aspects of each proposal are mixed to make a design that doesn't match any model of the current world, and doesn't achieve anybodies goals. This is the most common cause of bad design I have seen in my career: mismatched goals and mismatched models leading to a non-solution. The best way, in my opinion, to avoid this mistake is to make the steps of finding consensus on *where we are* and *where we are going* explicit and upfront, and not being ashamed to loop back to them during the discussion of *how are we going to get there?*.
 
 ![](https://s3.amazonaws.com/mbrooker-blog-images/design_bad_compromise.png)
-

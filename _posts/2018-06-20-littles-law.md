@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Telling Stories About Little's Law"
----
-
-{{ page.title }}
+related_posts:
+  - "/2017/12/28/mean"
+  - "/2021/08/05/utilization"
+  - "/2023/03/23/economics"
+---{{ page.title }}
 ================
 
 <p class="meta">Building Up Intuition with Narrative</p>

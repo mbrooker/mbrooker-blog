@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Heuristic Traps for Systems Operators"
----
-
-{{ page.title }}
+related_posts:
+  - "/2014/06/29/rasmussen"
+  - "/2022/11/08/writing"
+  - "/2024/03/25/needles"
+---{{ page.title }}
 ================
 
 <p class="meta">What can we learn from avalanche safety?</p>

@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Software Deployment, Speed, and Safety"
----
-
-{{ page.title }}
+related_posts:
+  - "/2024/06/04/scale"
+  - "/2023/05/23/snapshot-loading"
+  - "/2024/12/03/aurora-dsql"
+---{{ page.title }}
 ================
 
 <p class="meta">There's one right answer that applies in all situations, as always.</p>

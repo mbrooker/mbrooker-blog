@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Amazon's Distributed Computing Manifesto"
----
-
-{{ page.title }}
+related_posts:
+  - "/2023/01/30/nosql"
+  - "/2019/03/17/control"
+  - "/2024/12/05/inside-dsql-writes"
+---{{ page.title }}
 ================
 
 <p class="meta">Manifesto made manifest.</p>

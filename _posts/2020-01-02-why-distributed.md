@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Why do we need distributed systems?"
----
-
-{{ page.title }}
+related_posts:
+  - "/2024/06/04/scale"
+  - "/2023/03/23/economics"
+  - "/2024/03/04/mousetrap"
+---{{ page.title }}
 ================
 
 <p class="meta">Building distributed systems is hard. It's expensive. It's complex. But we do it anyway.</p>

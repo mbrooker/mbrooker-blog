@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Some Virtualization Papers Worth Reading"
----
-
-{{ page.title }}
+related_posts:
+  - "/2020/02/19/firecracker"
+  - "/2021/05/24/metastable"
+  - "/2022/11/29/snapstart"
+---{{ page.title }}
 ================
 
 <p class="meta">A short, and incomplete, survey.</p>

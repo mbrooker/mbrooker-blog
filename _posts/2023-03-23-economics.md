@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Surprising Scalability of Multitenancy"
----
-
-{{ page.title }}
+related_posts:
+  - "/2024/06/04/scale"
+  - "/2022/11/29/snapstart"
+  - "/2020/01/02/why-distributed"
+---{{ page.title }}
 ================
 
 <p class="meta"></p>

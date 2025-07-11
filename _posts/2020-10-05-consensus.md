@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Consensus is Harder Than It Looks"
----
-
-{{ page.title }}
+related_posts:
+  - "/2018/02/25/availability-liveness"
+  - "/2021/01/22/cloud-scale"
+  - "/2023/10/18/optimism"
+---{{ page.title }}
 ================
 
 <p class="meta">And it looks pretty hard.</p>
@@ -62,4 +64,3 @@ Think of using consensus in your system like getting a puppy: it may bring you a
  2. <a name="foot2"></a> There are some nice patterns for building deterministic high-performance systems, but the general problem is still an open area of research. For a good primer on determinism and non-determinism in database systems, check out [The Case for Determinism in Database Systems](http://paperhub.s3.amazonaws.com/878608b83ccf413ea73acfd6b78860a1.pdf) by Thomson and Abadi.
  3. <a name="foot3"></a> Bruce Dawson has an [excellent blog post](https://randomascii.wordpress.com/2013/07/16/floating-point-determinism/) on the various issues and challenges.
  4. <a name="foot4"></a> Bailis et al's [Highly Available Transactions: Virtues and Limitations](https://dsf.berkeley.edu/papers/vldb14-hats.pdf) paper contains a nice breakdown of the options here, and Aphyr's post on [Strong Consistency Models](https://aphyr.com/posts/313-strong-consistency-models) is a very approachable breakdown of the topic. If you really want to go deep, check out Dziuma et al's [Survey on consistency conditions](https://projects.ics.forth.gr/tech-reports/2013/2013.TR439_Survey_on_Consistency_Conditions.pdf)
-

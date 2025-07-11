@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Latency Sneaks Up On You"
----
-
-{{ page.title }}
+related_posts:
+  - "/2020/08/06/erlang"
+  - "/2021/08/27/caches"
+  - "/2018/06/20/littles-law"
+---{{ page.title }}
 ================
 
 <p class="meta">And is a bad way to measure efficiency.</p>

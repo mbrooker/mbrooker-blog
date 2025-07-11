@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "The Essential Leslie Lamport"
----
-
-{{ page.title }}
+related_posts:
+  - "/2014/05/10/lynch-pub"
+  - "/2014/09/21/liskov-pub"
+  - "/2014/01/12/ben-or"
+---{{ page.title }}
 ================
 
 <p class="meta">Some of my favourite Leslie Lamport publications.</p>
@@ -45,4 +47,3 @@ Lamport has written a great deal on temporal logic, including the deservedly hea
 *Why this is worth reading*: it's fun, has a great sense of humor, and no sense of self-importance to go with its real importance.
 
 *Don't read this if*: you're trying to understand or implement Paxos.
-

@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "On The Acoustics of Cocktail Parties"
----
-
-{{ page.title }}
+related_posts:
+  - "/2021/05/24/metastable"
+  - "/2024/03/25/needles"
+  - "/2023/02/07/hot-keys"
+---{{ page.title }}
 ================
 
 <p class="meta">Only parties of well-mannered guests will be considered.</p>

@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Balls Into Bins In Distributed Systems"
----
-
-{{ page.title }}
+related_posts:
+  - "/2023/05/10/open-closed"
+  - "/2022/04/11/simulation"
+  - "/2022/10/21/nudge"
+---{{ page.title }}
 ================
 
 <p class="meta">Throwing things can be fun.</p>
@@ -52,4 +54,3 @@ Still, the conclusion of all of this is that random load balancing (and random s
 
  1. <a name="foot1"></a> That's a Big Theta, if you're not familiar with it [wikipedia has a good explanation](https://en.wikipedia.org/wiki/Big_O_notation#Family_of_Bachmann%E2%80%93Landau_notations) of what it means. If you don't feel like reading that, and replace it with a big O in your head, that's close enough in this case.
  1. <a name="foot2"></a> That paper also contains some great analysis on the numerical properties of different hash-table probing strategies versus seperate chaining. If you like algorithm analysis, the conclusion section is particularly interesting.
- 

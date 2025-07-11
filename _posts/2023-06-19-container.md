@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "What is a container?"
----
-
-{{ page.title }}
+related_posts:
+  - "/2023/05/23/snapshot-loading"
+  - "/2021/01/22/cloud-scale"
+  - "/2022/08/11/backoff"
+---{{ page.title }}
 ================
 
 <p class="meta">What are words, anyway?</p>

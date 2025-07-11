@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Firecracker: Lightweight Virtualization for Serverless Applications"
----
-
-{{ page.title }}
+related_posts:
+  - "/2020/06/08/virtualization"
+  - "/2020/02/17/physalia"
+  - "/2024/12/03/aurora-dsql"
+---{{ page.title }}
 ================
 
 <p class="meta">Our second paper for NSDI'20.</p>
@@ -17,4 +19,3 @@ That paper was accepted to NSDI'20, and is [available here](https://www.amazon.s
 Like any project the size of Firecracker, it was developed by a team of people from vision to execution. I played only a small role in that, but it's been great to work with the team (and the community) on getting Firecracker out, adding features, and using it in production at pretty huge scale.
 
 Firecracker is a little bit unusual among software projects of having an explicit goal of being simple and well-suited for a relatively small number of tasks. That doesn't mean it's simplistic. Choosing what to do, and what not to do, was some of the most interesting decisions to be made in it's development. I'm particularly proud of how well the team made those decisions, and continues to make them.
-

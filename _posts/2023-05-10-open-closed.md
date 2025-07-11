@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Open and Closed, Omission and Collapse"
----
-
-{{ page.title }}
+related_posts:
+  - "/2022/10/21/nudge"
+  - "/2018/01/01/balls-into-bins"
+  - "/2022/08/11/backoff"
+---{{ page.title }}
 ================
 
 <p class="meta">Were you born in a cave?</p>

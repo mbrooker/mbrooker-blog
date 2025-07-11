@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Is there a CAP theorem for Durability?"
----
-
-{{ page.title }}
+related_posts:
+  - "/2018/02/25/availability-liveness"
+  - "/2014/10/12/harvest-yield"
+  - "/2024/07/25/cap-again"
+---{{ page.title }}
 ================
 
 <p class="meta">Expanding the taxonomy of distributed systems.</p>

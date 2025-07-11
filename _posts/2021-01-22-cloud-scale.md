@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "The Fundamental Mechanism of Scaling"
----
-
-{{ page.title }}
+related_posts:
+  - "/2018/02/25/availability-liveness"
+  - "/2019/05/01/emergent"
+  - "/2019/03/17/control"
+---{{ page.title }}
 ================
 
 <p class="meta">It's not Paxos, unfortunately.</p>
@@ -43,5 +45,4 @@ Finally, we can think about the work that each node needs to do. In a *coordinat
  1. <a name="foot1"></a> Like systems that coordinate heavily on writes but mostly avoid coordination on reads. [CRAQ](https://www.usenix.org/legacy/event/usenix09/tech/full_papers/terrace/terrace.pdf) is one such system, and a paper that helped me fall in love with distributed systems. So clever, and so simple once you understand it.
  2. <a name="foot2"></a> Best described by [Brewer and Lynch](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.67.6951&rep=rep1&type=pdf).
  3. <a name="foot3"></a> See, for example, Nancy Lynch's 1989 paper [A Hundred Impossibility Proofs for Distributed Computing](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.5022). If there were a hundred of these in 1989, you can imagine how many there are now, 32 years later. Wow, 1989 was 32 years ago. Huh.
- 4. <a name="foot4"></a> I wrote [a post](http://brooker.co.za/blog/2014/10/12/harvest-yield.html) about it back in 2014. 
-
+ 4. <a name="foot4"></a> I wrote [a post](http://brooker.co.za/blog/2014/10/12/harvest-yield.html) about it back in 2014.

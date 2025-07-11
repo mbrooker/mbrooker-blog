@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "One or Two? How Many Queues?"
----
-
-{{ page.title }}
+related_posts:
+  - "/2023/05/10/open-closed"
+  - "/2022/10/04/commitment"
+  - "/2022/10/21/nudge"
+---{{ page.title }}
 ================
 
 

@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "The Essential Barbara Liskov"
----
-
-{{ page.title }}
+related_posts:
+  - "/2014/03/30/lamport-pub"
+  - "/2014/05/19/vr"
+  - "/2014/05/10/lynch-pub"
+---{{ page.title }}
 ================
 
 <p class="meta">Some of my favorite Barbara Liskov publications.</p>

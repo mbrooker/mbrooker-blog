@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Is Anatoly Dyatlov to blame?"
----
-
-{{ page.title }}
+related_posts:
+  - "/2022/11/08/writing"
+  - "/2022/01/31/deployments"
+  - "/2016/01/03/correlation"
+---{{ page.title }}
 ================
 
 <p class="meta">Without a good safety culture, operators are bound to fail.</p>

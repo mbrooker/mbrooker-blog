@@ -1,9 +1,11 @@
 ---
 layout: post
 title: Latency lags bandwidth
----
-
-{{ page.title }}
+related_posts:
+  - "/2021/03/25/latency-bandwidth"
+  - "/2014/07/04/iostat-pct"
+  - "/2023/01/06/erasure"
+---{{ page.title }}
 ================
 
 <p class="meta">On the growing gap between capacity, bandwidth and latency.</p>

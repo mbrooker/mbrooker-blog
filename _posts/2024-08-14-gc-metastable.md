@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Garbage Collection and Metastability"
----
-
-{{ page.title }}
+related_posts:
+  - "/2021/08/27/caches"
+  - "/2022/01/19/predictability"
+  - "/2023/02/07/hot-keys"
+---{{ page.title }}
 ================
 
 <p class="meta">Cleaning up is hard to do.</p>

@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Better Benchmarks Through Graphs"
----
-
-{{ page.title }}
+related_posts:
+  - "/2024/01/23/big-deal"
+  - "/2024/12/05/inside-dsql-writes"
+  - "/2023/01/30/nosql"
+---{{ page.title }}
 ================
 
 <p class="meta">Isn't the ambiguity in the word *graphs* fun?</p>

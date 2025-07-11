@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Availability and availability"
----
-
-{{ page.title }}
+related_posts:
+  - "/2015/09/26/cap-durability"
+  - "/2021/01/22/cloud-scale"
+  - "/2024/07/25/cap-again"
+---{{ page.title }}
 ================
 
 <p class="meta">Translating math into engineering.</p>
@@ -65,4 +67,3 @@ In practice, CAP Available doesn't mean 'highly available to clients'. In practi
 ### Footnotes
 
  1. <a name="foot1"></a> Although, do check out [Bailis and Ghodsi](https://dl.acm.org/citation.cfm?doid=2460276.2462076) for a very readable introduction to the landscape of consistency.
- 

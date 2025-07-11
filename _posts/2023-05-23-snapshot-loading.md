@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Container Loading in AWS Lambda"
----
-
-{{ page.title }}
+related_posts:
+  - "/2022/11/29/snapstart"
+  - "/2019/03/17/control"
+  - "/2023/01/06/erasure"
+---{{ page.title }}
 ================
 
 <p class="meta">Slap shot?</p>

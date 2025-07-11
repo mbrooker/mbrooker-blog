@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "The Operations Gradient: Improving Safety in Complex Systems"
----
-
-{{ page.title }}
+related_posts:
+  - "/2021/05/24/metastable"
+  - "/2015/11/05/heuristics"
+  - "/2022/02/16/circuit-breakers"
+---{{ page.title }}
 ================
 
 <p class="meta">Can we improve the safety of complex systems by listening to operators more?</p>
@@ -39,4 +41,3 @@ Is all lost? No, but to make progress we may need to change the way that we thin
 > Those who are closest to the blunt (management) end are most remote from sharp end operations and are concerned with maintaining the organization, and threats to the organization are minimized by casting adverse events as anomalies.
 
 Instead of treating crossings of the safety boundary as anomalies, we should incorporate more feedback from the *sharp end* into the process that chooses the system operating point. This sharp-end gradient, mostly supplied by operators of complex systems, can provide a valuable third gradient (along with the gradients towards least effort and towards efficiency). The advantage of this approach is that it is continuous, in that it doesn't rely on big accidents and investigations, and adaptive, it constantly measures the local position of the safety boundary and provides a slope away from it. Getting this right requires constant attention from operators, and requires a conscious decision to include operators in the decision making process.
-

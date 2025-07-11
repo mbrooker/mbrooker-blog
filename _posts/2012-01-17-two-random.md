@@ -1,9 +1,11 @@
 ---
 layout: post
 title: The power of two random choices
----
-
-{{ page.title }}
+related_posts:
+  - "/2022/02/28/retries"
+  - "/2024/03/25/needles"
+  - "/2018/01/01/balls-into-bins"
+---{{ page.title }}
 ================
 
 <p class="meta">Using less information to make better decisions.</p>

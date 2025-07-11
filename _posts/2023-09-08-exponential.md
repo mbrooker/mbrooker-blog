@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Exponential Value at Linear Cost"
----
-
-{{ page.title }}
+related_posts:
+  - "/2021/10/20/simulation"
+  - "/2025/05/20/icpe"
+  - "/2023/01/06/erasure"
+---{{ page.title }}
 ================
 
 <p class="meta">What a deal!</p>

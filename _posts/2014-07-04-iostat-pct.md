@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Two traps in iostat: %util and svctm"
----
-
-{{ page.title }}
+related_posts:
+  - "/2013/07/14/io-performance"
+  - "/2021/08/05/utilization"
+  - "/2013/12/16/intel-rtm"
+---{{ page.title }}
 ================
 
 <p class="meta">These commonly-used fields in iostat shouldn't be commonly-used.</p>

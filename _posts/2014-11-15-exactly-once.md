@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Exactly-Once Delivery May Not Be What You Want"
----
-
-{{ page.title }}
+related_posts:
+  - "/2018/02/25/availability-liveness"
+  - "/2024/03/25/needles"
+  - "/2024/04/25/memorydb"
+---{{ page.title }}
 ================
 
 <p class="meta">It's hard to get, but that's OK, because you don't want it.</p>

@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Sodium Carbonate, and Ramenized Pasta"
----
-
-{{ page.title }}
+related_posts:
+  - "/2019/04/03/learning"
+  - "/2022/11/08/writing"
+  - "/2024/03/25/needles"
+---{{ page.title }}
 ================
 
 <p class="meta">Doing chemistry with baking soda, cabbage and an oven.</p>
@@ -43,9 +45,3 @@ Soapiness is probably not desirable in a pasta dish, so I washed both down a few
 The final bowl, when combined with a meat sauce and some fresh basil (thanks Aerogarden, for my unending basil glut), was excellent. The texture of the ramenized pasta is different from both fresh and dried pastas. It's springier and chewier, which I enjoyed. The end product would probably be more at home with a broth than a chunky meat sauce, but it was still good.
 
 An experiment I'll repeat.
-
-
-
-
-
-

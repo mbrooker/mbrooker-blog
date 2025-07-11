@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Versioning versus Coordination"
----
-
-{{ page.title }}
+related_posts:
+  - "/2024/12/05/inside-dsql-writes"
+  - "/2024/12/04/inside-dsql"
+  - "/2024/01/23/big-deal"
+---{{ page.title }}
 ================
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">

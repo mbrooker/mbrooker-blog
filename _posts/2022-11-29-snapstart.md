@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Lambda Snapstart, and snapshots as a tool for system builders"
----
-
-{{ page.title }}
+related_posts:
+  - "/2024/12/03/aurora-dsql"
+  - "/2023/05/23/snapshot-loading"
+  - "/2024/07/29/aurora-serverless"
+---{{ page.title }}
 ================
 
 <p class="meta">Clones.</p>

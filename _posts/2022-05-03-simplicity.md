@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "What is a simple system?"
----
-
-{{ page.title }}
+related_posts:
+  - "/2020/01/02/why-distributed"
+  - "/2022/02/16/circuit-breakers"
+  - "/2024/03/04/mousetrap"
+---{{ page.title }}
 ================
 
 <p class="meta">Is this pretentious?</p>

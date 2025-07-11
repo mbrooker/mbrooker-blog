@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Decomposing Aurora DSQL"
----
-
-{{ page.title }}
+related_posts:
+  - "/2024/12/17/occ-and-isolation"
+  - "/2024/12/05/inside-dsql-writes"
+  - "/2024/12/06/inside-dsql-cap"
+---{{ page.title }}
 ================
 
 <script>

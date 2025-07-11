@@ -1,9 +1,11 @@
 ---
 layout: post
 title: The benefits of having data
----
-
-{{ page.title }}
+related_posts:
+  - "/2014/01/12/ben-or"
+  - "/2014/04/14/failure-detectors"
+  - "/2018/01/01/balls-into-bins"
+---{{ page.title }}
 ================
 
 <p class="meta">Two ways to look at drive failures and temperature.</p>
