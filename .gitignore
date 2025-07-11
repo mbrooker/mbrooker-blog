@@ -1,1 +1,6 @@
 .DS_Store
+
+# Rust build artifacts
+/tools/related_posts/target/
+**/*.rs.bk
+Cargo.lock
