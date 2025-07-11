@@ -3,10 +3,11 @@ layout: post
 title: "What is a container?"
 
 
+
 related_posts:
   - "/2023/05/23/snapshot-loading"
-  - "/2021/01/22/cloud-scale"
-  - "/2022/08/11/backoff"
+  - "/2024/11/14/lambda-ten-years"
+  - "/2022/11/22/manifesto"
 ---{{ page.title }}
 ================
 

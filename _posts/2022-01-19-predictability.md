@@ -3,10 +3,11 @@ layout: post
 title: "DynamoDB's Best Feature: Predictability"
 
 
+
 related_posts:
-  - "/2021/08/27/caches"
-  - "/2024/12/06/inside-dsql-cap"
+  - "/2022/07/12/dynamodb"
   - "/2024/12/03/aurora-dsql"
+  - "/2024/04/25/memorydb"
 ---{{ page.title }}
 ================
 

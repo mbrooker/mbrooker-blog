@@ -3,10 +3,11 @@ layout: post
 title: "What is a simple system?"
 
 
+
 related_posts:
-  - "/2020/01/02/why-distributed"
-  - "/2022/02/16/circuit-breakers"
-  - "/2024/03/04/mousetrap"
+  - "/2022/12/15/thumb"
+  - "/2015/01/25/patterns"
+  - "/2024/06/04/scale"
 ---{{ page.title }}
 ================
 

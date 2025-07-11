@@ -3,10 +3,11 @@ layout: post
 title: "Exponential Value at Linear Cost"
 
 
+
 related_posts:
   - "/2021/10/20/simulation"
-  - "/2025/05/20/icpe"
-  - "/2023/01/06/erasure"
+  - "/2021/01/06/quorum-availability"
+  - "/2024/02/12/parameters"
 ---{{ page.title }}
 ================
 

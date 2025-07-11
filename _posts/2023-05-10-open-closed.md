@@ -3,10 +3,11 @@ layout: post
 title: "Open and Closed, Omission and Collapse"
 
 
+
 related_posts:
-  - "/2022/10/21/nudge"
-  - "/2018/01/01/balls-into-bins"
-  - "/2022/08/11/backoff"
+  - "/2021/08/05/utilization"
+  - "/2020/08/06/erlang"
+  - "/2025/05/20/icpe"
 ---{{ page.title }}
 ================
 

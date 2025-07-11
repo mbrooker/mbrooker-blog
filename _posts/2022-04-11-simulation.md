@@ -3,10 +3,11 @@ layout: post
 title: "Simple Simulations for System Builders"
 
 
+
 related_posts:
   - "/2022/06/02/formal"
-  - "/2022/07/29/getting-into-tla"
-  - "/2018/01/01/balls-into-bins"
+  - "/2018/06/20/littles-law"
+  - "/2024/04/17/formal"
 ---{{ page.title }}
 ================
 

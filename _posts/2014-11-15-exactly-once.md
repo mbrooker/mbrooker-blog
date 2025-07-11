@@ -3,10 +3,11 @@ layout: post
 title: "Exactly-Once Delivery May Not Be What You Want"
 
 
+
 related_posts:
-  - "/2018/02/25/availability-liveness"
-  - "/2024/03/25/needles"
-  - "/2024/04/25/memorydb"
+  - "/2020/10/05/consensus"
+  - "/2021/01/22/cloud-scale"
+  - "/2021/04/14/redundancy"
 ---{{ page.title }}
 ================
 

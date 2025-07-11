@@ -3,10 +3,11 @@ layout: post
 title: "The Builder's Guide to Better Mousetraps"
 
 
+
 related_posts:
-  - "/2020/01/02/why-distributed"
+  - "/2020/10/19/big-changes"
+  - "/2022/01/31/deployments"
   - "/2024/06/04/scale"
-  - "/2024/02/06/time"
 ---{{ page.title }}
 ================
 

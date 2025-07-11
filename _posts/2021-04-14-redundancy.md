@@ -3,10 +3,11 @@ layout: post
 title: "Redundant against what?"
 
 
+
 related_posts:
-  - "/2021/01/22/cloud-scale"
-  - "/2022/01/31/deployments"
-  - "/2019/03/17/control"
+  - "/2019/06/20/redundancy"
+  - "/2016/01/03/correlation"
+  - "/2019/05/01/emergent"
 ---{{ page.title }}
 ================
 

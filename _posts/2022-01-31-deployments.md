@@ -3,10 +3,11 @@ layout: post
 title: "Software Deployment, Speed, and Safety"
 
 
+
 related_posts:
+  - "/2024/03/04/mousetrap"
   - "/2024/06/04/scale"
-  - "/2023/05/23/snapshot-loading"
-  - "/2024/12/03/aurora-dsql"
+  - "/2024/04/17/formal"
 ---{{ page.title }}
 ================
 

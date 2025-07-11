@@ -3,10 +3,11 @@ layout: post
 title: "Kindness, Wickedness and Safety"
 
 
+
 related_posts:
-  - "/2019/04/03/learning"
-  - "/2016/01/03/correlation"
-  - "/2014/05/10/lynch-pub"
+  - "/2014/06/29/rasmussen"
+  - "/2019/06/17/chernobyl"
+  - "/2021/02/22/postmortem"
 ---{{ page.title }}
 ================
 

@@ -3,10 +3,11 @@ layout: post
 title: "Snark, Chord, and Trust in Algorithms"
 
 
+
 related_posts:
-  - "/2022/07/29/getting-into-tla"
+  - "/2023/07/28/ds-testing"
   - "/2014/03/30/lamport-pub"
-  - "/2014/05/19/vr"
+  - "/2015/03/29/formal"
 ---{{ page.title }}
 ================
 

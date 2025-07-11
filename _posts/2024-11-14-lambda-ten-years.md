@@ -3,10 +3,11 @@ layout: post
 title: "Ten Years of AWS Lambda"
 
 
+
 related_posts:
   - "/2023/05/23/snapshot-loading"
-  - "/2022/11/29/snapstart"
   - "/2024/12/03/aurora-dsql"
+  - "/2024/07/29/aurora-serverless"
 ---{{ page.title }}
 ================
 

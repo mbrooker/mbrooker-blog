@@ -3,10 +3,11 @@ layout: post
 title: "Getting into formal specification, and getting my team into it too"
 
 
+
 related_posts:
-  - "/2022/04/11/simulation"
-  - "/2024/04/17/formal"
-  - "/2024/12/03/aurora-dsql"
+  - "/2014/08/09/formal-methods"
+  - "/2022/06/02/formal"
+  - "/2015/03/29/formal"
 ---{{ page.title }}
 ================
 

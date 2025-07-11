@@ -3,10 +3,11 @@ layout: post
 title: "Getting Big Things Done"
 
 
+
 related_posts:
-  - "/2022/11/08/writing"
   - "/2024/02/06/time"
-  - "/2022/01/31/deployments"
+  - "/2024/03/04/mousetrap"
+  - "/2022/11/08/writing"
 ---{{ page.title }}
 ================
 

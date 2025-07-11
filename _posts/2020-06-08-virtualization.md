@@ -3,10 +3,11 @@ layout: post
 title: "Some Virtualization Papers Worth Reading"
 
 
+
 related_posts:
-  - "/2020/02/19/firecracker"
-  - "/2021/05/24/metastable"
-  - "/2022/11/29/snapstart"
+  - "/2025/06/02/hotos"
+  - "/2023/07/13/osdi"
+  - "/2014/09/21/liskov-pub"
 ---{{ page.title }}
 ================
 

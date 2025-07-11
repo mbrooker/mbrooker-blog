@@ -3,10 +3,11 @@ layout: post
 title: "When Redundancy Actually Helps"
 
 
+
 related_posts:
-  - "/2020/01/02/why-distributed"
-  - "/2022/01/31/deployments"
-  - "/2024/06/04/scale"
+  - "/2021/04/14/redundancy"
+  - "/2016/01/03/correlation"
+  - "/2019/05/01/emergent"
 ---{{ page.title }}
 ================
 

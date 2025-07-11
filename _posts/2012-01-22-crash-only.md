@@ -3,10 +3,11 @@ layout: post
 title: The properties of crash-only software
 
 
+
 related_posts:
-  - "/2012/09/02/expect-less"
-  - "/2024/03/25/needles"
-  - "/2019/04/03/learning"
+  - "/2014/09/21/liskov-pub"
+  - "/2014/10/12/harvest-yield"
+  - "/2021/05/24/metastable"
 ---{{ page.title }}
 ================
 

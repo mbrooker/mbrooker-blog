@@ -3,10 +3,11 @@ layout: post
 title: "Quorum Availability"
 
 
+
 related_posts:
-  - "/2021/01/22/cloud-scale"
-  - "/2022/10/04/commitment"
-  - "/2023/05/23/snapshot-loading"
+  - "/2014/01/12/ben-or"
+  - "/2020/10/05/consensus"
+  - "/2015/09/26/cap-durability"
 ---{{ page.title }}
 ================
 

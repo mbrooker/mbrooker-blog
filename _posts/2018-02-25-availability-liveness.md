@@ -3,10 +3,11 @@ layout: post
 title: "Availability and availability"
 
 
+
 related_posts:
-  - "/2015/09/26/cap-durability"
-  - "/2021/01/22/cloud-scale"
   - "/2024/07/25/cap-again"
+  - "/2015/09/26/cap-durability"
+  - "/2014/10/12/harvest-yield"
 ---{{ page.title }}
 ================
 

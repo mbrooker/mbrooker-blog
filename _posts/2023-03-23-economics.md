@@ -3,10 +3,11 @@ layout: post
 title: "Surprising Scalability of Multitenancy"
 
 
+
 related_posts:
+  - "/2024/01/18/scalability"
   - "/2024/06/04/scale"
-  - "/2022/11/29/snapstart"
-  - "/2020/01/02/why-distributed"
+  - "/2024/07/29/aurora-serverless"
 ---{{ page.title }}
 ================
 

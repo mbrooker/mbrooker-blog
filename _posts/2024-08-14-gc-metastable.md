@@ -3,10 +3,11 @@ layout: post
 title: "Garbage Collection and Metastability"
 
 
+
 related_posts:
   - "/2021/08/27/caches"
-  - "/2022/01/19/predictability"
-  - "/2023/02/07/hot-keys"
+  - "/2021/05/24/metastable"
+  - "/2012/09/10/volatile"
 ---{{ page.title }}
 ================
 

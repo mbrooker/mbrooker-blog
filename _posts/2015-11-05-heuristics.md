@@ -3,10 +3,11 @@ layout: post
 title: "Heuristic Traps for Systems Operators"
 
 
+
 related_posts:
   - "/2014/06/29/rasmussen"
-  - "/2022/11/08/writing"
-  - "/2024/03/25/needles"
+  - "/2023/04/20/hobbies"
+  - "/2021/02/22/postmortem"
 ---{{ page.title }}
 ================
 

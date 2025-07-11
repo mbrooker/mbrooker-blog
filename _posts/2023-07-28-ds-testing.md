@@ -3,10 +3,11 @@ layout: post
 title: "Invariants: A Better Debugger?"
 
 
+
 related_posts:
-  - "/2024/12/03/aurora-dsql"
+  - "/2014/03/08/model-checking"
   - "/2022/07/29/getting-into-tla"
-  - "/2022/11/08/writing"
+  - "/2014/09/21/liskov-pub"
 ---{{ page.title }}
 ================
 

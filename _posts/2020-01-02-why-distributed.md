@@ -3,10 +3,11 @@ layout: post
 title: "Why do we need distributed systems?"
 
 
+
 related_posts:
   - "/2024/06/04/scale"
-  - "/2023/03/23/economics"
-  - "/2024/03/04/mousetrap"
+  - "/2021/01/22/cloud-scale"
+  - "/2021/04/14/redundancy"
 ---{{ page.title }}
 ================
 

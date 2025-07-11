@@ -3,10 +3,11 @@ layout: post
 title: "Amazon's Distributed Computing Manifesto"
 
 
+
 related_posts:
-  - "/2023/01/30/nosql"
+  - "/2024/06/04/scale"
+  - "/2021/01/22/cloud-scale"
   - "/2019/03/17/control"
-  - "/2024/12/05/inside-dsql-writes"
 ---{{ page.title }}
 ================
 

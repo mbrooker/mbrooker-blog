@@ -3,10 +3,11 @@ layout: post
 title: The benefits of having data
 
 
+
 related_posts:
-  - "/2014/01/12/ben-or"
-  - "/2014/04/14/failure-detectors"
-  - "/2018/01/01/balls-into-bins"
+  - "/2016/01/03/correlation"
+  - "/2021/03/25/latency-bandwidth"
+  - "/2014/07/04/iostat-pct"
 ---{{ page.title }}
 ================
 

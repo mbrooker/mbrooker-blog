@@ -3,10 +3,11 @@ layout: post
 title: "The Fundamental Mechanism of Scaling"
 
 
+
 related_posts:
-  - "/2018/02/25/availability-liveness"
   - "/2019/05/01/emergent"
-  - "/2019/03/17/control"
+  - "/2020/10/05/consensus"
+  - "/2024/06/04/scale"
 ---{{ page.title }}
 ================
 

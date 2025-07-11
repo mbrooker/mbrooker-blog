@@ -3,10 +3,11 @@ layout: post
 title: "Why Must Systems Be Operated?"
 
 
+
 related_posts:
-  - "/2020/01/02/why-distributed"
+  - "/2019/06/20/redundancy"
+  - "/2021/04/14/redundancy"
   - "/2021/05/24/metastable"
-  - "/2022/02/16/circuit-breakers"
 ---{{ page.title }}
 ================
 

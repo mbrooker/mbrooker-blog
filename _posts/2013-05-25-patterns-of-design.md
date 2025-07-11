@@ -3,10 +3,11 @@ layout: post
 title: Some Patterns of Engineering Design Meetings
 
 
+
 related_posts:
-  - "/2023/04/20/hobbies"
-  - "/2022/01/31/deployments"
-  - "/2014/01/12/ben-or"
+  - "/2015/01/25/patterns"
+  - "/2020/10/19/big-changes"
+  - "/2024/04/17/formal"
 ---{{ page.title }}
 ================
 

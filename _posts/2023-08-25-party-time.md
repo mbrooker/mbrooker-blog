@@ -3,10 +3,11 @@ layout: post
 title: "On The Acoustics of Cocktail Parties"
 
 
+
 related_posts:
-  - "/2021/05/24/metastable"
-  - "/2024/03/25/needles"
-  - "/2023/02/07/hot-keys"
+  - "/2018/06/20/littles-law"
+  - "/2020/08/06/erlang"
+  - "/2021/01/06/quorum-availability"
 ---{{ page.title }}
 ================
 

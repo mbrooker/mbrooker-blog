@@ -3,9 +3,10 @@ layout: post
 title: "Is Anatoly Dyatlov to blame?"
 
 
+
 related_posts:
-  - "/2022/11/08/writing"
-  - "/2022/01/31/deployments"
+  - "/2014/06/29/rasmussen"
+  - "/2019/08/12/kind-wicked"
   - "/2016/01/03/correlation"
 ---{{ page.title }}
 ================

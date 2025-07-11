@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::env;
 use std::error::Error;
 use std::fs::File;
@@ -10,6 +10,8 @@ use aws_sdk_bedrockruntime::primitives::Blob;
 use serde::{Deserialize, Serialize};
 use ndarray::{Array1, ArrayView1};
 use futures::future::join_all;
+
+mod keyword_extraction;
 
 // Number of related posts to include
 const NUM_RELATED_POSTS: usize = 3;
@@ -25,11 +27,12 @@ struct BlogPost {
     title: String,
     url: String,
     embedding: Option<Vec<f32>>,
+    keywords: HashSet<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 struct TitanEmbeddingRequest {
-    input_text: String,
+    inputText: String,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -78,30 +81,78 @@ fn extract_title_and_url(path: &Path) -> (String, String) {
 async fn get_embedding(client: &BedrockClient, text: &str) -> Result<Vec<f32>, Box<dyn Error>> {
     // Truncate text if it's too long (Titan has a limit of around 8K tokens)
     let truncated_text = if text.len() > 8000 {
+        eprintln!("Warning: Text truncated from {} to 8000 characters", text.len());
         &text[0..8000]
     } else {
         text
     };
     
     let request = TitanEmbeddingRequest {
-        input_text: truncated_text.to_string(),
+        inputText: truncated_text.to_string(),
     };
     
-    let request_json = serde_json::to_string(&request)?;
+    let request_json = match serde_json::to_string(&request) {
+        Ok(json) => json,
+        Err(e) => {
+            eprintln!("Error serializing embedding request to JSON: {}", e);
+            eprintln!("Request data: input_text length = {}", truncated_text.len());
+            return Err(Box::new(e));
+        }
+    };
     
-    let response = client
+    eprintln!("Making embedding request to model: {}", TITAN_EMBEDDINGS_MODEL_ID);
+    eprintln!("Request payload size: {} bytes", request_json.len());
+    
+    let response = match client
         .invoke_model()
         .model_id(TITAN_EMBEDDINGS_MODEL_ID)
         .content_type("application/json")
         .accept("application/json")
-        .body(Blob::new(request_json))
+        .body(Blob::new(request_json.clone()))
         .send()
-        .await?;
+        .await {
+        Ok(resp) => resp,
+        Err(e) => {
+            eprintln!("Error invoking Bedrock model:");
+            eprintln!("  Model ID: {}", TITAN_EMBEDDINGS_MODEL_ID);
+            eprintln!("  Error: {}", e);
+            eprintln!("  Request payload: {}", request_json);
+            
+            // Try to extract more specific error information
+            if let Some(service_err) = e.as_service_error() {
+                eprintln!("  Service error details: {:?}", service_err);
+            }
+            
+            return Err(Box::new(e));
+        }
+    };
     
     let response_body = response.body.as_ref();
-    let response_str = std::str::from_utf8(response_body)?;
-    let response_json: TitanEmbeddingResponse = serde_json::from_str(response_str)?;
+    eprintln!("Received response body size: {} bytes", response_body.len());
     
+    let response_str = match std::str::from_utf8(response_body) {
+        Ok(s) => s,
+        Err(e) => {
+            eprintln!("Error converting response body to UTF-8 string: {}", e);
+            eprintln!("Response body (first 500 bytes): {:?}", 
+                &response_body[..std::cmp::min(500, response_body.len())]);
+            return Err(Box::new(e));
+        }
+    };
+    
+    eprintln!("Response body: {}", response_str);
+    
+    let response_json: TitanEmbeddingResponse = match serde_json::from_str(response_str) {
+        Ok(json) => json,
+        Err(e) => {
+            eprintln!("Error parsing response JSON: {}", e);
+            eprintln!("Raw response: {}", response_str);
+            eprintln!("Expected format: {{\"embedding\": [f32, ...]}}");
+            return Err(Box::new(e));
+        }
+    };
+    
+    eprintln!("Successfully parsed embedding with {} dimensions", response_json.embedding.len());
     Ok(response_json.embedding)
 }
 
@@ -217,18 +268,18 @@ fn find_blog_root() -> PathBuf {
 async fn main() -> Result<(), Box<dyn Error>> {
     println!("Starting related posts generator...");
     
-    // Check for dry-run flag
+    // Check for dry-run flag and force-keywords flag
     let args: Vec<String> = env::args().collect();
     let dry_run = args.iter().any(|arg| arg == "--dry-run");
+    let force_keywords = args.iter().any(|arg| arg == "--force-keywords");
     
     if dry_run {
         println!("Running in dry-run mode (no files will be modified)");
     }
     
-    // Initialize AWS SDK
-    println!("Initializing AWS SDK...");
-    let config = aws_config::load_defaults(aws_config::BehaviorVersion::latest()).await;
-    let bedrock_client = BedrockClient::new(&config);
+    if force_keywords {
+        println!("Forcing keyword-based similarity instead of embeddings");
+    }
     
     // Find the blog root directory
     let blog_root = find_blog_root();
@@ -251,6 +302,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
             let (frontmatter, body) = extract_frontmatter_and_content(&content);
             let (title, url) = extract_title_and_url(path);
             
+            // Extract keywords for fallback approach
+            let text_for_keywords = format!("{} {}", title, body);
+            let keywords = keyword_extraction::extract_keywords(&text_for_keywords);
+            
             posts.push(BlogPost {
                 path: path.to_path_buf(),
                 content,
@@ -259,62 +314,120 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 title,
                 url,
                 embedding: None,
+                keywords,
             });
         }
     }
     
     println!("Found {} posts", posts.len());
     
-    // Generate embeddings for all posts
-    println!("Generating embeddings using Amazon Bedrock Titan Text Embeddings...");
-    
-    // Process posts in batches to avoid overwhelming the API
-    let batch_size = 10;
+    let mut use_embeddings = !force_keywords;
     let mut posts_with_embeddings = Vec::new();
     
-    for chunk in posts.chunks(batch_size) {
-        let mut futures = Vec::new();
-        
-        for post in chunk {
-            let text_for_embedding = format!("{} {}", post.title, post.body);
-            let client = &bedrock_client;
-            
-            let future = async move {
-                let mut post_clone = post.clone();
-                match get_embedding(client, &text_for_embedding).await {
-                    Ok(embedding) => {
-                        post_clone.embedding = Some(embedding);
-                        println!("Generated embedding for: {}", post_clone.path.display());
-                        post_clone
-                    },
-                    Err(e) => {
-                        eprintln!("Error generating embedding for {}: {}", post_clone.path.display(), e);
-                        post_clone
+    if use_embeddings {
+        // Try to initialize AWS SDK
+        println!("Initializing AWS SDK...");
+        match aws_config::load_defaults(aws_config::BehaviorVersion::latest()).await {
+            config => {
+                let bedrock_client = BedrockClient::new(&config);
+                
+                // Generate embeddings for all posts
+                println!("Generating embeddings using Amazon Bedrock Titan Text Embeddings...");
+                
+                // Process posts in batches to avoid overwhelming the API
+                let batch_size = 10;
+                let mut embedding_failures = 0;
+                
+                for chunk in posts.chunks(batch_size) {
+                    let mut futures = Vec::new();
+                    
+                    for post in chunk {
+                        let text_for_embedding = format!("{} {}", post.title, post.body);
+                        let client = &bedrock_client;
+                        
+                        let future = async move {
+                            let mut post_clone = post.clone();
+                            match get_embedding(client, &text_for_embedding).await {
+                                Ok(embedding) => {
+                                    post_clone.embedding = Some(embedding);
+                                    println!("Generated embedding for: {}", post_clone.path.display());
+                                    post_clone
+                                },
+                                Err(e) => {
+                                    eprintln!("Error generating embedding for {}: {}", post_clone.path.display(), e);
+                                    post_clone
+                                }
+                            }
+                        };
+                        
+                        futures.push(future);
                     }
+                    
+                    let results = join_all(futures).await;
+                    
+                    // Count failures
+                    for post in &results {
+                        if post.embedding.is_none() {
+                            embedding_failures += 1;
+                        }
+                    }
+                    
+                    posts_with_embeddings.extend(results);
                 }
-            };
-            
-            futures.push(future);
+                
+                // If more than 50% of embeddings failed, fall back to keyword-based approach
+                if embedding_failures > posts.len() / 2 {
+                    println!("Too many embedding failures ({}). Falling back to keyword-based approach.", embedding_failures);
+                    use_embeddings = false;
+                    posts_with_embeddings = posts.clone();
+                }
+            }
         }
-        
-        let results = join_all(futures).await;
-        posts_with_embeddings.extend(results);
+    } else {
+        // Use keyword-based approach
+        posts_with_embeddings = posts.clone();
     }
     
     // Calculate similarities and find related posts
-    println!("Finding related posts using cosine similarity...");
+    println!("Finding related posts...");
     let mut related_posts_map: HashMap<PathBuf, Vec<&BlogPost>> = HashMap::new();
     
-    for i in 0..posts_with_embeddings.len() {
-        let mut similarities: Vec<(usize, f32)> = Vec::new();
-        
-        if let Some(ref embedding_i) = posts_with_embeddings[i].embedding {
+    if use_embeddings {
+        println!("Using embedding-based similarity (cosine similarity)");
+        for i in 0..posts_with_embeddings.len() {
+            let mut similarities: Vec<(usize, f32)> = Vec::new();
+            
+            if let Some(ref embedding_i) = posts_with_embeddings[i].embedding {
+                for j in 0..posts_with_embeddings.len() {
+                    if i != j {
+                        if let Some(ref embedding_j) = posts_with_embeddings[j].embedding {
+                            let similarity = cosine_similarity(embedding_i, embedding_j);
+                            similarities.push((j, similarity));
+                        }
+                    }
+                }
+                
+                // Sort by similarity (highest first)
+                similarities.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
+                
+                // Take top N related posts
+                let related: Vec<&BlogPost> = similarities.iter()
+                    .take(NUM_RELATED_POSTS)
+                    .map(|(idx, _)| &posts_with_embeddings[*idx])
+                    .collect();
+                
+                related_posts_map.insert(posts_with_embeddings[i].path.clone(), related);
+            }
+        }
+    } else {
+        println!("Using keyword-based similarity");
+        for i in 0..posts_with_embeddings.len() {
+            let mut similarities: Vec<(usize, f32)> = Vec::new();
+            
             for j in 0..posts_with_embeddings.len() {
                 if i != j {
-                    if let Some(ref embedding_j) = posts_with_embeddings[j].embedding {
-                        let similarity = cosine_similarity(embedding_i, embedding_j);
-                        similarities.push((j, similarity));
-                    }
+                    let similarity = keyword_extraction::calculate_keyword_similarity(&posts_with_embeddings[i], &posts_with_embeddings[j]);
+                    similarities.push((j, similarity));
                 }
             }
             

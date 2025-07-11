@@ -3,10 +3,11 @@ layout: post
 title: "Incident Response Isn't Enough"
 
 
+
 related_posts:
-  - "/2021/04/14/redundancy"
-  - "/2024/03/04/mousetrap"
   - "/2016/01/03/correlation"
+  - "/2019/06/20/redundancy"
+  - "/2018/02/25/availability-liveness"
 ---{{ page.title }}
 ================
 

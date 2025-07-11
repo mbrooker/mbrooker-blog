@@ -3,10 +3,11 @@ layout: post
 title: "DSQL Vignette: Reads and Compute"
 
 
+
 related_posts:
   - "/2024/12/05/inside-dsql-writes"
   - "/2024/12/03/aurora-dsql"
-  - "/2025/02/04/versioning"
+  - "/2024/12/06/inside-dsql-cap"
 ---{{ page.title }}
 ================
 
