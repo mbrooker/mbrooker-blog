@@ -6,9 +6,8 @@ use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 use aws_sdk_bedrockruntime::Client as BedrockClient;
-use aws_sdk_bedrockruntime::types::ContentType;
+use aws_sdk_bedrockruntime::primitives::Blob;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
 use ndarray::{Array1, ArrayView1};
 use futures::future::join_all;
 
@@ -93,9 +92,9 @@ async fn get_embedding(client: &BedrockClient, text: &str) -> Result<Vec<f32>, B
     let response = client
         .invoke_model()
         .model_id(TITAN_EMBEDDINGS_MODEL_ID)
-        .content_type(ContentType::ApplicationJson)
-        .accept(ContentType::ApplicationJson)
-        .body(aws_sdk_bedrockruntime::types::Blob::new(request_json))
+        .content_type("application/json")
+        .accept("application/json")
+        .body(Blob::new(request_json))
         .send()
         .await?;
     
@@ -228,7 +227,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     
     // Initialize AWS SDK
     println!("Initializing AWS SDK...");
-    let config = aws_config::load_from_env().await;
+    let config = aws_config::load_defaults(aws_config::BehaviorVersion::latest()).await;
     let bedrock_client = BedrockClient::new(&config);
     
     // Find the blog root directory
