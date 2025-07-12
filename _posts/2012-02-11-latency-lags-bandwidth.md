@@ -5,10 +5,11 @@ title: Latency lags bandwidth
 
 
 
+
 related_posts:
-  - "/2021/03/25/latency-bandwidth"
-  - "/2021/08/05/utilization"
-  - "/2021/08/27/caches"
+  - "/2021/03/25/latency-bandwidth/"
+  - "/2021/08/05/utilization/"
+  - "/2021/08/27/caches/"
 ---
 {{ page.title }}
 ================

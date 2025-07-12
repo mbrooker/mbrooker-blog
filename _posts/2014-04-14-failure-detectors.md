@@ -5,10 +5,11 @@ title: "Failure Detectors, and Non-Blocking Atomic Commit"
 
 
 
+
 related_posts:
-  - "/2014/01/12/ben-or"
-  - "/2020/10/05/consensus"
-  - "/2014/05/10/lynch-pub"
+  - "/2014/01/12/ben-or/"
+  - "/2020/10/05/consensus/"
+  - "/2014/05/10/lynch-pub/"
 ---
 {{ page.title }}
 ================

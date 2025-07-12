@@ -5,10 +5,11 @@ title: "On The Acoustics of Cocktail Parties"
 
 
 
+
 related_posts:
-  - "/2018/06/20/littles-law"
-  - "/2020/08/06/erlang"
-  - "/2021/01/06/quorum-availability"
+  - "/2018/06/20/littles-law/"
+  - "/2020/08/06/erlang/"
+  - "/2021/01/06/quorum-availability/"
 ---
 {{ page.title }}
 ================

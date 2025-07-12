@@ -5,10 +5,11 @@ title: "Surprising Scalability of Multitenancy"
 
 
 
+
 related_posts:
-  - "/2024/01/18/scalability"
-  - "/2024/06/04/scale"
-  - "/2024/07/29/aurora-serverless"
+  - "/2024/01/18/scalability/"
+  - "/2024/06/04/scale/"
+  - "/2024/07/29/aurora-serverless/"
 ---
 {{ page.title }}
 ================

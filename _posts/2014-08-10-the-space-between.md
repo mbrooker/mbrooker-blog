@@ -5,10 +5,11 @@ title: "The Space Between Theory and Practice in Distributed Systems"
 
 
 
+
 related_posts:
-  - "/2019/04/03/learning"
-  - "/2021/01/22/cloud-scale"
-  - "/2020/10/05/consensus"
+  - "/2019/04/03/learning/"
+  - "/2021/01/22/cloud-scale/"
+  - "/2020/10/05/consensus/"
 ---
 {{ page.title }}
 ================

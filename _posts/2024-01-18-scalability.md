@@ -5,10 +5,11 @@ title: "What is Scalability Anyway?"
 
 
 
+
 related_posts:
-  - "/2023/03/23/economics"
-  - "/2024/06/04/scale"
-  - "/2023/01/30/nosql"
+  - "/2023/03/23/economics/"
+  - "/2024/06/04/scale/"
+  - "/2023/01/30/nosql/"
 ---
 {{ page.title }}
 ================

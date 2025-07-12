@@ -1,3 +1,4 @@
 markdown: kramdown
 pygments: false
 baseurl: /blog
+permalink: /:year/:month/:day/:title/

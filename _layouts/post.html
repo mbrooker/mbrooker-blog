@@ -9,14 +9,22 @@ layout: default
   <h2>Other Posts</h2>
   &laquo; <a href="{{ site.baseurl }}">Back to the blog index</a><br>
   <ul class="posts">
-    {% if page.related_posts %}
+    {% if page.related_posts and page.related_posts.size > 0 %}
       {% for related_url in page.related_posts %}
+        {% assign related_url_clean = related_url | strip %}
+        {% assign found_match = false %}
         {% for post in site.posts %}
-          {% if post.url == related_url %}
+          {% assign post_url_clean = post.url | strip %}
+          {% if post_url_clean == related_url_clean %}
             <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+            {% assign found_match = true %}
             {% break %}
           {% endif %}
         {% endfor %}
+        {% unless found_match %}
+          <!-- Debug: show what we were looking for -->
+          <!-- Looking for: "{{ related_url_clean }}" -->
+        {% endunless %}
       {% endfor %}
     {% else %}
       {% for post in site.related_posts limit:3 %}

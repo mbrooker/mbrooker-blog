@@ -5,10 +5,11 @@ title: "Amazon's Distributed Computing Manifesto"
 
 
 
+
 related_posts:
-  - "/2024/06/04/scale"
-  - "/2021/01/22/cloud-scale"
-  - "/2019/03/17/control"
+  - "/2024/06/04/scale/"
+  - "/2021/01/22/cloud-scale/"
+  - "/2019/03/17/control/"
 ---
 {{ page.title }}
 ================

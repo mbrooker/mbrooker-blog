@@ -5,10 +5,11 @@ title: "Sodium Carbonate, and Ramenized Pasta"
 
 
 
+
 related_posts:
-  - "/2014/10/25/ice-cream"
-  - "/2013/01/20/two-phase"
-  - "/2014/11/30/two-farmers"
+  - "/2014/10/25/ice-cream/"
+  - "/2013/01/20/two-phase/"
+  - "/2014/11/30/two-farmers/"
 ---
 {{ page.title }}
 ================

@@ -5,10 +5,11 @@ title: Java's Atomic and volatile, under the hood on x86
 
 
 
+
 related_posts:
-  - "/2013/01/06/volatile"
-  - "/2012/09/10/volatile"
-  - "/2012/09/10/locking"
+  - "/2013/01/06/volatile/"
+  - "/2012/09/10/volatile/"
+  - "/2012/09/10/locking/"
 ---
 {{ page.title }}
 ================

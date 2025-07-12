@@ -5,10 +5,11 @@ title: "Quorum Availability"
 
 
 
+
 related_posts:
-  - "/2014/01/12/ben-or"
-  - "/2020/10/05/consensus"
-  - "/2015/09/26/cap-durability"
+  - "/2014/01/12/ben-or/"
+  - "/2020/10/05/consensus/"
+  - "/2015/09/26/cap-durability/"
 ---
 {{ page.title }}
 ================

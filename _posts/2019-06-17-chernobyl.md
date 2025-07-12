@@ -5,10 +5,11 @@ title: "Is Anatoly Dyatlov to blame?"
 
 
 
+
 related_posts:
-  - "/2014/06/29/rasmussen"
-  - "/2019/08/12/kind-wicked"
-  - "/2016/01/03/correlation"
+  - "/2014/06/29/rasmussen/"
+  - "/2019/08/12/kind-wicked/"
+  - "/2016/01/03/correlation/"
 ---
 {{ page.title }}
 ================

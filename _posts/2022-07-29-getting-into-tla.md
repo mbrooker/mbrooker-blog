@@ -5,10 +5,11 @@ title: "Getting into formal specification, and getting my team into it too"
 
 
 
+
 related_posts:
-  - "/2014/08/09/formal-methods"
-  - "/2022/06/02/formal"
-  - "/2015/03/29/formal"
+  - "/2014/08/09/formal-methods/"
+  - "/2022/06/02/formal/"
+  - "/2015/03/29/formal/"
 ---
 {{ page.title }}
 ================

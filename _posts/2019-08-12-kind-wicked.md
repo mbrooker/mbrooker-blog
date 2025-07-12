@@ -5,10 +5,11 @@ title: "Kindness, Wickedness and Safety"
 
 
 
+
 related_posts:
-  - "/2014/06/29/rasmussen"
-  - "/2019/06/17/chernobyl"
-  - "/2021/02/22/postmortem"
+  - "/2014/06/29/rasmussen/"
+  - "/2019/06/17/chernobyl/"
+  - "/2021/02/22/postmortem/"
 ---
 {{ page.title }}
 ================

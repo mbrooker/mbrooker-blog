@@ -5,10 +5,11 @@ title: "Latency Sneaks Up On You"
 
 
 
+
 related_posts:
-  - "/2020/08/06/erlang"
-  - "/2021/04/19/latency"
-  - "/2017/12/28/mean"
+  - "/2020/08/06/erlang/"
+  - "/2021/04/19/latency/"
+  - "/2017/12/28/mean/"
 ---
 {{ page.title }}
 ================

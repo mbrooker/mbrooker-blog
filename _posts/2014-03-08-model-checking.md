@@ -5,10 +5,11 @@ title: "Snark, Chord, and Trust in Algorithms"
 
 
 
+
 related_posts:
-  - "/2023/07/28/ds-testing"
-  - "/2014/03/30/lamport-pub"
-  - "/2015/03/29/formal"
+  - "/2023/07/28/ds-testing/"
+  - "/2014/03/30/lamport-pub/"
+  - "/2015/03/29/formal/"
 ---
 {{ page.title }}
 ================

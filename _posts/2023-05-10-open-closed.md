@@ -5,10 +5,11 @@ title: "Open and Closed, Omission and Collapse"
 
 
 
+
 related_posts:
-  - "/2021/08/05/utilization"
-  - "/2020/08/06/erlang"
-  - "/2025/05/20/icpe"
+  - "/2021/08/05/utilization/"
+  - "/2020/08/06/erlang/"
+  - "/2025/05/20/icpe/"
 ---
 {{ page.title }}
 ================

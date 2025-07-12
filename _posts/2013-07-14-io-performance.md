@@ -5,10 +5,11 @@ title: "Beyond iostat: Storage performance analysis with blktrace"
 
 
 
+
 related_posts:
-  - "/2014/07/04/iostat-pct"
-  - "/2021/03/25/latency-bandwidth"
-  - "/2012/02/11/latency-lags-bandwidth"
+  - "/2014/07/04/iostat-pct/"
+  - "/2021/03/25/latency-bandwidth/"
+  - "/2012/02/11/latency-lags-bandwidth/"
 ---
 {{ page.title }}
 ================

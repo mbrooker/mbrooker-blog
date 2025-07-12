@@ -5,10 +5,11 @@ title: "Simple Simulations for System Builders"
 
 
 
+
 related_posts:
-  - "/2022/06/02/formal"
-  - "/2018/06/20/littles-law"
-  - "/2024/04/17/formal"
+  - "/2022/06/02/formal/"
+  - "/2018/06/20/littles-law/"
+  - "/2024/04/17/formal/"
 ---
 {{ page.title }}
 ================

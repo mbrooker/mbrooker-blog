@@ -5,10 +5,11 @@ title: "DynamoDB's Best Feature: Predictability"
 
 
 
+
 related_posts:
-  - "/2022/07/12/dynamodb"
-  - "/2024/12/03/aurora-dsql"
-  - "/2024/04/25/memorydb"
+  - "/2022/07/12/dynamodb/"
+  - "/2024/12/03/aurora-dsql/"
+  - "/2024/04/25/memorydb/"
 ---
 {{ page.title }}
 ================
