@@ -7,10 +7,14 @@ title: "Some Virtualization Papers Worth Reading"
 
 
 
+
+
 related_posts:
   - "/2025/06/02/hotos.html"
   - "/2023/07/13/osdi.html"
   - "/2014/09/21/liskov-pub.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

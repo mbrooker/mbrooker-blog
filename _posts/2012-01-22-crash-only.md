@@ -7,10 +7,14 @@ title: The properties of crash-only software
 
 
 
+
+
 related_posts:
   - "/2014/09/21/liskov-pub.html"
   - "/2014/10/12/harvest-yield.html"
   - "/2021/05/24/metastable.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

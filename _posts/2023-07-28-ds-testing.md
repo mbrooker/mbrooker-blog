@@ -7,10 +7,14 @@ title: "Invariants: A Better Debugger?"
 
 
 
+
+
 related_posts:
   - "/2014/03/08/model-checking.html"
   - "/2022/07/29/getting-into-tla.html"
   - "/2014/09/21/liskov-pub.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

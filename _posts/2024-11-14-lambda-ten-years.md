@@ -7,10 +7,14 @@ title: "Ten Years of AWS Lambda"
 
 
 
+
+
 related_posts:
   - "/2023/05/23/snapshot-loading.html"
   - "/2024/12/03/aurora-dsql.html"
   - "/2024/07/29/aurora-serverless.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

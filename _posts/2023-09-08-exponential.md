@@ -7,10 +7,14 @@ title: "Exponential Value at Linear Cost"
 
 
 
+
+
 related_posts:
   - "/2021/10/20/simulation.html"
   - "/2021/01/06/quorum-availability.html"
   - "/2024/02/12/parameters.html"
+dissimilar_posts:
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

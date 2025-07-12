@@ -7,10 +7,14 @@ title: "Exactly-Once Delivery May Not Be What You Want"
 
 
 
+
+
 related_posts:
   - "/2020/10/05/consensus.html"
   - "/2021/01/22/cloud-scale.html"
   - "/2021/04/14/redundancy.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

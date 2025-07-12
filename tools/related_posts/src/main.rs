@@ -15,6 +15,8 @@ mod keyword_extraction;
 
 // Number of related posts to include
 const NUM_RELATED_POSTS: usize = 3;
+// Number of dissimilar posts to include
+const NUM_DISSIMILAR_POSTS: usize = 1;
 // Titan Text Embeddings model ID
 const TITAN_EMBEDDINGS_MODEL_ID: &str = "amazon.titan-embed-text-v1";
 
@@ -182,42 +184,61 @@ fn norm(v: &ArrayView1<f32>) -> f32 {
     v.dot(v).sqrt()
 }
 
-fn update_frontmatter(post: &BlogPost, related_posts: &[&BlogPost]) -> String {
+fn update_frontmatter(post: &BlogPost, related_posts: &[&BlogPost], dissimilar_posts: &[&BlogPost]) -> String {
     let mut new_frontmatter = post.frontmatter.clone();
     
-    // Remove existing related_posts if present
-    if new_frontmatter.contains("related_posts:") {
-        let start_idx = new_frontmatter.find("related_posts:").unwrap();
-        let mut end_idx = new_frontmatter[start_idx..].find("\n---").unwrap_or_else(|| new_frontmatter[start_idx..].len());
-        end_idx += start_idx;
-        
-        let before = &new_frontmatter[..start_idx];
-        let after = if end_idx + 1 < new_frontmatter.len() {
-            &new_frontmatter[end_idx..]
-        } else {
-            ""
-        };
-        
-        new_frontmatter = format!("{}{}", before, after);
+    // Remove existing related_posts and dissimilar_posts if present
+    for field in &["related_posts:", "dissimilar_posts:"] {
+        if new_frontmatter.contains(field) {
+            let start_idx = new_frontmatter.find(field).unwrap();
+            let mut end_idx = new_frontmatter[start_idx..].find("\n---").unwrap_or_else(|| new_frontmatter[start_idx..].len());
+            end_idx += start_idx;
+            
+            let before = &new_frontmatter[..start_idx];
+            let after = if end_idx + 1 < new_frontmatter.len() {
+                &new_frontmatter[end_idx..]
+            } else {
+                ""
+            };
+            
+            new_frontmatter = format!("{}{}", before, after);
+        }
     }
     
-    // Add new related_posts
-    if !related_posts.is_empty() {
-        let related_urls: Vec<String> = related_posts.iter()
-            .map(|p| p.url.clone())
-            .collect();
-        
-        // Find where to insert the related_posts
+    // Add new related_posts and dissimilar_posts
+    if !related_posts.is_empty() || !dissimilar_posts.is_empty() {
+        // Find where to insert the posts data
         if let Some(idx) = new_frontmatter.rfind("---") {
             let (before, after) = new_frontmatter.split_at(idx);
-            new_frontmatter = format!("{}related_posts:\n{}\n{}", 
-                before,
-                related_urls.iter()
+            let mut posts_section = String::new();
+            
+            if !related_posts.is_empty() {
+                let related_urls: Vec<String> = related_posts.iter()
+                    .map(|p| p.url.clone())
+                    .collect();
+                
+                posts_section.push_str("related_posts:\n");
+                posts_section.push_str(&related_urls.iter()
                     .map(|url| format!("  - \"{}\"", url))
                     .collect::<Vec<_>>()
-                    .join("\n"),
-                after
-            );
+                    .join("\n"));
+                posts_section.push('\n');
+            }
+            
+            if !dissimilar_posts.is_empty() {
+                let dissimilar_urls: Vec<String> = dissimilar_posts.iter()
+                    .map(|p| p.url.clone())
+                    .collect();
+                
+                posts_section.push_str("dissimilar_posts:\n");
+                posts_section.push_str(&dissimilar_urls.iter()
+                    .map(|url| format!("  - \"{}\"", url))
+                    .collect::<Vec<_>>()
+                    .join("\n"));
+                posts_section.push('\n');
+            }
+            
+            new_frontmatter = format!("{}{}{}", before, posts_section, after);
         }
     }
     
@@ -391,6 +412,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Calculate similarities and find related posts
     println!("Finding related posts...");
     let mut related_posts_map: HashMap<PathBuf, Vec<&BlogPost>> = HashMap::new();
+    let mut dissimilar_posts_map: HashMap<PathBuf, Vec<&BlogPost>> = HashMap::new();
     
     if use_embeddings {
         println!("Using embedding-based similarity (cosine similarity)");
@@ -410,13 +432,21 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 // Sort by similarity (highest first)
                 similarities.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
                 
-                // Take top N related posts
+                // Take top N related posts (most similar)
                 let related: Vec<&BlogPost> = similarities.iter()
                     .take(NUM_RELATED_POSTS)
                     .map(|(idx, _)| &posts_with_embeddings[*idx])
                     .collect();
                 
+                // Take bottom N dissimilar posts (least similar)
+                let dissimilar: Vec<&BlogPost> = similarities.iter()
+                    .rev()
+                    .take(NUM_DISSIMILAR_POSTS)
+                    .map(|(idx, _)| &posts_with_embeddings[*idx])
+                    .collect();
+                
                 related_posts_map.insert(posts_with_embeddings[i].path.clone(), related);
+                dissimilar_posts_map.insert(posts_with_embeddings[i].path.clone(), dissimilar);
             }
         }
     } else {
@@ -434,33 +464,42 @@ async fn main() -> Result<(), Box<dyn Error>> {
             // Sort by similarity (highest first)
             similarities.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
             
-            // Take top N related posts
+            // Take top N related posts (most similar)
             let related: Vec<&BlogPost> = similarities.iter()
                 .take(NUM_RELATED_POSTS)
                 .map(|(idx, _)| &posts_with_embeddings[*idx])
                 .collect();
             
+            // Take bottom N dissimilar posts (least similar)
+            let dissimilar: Vec<&BlogPost> = similarities.iter()
+                .rev()
+                .take(NUM_DISSIMILAR_POSTS)
+                .map(|(idx, _)| &posts_with_embeddings[*idx])
+                .collect();
+            
             related_posts_map.insert(posts_with_embeddings[i].path.clone(), related);
+            dissimilar_posts_map.insert(posts_with_embeddings[i].path.clone(), dissimilar);
         }
     }
     
     // Update frontmatter in each post
     println!("Updating post frontmatter...");
     for post in &posts_with_embeddings {
-        if let Some(related) = related_posts_map.get(&post.path) {
-            let updated_content = format!("{}\n{}", 
-                update_frontmatter(post, related),
-                post.body
-            );
-            
-            // Write updated content back to file (unless in dry-run mode)
-            if !dry_run {
-                let mut file = File::create(&post.path)?;
-                file.write_all(updated_content.as_bytes())?;
-            }
-            
-            println!("Updated: {}", post.path.display());
+        let related = related_posts_map.get(&post.path).map(|v| v.as_slice()).unwrap_or(&[]);
+        let dissimilar = dissimilar_posts_map.get(&post.path).map(|v| v.as_slice()).unwrap_or(&[]);
+        
+        let updated_content = format!("{}\n{}", 
+            update_frontmatter(post, related, dissimilar),
+            post.body
+        );
+        
+        // Write updated content back to file (unless in dry-run mode)
+        if !dry_run {
+            let mut file = File::create(&post.path)?;
+            file.write_all(updated_content.as_bytes())?;
         }
+        
+        println!("Updated: {}", post.path.display());
     }
     
     if dry_run {

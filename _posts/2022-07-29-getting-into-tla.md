@@ -7,10 +7,14 @@ title: "Getting into formal specification, and getting my team into it too"
 
 
 
+
+
 related_posts:
   - "/2014/08/09/formal-methods.html"
   - "/2022/06/02/formal.html"
   - "/2015/03/29/formal.html"
+dissimilar_posts:
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

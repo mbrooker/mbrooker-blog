@@ -7,10 +7,14 @@ title: "Redundant against what?"
 
 
 
+
+
 related_posts:
   - "/2019/06/20/redundancy.html"
   - "/2016/01/03/correlation.html"
   - "/2019/05/01/emergent.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

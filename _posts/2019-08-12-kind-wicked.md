@@ -7,10 +7,14 @@ title: "Kindness, Wickedness and Safety"
 
 
 
+
+
 related_posts:
   - "/2014/06/29/rasmussen.html"
   - "/2019/06/17/chernobyl.html"
   - "/2021/02/22/postmortem.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

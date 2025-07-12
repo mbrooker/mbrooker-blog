@@ -7,10 +7,14 @@ title: "Harvest and Yield: Not A Natural Cure for Tradeoff Confusion"
 
 
 
+
+
 related_posts:
   - "/2018/02/25/availability-liveness.html"
   - "/2024/07/25/cap-again.html"
   - "/2015/09/26/cap-durability.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

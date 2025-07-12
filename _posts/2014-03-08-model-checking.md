@@ -7,10 +7,14 @@ title: "Snark, Chord, and Trust in Algorithms"
 
 
 
+
+
 related_posts:
   - "/2023/07/28/ds-testing.html"
   - "/2014/03/30/lamport-pub.html"
   - "/2015/03/29/formal.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

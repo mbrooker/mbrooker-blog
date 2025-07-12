@@ -7,10 +7,14 @@ title: "Consensus is Harder Than It Looks"
 
 
 
+
+
 related_posts:
   - "/2021/01/22/cloud-scale.html"
   - "/2014/04/14/failure-detectors.html"
   - "/2014/01/12/ben-or.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

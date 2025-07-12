@@ -8,6 +8,9 @@ layout: default
 <div id="related">
   <h2>Other Posts</h2>
   &laquo; <a href="{{ site.baseurl }}">Back to the blog index</a><br>
+  
+  <!-- Similar Posts -->
+  <h3>Similar Posts</h3>
   <ul class="posts">
     {% if page.related_posts and page.related_posts.size > 0 %}
       {% for related_url in page.related_posts %}
@@ -32,4 +35,27 @@ layout: default
       {% endfor %}
     {% endif %}
   </ul>
+  
+  <!-- Dissimilar Posts -->
+  {% if page.dissimilar_posts and page.dissimilar_posts.size > 0 %}
+  <h3>Something Completely Different</h3>
+  <ul class="posts">
+    {% for dissimilar_url in page.dissimilar_posts %}
+      {% assign dissimilar_url_clean = dissimilar_url | strip %}
+      {% assign found_match = false %}
+      {% for post in site.posts %}
+        {% assign post_url_clean = post.url | strip %}
+        {% if post_url_clean == dissimilar_url_clean %}
+          <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+          {% assign found_match = true %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+      {% unless found_match %}
+        <!-- Debug: show what we were looking for -->
+        <!-- Looking for: "{{ dissimilar_url_clean }}" -->
+      {% endunless %}
+    {% endfor %}
+  </ul>
+  {% endif %}
 </div>

@@ -7,10 +7,14 @@ title: "What is a simple system?"
 
 
 
+
+
 related_posts:
   - "/2022/12/15/thumb.html"
   - "/2015/01/25/patterns.html"
   - "/2024/06/04/scale.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

@@ -7,10 +7,14 @@ title: "Quorum Availability"
 
 
 
+
+
 related_posts:
   - "/2014/01/12/ben-or.html"
   - "/2020/10/05/consensus.html"
   - "/2015/09/26/cap-durability.html"
+dissimilar_posts:
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

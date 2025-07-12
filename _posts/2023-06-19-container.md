@@ -7,10 +7,14 @@ title: "What is a container?"
 
 
 
+
+
 related_posts:
   - "/2023/05/23/snapshot-loading.html"
   - "/2024/11/14/lambda-ten-years.html"
   - "/2022/11/22/manifesto.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

@@ -7,10 +7,14 @@ title: "Surprising Scalability of Multitenancy"
 
 
 
+
+
 related_posts:
   - "/2024/01/18/scalability.html"
   - "/2024/06/04/scale.html"
   - "/2024/07/29/aurora-serverless.html"
+dissimilar_posts:
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

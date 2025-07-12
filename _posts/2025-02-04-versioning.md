@@ -7,10 +7,14 @@ title: "Versioning versus Coordination"
 
 
 
+
+
 related_posts:
   - "/2024/12/17/occ-and-isolation.html"
   - "/2024/12/05/inside-dsql-writes.html"
   - "/2024/01/23/big-deal.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

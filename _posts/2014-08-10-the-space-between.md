@@ -7,10 +7,14 @@ title: "The Space Between Theory and Practice in Distributed Systems"
 
 
 
+
+
 related_posts:
   - "/2019/04/03/learning.html"
   - "/2021/01/22/cloud-scale.html"
   - "/2020/10/05/consensus.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

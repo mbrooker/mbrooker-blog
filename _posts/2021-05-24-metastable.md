@@ -7,10 +7,14 @@ title: "Metastability and Distributed Systems"
 
 
 
+
+
 related_posts:
   - "/2019/05/01/emergent.html"
   - "/2018/02/25/availability-liveness.html"
   - "/2016/01/03/correlation.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================
