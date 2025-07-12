@@ -4,11 +4,13 @@ title: "Metastability and Distributed Systems"
 
 
 
+
 related_posts:
   - "/2019/05/01/emergent"
   - "/2018/02/25/availability-liveness"
   - "/2016/01/03/correlation"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">What if computer science had different parents?</p>

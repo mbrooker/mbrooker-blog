@@ -4,11 +4,13 @@ title: "The Essential Leslie Lamport"
 
 
 
+
 related_posts:
   - "/2014/05/10/lynch-pub"
   - "/2014/09/21/liskov-pub"
   - "/2014/03/08/model-checking"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Some of my favourite Leslie Lamport publications.</p>

@@ -4,11 +4,13 @@ title: "False Sharing versus Perfect Placement"
 
 
 
+
 related_posts:
   - "/2023/02/07/hot-keys"
   - "/2022/10/04/commitment"
   - "/2024/02/12/parameters"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta"></p>

@@ -4,11 +4,13 @@ title: "Resource Management in Aurora Serverless"
 
 
 
+
 related_posts:
   - "/2024/12/03/aurora-dsql"
   - "/2024/12/04/inside-dsql"
   - "/2024/04/25/memorydb"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Systems, big and small.</p>

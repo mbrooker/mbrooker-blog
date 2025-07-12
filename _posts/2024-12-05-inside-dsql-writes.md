@@ -4,11 +4,13 @@ title: "DSQL Vignette: Transactions and Durability"
 
 
 
+
 related_posts:
   - "/2024/12/04/inside-dsql"
   - "/2025/04/17/decomposing"
   - "/2024/12/17/occ-and-isolation"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 

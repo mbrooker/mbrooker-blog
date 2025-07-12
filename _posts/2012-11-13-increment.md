@@ -4,11 +4,13 @@ title: Java's Atomic and volatile, under the hood on x86
 
 
 
+
 related_posts:
   - "/2013/01/06/volatile"
   - "/2012/09/10/volatile"
   - "/2012/09/10/locking"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">How exactly do AtomicInteger and volatile do their magic in Java?</p>

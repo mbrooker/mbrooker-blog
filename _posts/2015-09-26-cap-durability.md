@@ -4,11 +4,13 @@ title: "Is there a CAP theorem for Durability?"
 
 
 
+
 related_posts:
   - "/2018/02/25/availability-liveness"
   - "/2024/07/25/cap-again"
   - "/2014/07/16/pacelc"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Expanding the taxonomy of distributed systems.</p>

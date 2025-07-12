@@ -4,11 +4,13 @@ title: "What is a container?"
 
 
 
+
 related_posts:
   - "/2023/05/23/snapshot-loading"
   - "/2024/11/14/lambda-ten-years"
   - "/2022/11/22/manifesto"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">What are words, anyway?</p>

@@ -4,11 +4,13 @@ title: "Why do we need distributed systems?"
 
 
 
+
 related_posts:
   - "/2024/06/04/scale"
   - "/2021/01/22/cloud-scale"
   - "/2021/04/14/redundancy"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Building distributed systems is hard. It's expensive. It's complex. But we do it anyway.</p>

@@ -448,7 +448,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("Updating post frontmatter...");
     for post in &posts_with_embeddings {
         if let Some(related) = related_posts_map.get(&post.path) {
-            let updated_content = format!("{}{}", 
+            let updated_content = format!("{}\n{}", 
                 update_frontmatter(post, related),
                 post.body
             );

@@ -4,11 +4,13 @@ title: "Software Deployment, Speed, and Safety"
 
 
 
+
 related_posts:
   - "/2024/03/04/mousetrap"
   - "/2024/06/04/scale"
   - "/2024/04/17/formal"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">There's one right answer that applies in all situations, as always.</p>

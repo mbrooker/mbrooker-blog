@@ -4,11 +4,13 @@ title: "The Operations Gradient: Improving Safety in Complex Systems"
 
 
 
+
 related_posts:
   - "/2015/11/05/heuristics"
   - "/2016/01/03/correlation"
   - "/2021/02/22/postmortem"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Can we improve the safety of complex systems by listening to operators more?</p>

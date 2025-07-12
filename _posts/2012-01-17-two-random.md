@@ -4,11 +4,13 @@ title: The power of two random choices
 
 
 
+
 related_posts:
   - "/2024/03/25/needles"
   - "/2018/01/01/balls-into-bins"
   - "/2022/10/21/nudge"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Using less information to make better decisions.</p>

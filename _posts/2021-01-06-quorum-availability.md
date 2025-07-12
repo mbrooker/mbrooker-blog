@@ -4,11 +4,13 @@ title: "Quorum Availability"
 
 
 
+
 related_posts:
   - "/2014/01/12/ben-or"
   - "/2020/10/05/consensus"
   - "/2015/09/26/cap-durability"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">It's counterintuitive, but is it right?</p>

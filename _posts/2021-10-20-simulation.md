@@ -4,11 +4,13 @@ title: "Serial, Parallel, and Quorum Latencies"
 
 
 
+
 related_posts:
   - "/2023/09/08/exponential"
   - "/2024/02/12/parameters"
   - "/2022/04/11/simulation"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Why are they letting me write Javascript?</p>

@@ -4,11 +4,13 @@ title: "It's About Time!"
 
 
 
+
 related_posts:
   - "/2023/10/18/optimism"
   - "/2014/11/15/exactly-once"
   - "/2014/03/30/lamport-pub"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">What's the time? Time to get a watch.</p>

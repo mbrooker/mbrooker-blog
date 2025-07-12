@@ -4,11 +4,13 @@ title: "Some Virtualization Papers Worth Reading"
 
 
 
+
 related_posts:
   - "/2025/06/02/hotos"
   - "/2023/07/13/osdi"
   - "/2014/09/21/liskov-pub"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">A short, and incomplete, survey.</p>

@@ -4,11 +4,13 @@ title: "When Redundancy Actually Helps"
 
 
 
+
 related_posts:
   - "/2021/04/14/redundancy"
   - "/2016/01/03/correlation"
   - "/2019/05/01/emergent"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Redundancy can harm more than it helps.</p>

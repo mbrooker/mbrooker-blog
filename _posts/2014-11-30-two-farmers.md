@@ -4,11 +4,13 @@ title: "Two Farmers and Common Knowledge"
 
 
 
+
 related_posts:
   - "/2014/10/25/ice-cream"
   - "/2015/03/03/sybil"
   - "/2014/11/15/exactly-once"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">A legislative solution to a technical problem.</p>

@@ -4,11 +4,13 @@ title: "Sodium Carbonate, and Ramenized Pasta"
 
 
 
+
 related_posts:
   - "/2014/10/25/ice-cream"
   - "/2013/01/20/two-phase"
   - "/2014/11/30/two-farmers"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Doing chemistry with baking soda, cabbage and an oven.</p>

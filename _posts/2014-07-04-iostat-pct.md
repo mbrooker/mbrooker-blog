@@ -4,11 +4,13 @@ title: "Two traps in iostat: %util and svctm"
 
 
 
+
 related_posts:
   - "/2013/07/14/io-performance"
   - "/2021/03/25/latency-bandwidth"
   - "/2012/02/11/latency-lags-bandwidth"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">These commonly-used fields in iostat shouldn't be commonly-used.</p>

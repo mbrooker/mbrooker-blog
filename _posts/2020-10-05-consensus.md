@@ -4,11 +4,13 @@ title: "Consensus is Harder Than It Looks"
 
 
 
+
 related_posts:
   - "/2021/01/22/cloud-scale"
   - "/2014/04/14/failure-detectors"
   - "/2014/01/12/ben-or"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">And it looks pretty hard.</p>

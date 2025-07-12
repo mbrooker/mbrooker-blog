@@ -4,11 +4,13 @@ title: "What is a simple system?"
 
 
 
+
 related_posts:
   - "/2022/12/15/thumb"
   - "/2015/01/25/patterns"
   - "/2024/06/04/scale"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Is this pretentious?</p>

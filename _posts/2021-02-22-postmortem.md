@@ -4,11 +4,13 @@ title: "Incident Response Isn't Enough"
 
 
 
+
 related_posts:
   - "/2016/01/03/correlation"
   - "/2019/06/20/redundancy"
   - "/2018/02/25/availability-liveness"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Single points of failure become invisible.</p>

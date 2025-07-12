@@ -4,11 +4,13 @@ title: "Better Benchmarks Through Graphs"
 
 
 
+
 related_posts:
   - "/2022/10/04/commitment"
   - "/2025/05/20/icpe"
   - "/2023/03/07/false-sharing"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Isn't the ambiguity in the word *graphs* fun?</p>

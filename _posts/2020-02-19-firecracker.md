@@ -4,11 +4,13 @@ title: "Firecracker: Lightweight Virtualization for Serverless Applications"
 
 
 
+
 related_posts:
   - "/2024/11/14/lambda-ten-years"
   - "/2020/06/08/virtualization"
   - "/2022/07/12/dynamodb"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Our second paper for NSDI'20.</p>

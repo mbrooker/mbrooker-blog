@@ -4,11 +4,13 @@ title: "Will circuit breakers solve my problems?"
 
 
 
+
 related_posts:
   - "/2022/02/28/retries"
   - "/2018/02/25/availability-liveness"
   - "/2021/05/24/metastable"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">Maybe, but you need to know what problem you're trying to solve first.</p>

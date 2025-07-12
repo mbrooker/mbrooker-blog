@@ -4,11 +4,13 @@ title: "What You Can Learn From Old Hard Drive Adverts"
 
 
 
+
 related_posts:
   - "/2012/02/11/latency-lags-bandwidth"
   - "/2014/07/04/iostat-pct"
   - "/2013/07/14/io-performance"
----{{ page.title }}
+---
+{{ page.title }}
 ================
 
 <p class="meta">The single most important trend in systems.</p>
