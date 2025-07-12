@@ -6,11 +6,11 @@ layout: default
 </div>
 
 <div id="related">
-  <h2>Other Posts</h2>
+  <br><br>
   &laquo; <a href="{{ site.baseurl }}">Back to the blog index</a><br>
   
   <!-- Similar Posts -->
-  <h3>Similar Posts</h3>
+  <h4>Similar Posts</h4>
   <ul class="posts">
     {% if page.related_posts and page.related_posts.size > 0 %}
       {% for related_url in page.related_posts %}
@@ -38,7 +38,7 @@ layout: default
   
   <!-- Dissimilar Posts -->
   {% if page.dissimilar_posts and page.dissimilar_posts.size > 0 %}
-  <h3>Something Completely Different</h3>
+  <h4>Something Completely Different</h4>
   <ul class="posts">
     {% for dissimilar_url in page.dissimilar_posts %}
       {% assign dissimilar_url_clean = dissimilar_url | strip %}
