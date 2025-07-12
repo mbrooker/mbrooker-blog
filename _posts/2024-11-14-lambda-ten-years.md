@@ -6,10 +6,11 @@ title: "Ten Years of AWS Lambda"
 
 
 
+
 related_posts:
-  - "/2023/05/23/snapshot-loading/"
-  - "/2024/12/03/aurora-dsql/"
-  - "/2024/07/29/aurora-serverless/"
+  - "/2023/05/23/snapshot-loading.html"
+  - "/2024/12/03/aurora-dsql.html"
+  - "/2024/07/29/aurora-serverless.html"
 ---
 {{ page.title }}
 ================

@@ -6,10 +6,11 @@ title: "Why do we need distributed systems?"
 
 
 
+
 related_posts:
-  - "/2024/06/04/scale/"
-  - "/2021/01/22/cloud-scale/"
-  - "/2021/04/14/redundancy/"
+  - "/2024/06/04/scale.html"
+  - "/2021/01/22/cloud-scale.html"
+  - "/2021/04/14/redundancy.html"
 ---
 {{ page.title }}
 ================

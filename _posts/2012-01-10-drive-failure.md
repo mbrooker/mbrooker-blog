@@ -6,10 +6,11 @@ title: The benefits of having data
 
 
 
+
 related_posts:
-  - "/2016/01/03/correlation/"
-  - "/2021/03/25/latency-bandwidth/"
-  - "/2014/07/04/iostat-pct/"
+  - "/2016/01/03/correlation.html"
+  - "/2021/03/25/latency-bandwidth.html"
+  - "/2014/07/04/iostat-pct.html"
 ---
 {{ page.title }}
 ================

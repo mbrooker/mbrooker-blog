@@ -6,10 +6,11 @@ title: Expect Less, Get More?
 
 
 
+
 related_posts:
-  - "/2020/10/19/big-changes/"
-  - "/2024/02/06/time/"
-  - "/2020/09/02/learning/"
+  - "/2020/10/19/big-changes.html"
+  - "/2024/02/06/time.html"
+  - "/2020/09/02/learning.html"
 ---
 {{ page.title }}
 ================

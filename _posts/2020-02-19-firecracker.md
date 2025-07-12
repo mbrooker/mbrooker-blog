@@ -6,10 +6,11 @@ title: "Firecracker: Lightweight Virtualization for Serverless Applications"
 
 
 
+
 related_posts:
-  - "/2024/11/14/lambda-ten-years/"
-  - "/2020/06/08/virtualization/"
-  - "/2022/07/12/dynamodb/"
+  - "/2024/11/14/lambda-ten-years.html"
+  - "/2020/06/08/virtualization.html"
+  - "/2022/07/12/dynamodb.html"
 ---
 {{ page.title }}
 ================

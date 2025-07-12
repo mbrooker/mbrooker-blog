@@ -6,10 +6,11 @@ title: "DSQL Vignette: Wait! Isn't That Impossible?"
 
 
 
+
 related_posts:
-  - "/2024/12/04/inside-dsql/"
-  - "/2024/12/05/inside-dsql-writes/"
-  - "/2024/12/03/aurora-dsql/"
+  - "/2024/12/04/inside-dsql.html"
+  - "/2024/12/05/inside-dsql-writes.html"
+  - "/2024/12/03/aurora-dsql.html"
 ---
 {{ page.title }}
 ================

@@ -6,10 +6,11 @@ title: "False Sharing versus Perfect Placement"
 
 
 
+
 related_posts:
-  - "/2023/02/07/hot-keys/"
-  - "/2022/10/04/commitment/"
-  - "/2024/02/12/parameters/"
+  - "/2023/02/07/hot-keys.html"
+  - "/2022/10/04/commitment.html"
+  - "/2024/02/12/parameters.html"
 ---
 {{ page.title }}
 ================

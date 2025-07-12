@@ -6,10 +6,11 @@ title: "Container Loading in AWS Lambda"
 
 
 
+
 related_posts:
-  - "/2024/11/14/lambda-ten-years/"
-  - "/2022/11/29/snapstart/"
-  - "/2023/01/06/erasure/"
+  - "/2024/11/14/lambda-ten-years.html"
+  - "/2022/11/29/snapstart.html"
+  - "/2023/01/06/erasure.html"
 ---
 {{ page.title }}
 ================

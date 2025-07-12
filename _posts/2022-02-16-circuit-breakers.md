@@ -6,10 +6,11 @@ title: "Will circuit breakers solve my problems?"
 
 
 
+
 related_posts:
-  - "/2022/02/28/retries/"
-  - "/2018/02/25/availability-liveness/"
-  - "/2021/05/24/metastable/"
+  - "/2022/02/28/retries.html"
+  - "/2018/02/25/availability-liveness.html"
+  - "/2021/05/24/metastable.html"
 ---
 {{ page.title }}
 ================

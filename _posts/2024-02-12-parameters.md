@@ -6,10 +6,11 @@ title: "Better Benchmarks Through Graphs"
 
 
 
+
 related_posts:
-  - "/2022/10/04/commitment/"
-  - "/2025/05/20/icpe/"
-  - "/2023/03/07/false-sharing/"
+  - "/2022/10/04/commitment.html"
+  - "/2025/05/20/icpe.html"
+  - "/2023/03/07/false-sharing.html"
 ---
 {{ page.title }}
 ================

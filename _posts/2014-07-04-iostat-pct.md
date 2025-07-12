@@ -6,10 +6,11 @@ title: "Two traps in iostat: %util and svctm"
 
 
 
+
 related_posts:
-  - "/2013/07/14/io-performance/"
-  - "/2021/03/25/latency-bandwidth/"
-  - "/2012/02/11/latency-lags-bandwidth/"
+  - "/2013/07/14/io-performance.html"
+  - "/2021/03/25/latency-bandwidth.html"
+  - "/2012/02/11/latency-lags-bandwidth.html"
 ---
 {{ page.title }}
 ================

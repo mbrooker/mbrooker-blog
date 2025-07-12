@@ -6,10 +6,11 @@ title: "Garbage Collection and Metastability"
 
 
 
+
 related_posts:
-  - "/2021/08/27/caches/"
-  - "/2021/05/24/metastable/"
-  - "/2012/09/10/volatile/"
+  - "/2021/08/27/caches.html"
+  - "/2021/05/24/metastable.html"
+  - "/2012/09/10/volatile.html"
 ---
 {{ page.title }}
 ================

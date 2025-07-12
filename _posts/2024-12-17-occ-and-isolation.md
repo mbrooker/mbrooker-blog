@@ -6,10 +6,11 @@ title: "Snapshot Isolation vs Serializability"
 
 
 
+
 related_posts:
-  - "/2024/01/23/big-deal/"
-  - "/2025/02/05/feketes/"
-  - "/2024/12/05/inside-dsql-writes/"
+  - "/2024/01/23/big-deal.html"
+  - "/2025/02/05/feketes.html"
+  - "/2024/12/05/inside-dsql-writes.html"
 ---
 {{ page.title }}
 ================

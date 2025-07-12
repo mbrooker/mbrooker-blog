@@ -6,10 +6,11 @@ title: "DSQL Vignette: Aurora DSQL, and A Personal Story"
 
 
 
+
 related_posts:
-  - "/2024/12/04/inside-dsql/"
-  - "/2024/07/29/aurora-serverless/"
-  - "/2022/07/12/dynamodb/"
+  - "/2024/12/04/inside-dsql.html"
+  - "/2024/07/29/aurora-serverless.html"
+  - "/2022/07/12/dynamodb.html"
 ---
 {{ page.title }}
 ================

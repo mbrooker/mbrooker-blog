@@ -67,7 +67,7 @@ fn extract_title_and_url(path: &Path) -> (String, String) {
         let slug = slug_with_ext.trim_end_matches(".md");
         
         // Construct URL in Jekyll format (with trailing slash)
-        let url = format!("/{}/{}/{}/{}/", year, month, day, slug);
+        let url = format!("/{}/{}/{}/{}.html", year, month, day, slug);
         
         // Try to extract title from frontmatter or use slug as fallback
         let title = slug.replace('-', " ");

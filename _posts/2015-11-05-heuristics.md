@@ -6,10 +6,11 @@ title: "Heuristic Traps for Systems Operators"
 
 
 
+
 related_posts:
-  - "/2014/06/29/rasmussen/"
-  - "/2023/04/20/hobbies/"
-  - "/2021/02/22/postmortem/"
+  - "/2014/06/29/rasmussen.html"
+  - "/2023/04/20/hobbies.html"
+  - "/2021/02/22/postmortem.html"
 ---
 {{ page.title }}
 ================

@@ -6,10 +6,11 @@ title: "When Redundancy Actually Helps"
 
 
 
+
 related_posts:
-  - "/2021/04/14/redundancy/"
-  - "/2016/01/03/correlation/"
-  - "/2019/05/01/emergent/"
+  - "/2021/04/14/redundancy.html"
+  - "/2016/01/03/correlation.html"
+  - "/2019/05/01/emergent.html"
 ---
 {{ page.title }}
 ================

@@ -6,10 +6,11 @@ title: "Serial, Parallel, and Quorum Latencies"
 
 
 
+
 related_posts:
-  - "/2023/09/08/exponential/"
-  - "/2024/02/12/parameters/"
-  - "/2022/04/11/simulation/"
+  - "/2023/09/08/exponential.html"
+  - "/2024/02/12/parameters.html"
+  - "/2022/04/11/simulation.html"
 ---
 {{ page.title }}
 ================

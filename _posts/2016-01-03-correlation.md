@@ -6,10 +6,11 @@ title: "Why Must Systems Be Operated?"
 
 
 
+
 related_posts:
-  - "/2019/06/20/redundancy/"
-  - "/2021/04/14/redundancy/"
-  - "/2021/05/24/metastable/"
+  - "/2019/06/20/redundancy.html"
+  - "/2021/04/14/redundancy.html"
+  - "/2021/05/24/metastable.html"
 ---
 {{ page.title }}
 ================

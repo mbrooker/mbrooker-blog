@@ -6,10 +6,11 @@ title: "What is a simple system?"
 
 
 
+
 related_posts:
-  - "/2022/12/15/thumb/"
-  - "/2015/01/25/patterns/"
-  - "/2024/06/04/scale/"
+  - "/2022/12/15/thumb.html"
+  - "/2015/01/25/patterns.html"
+  - "/2024/06/04/scale.html"
 ---
 {{ page.title }}
 ================

@@ -6,10 +6,11 @@ title: The power of two random choices
 
 
 
+
 related_posts:
-  - "/2024/03/25/needles/"
-  - "/2018/01/01/balls-into-bins/"
-  - "/2022/10/21/nudge/"
+  - "/2024/03/25/needles.html"
+  - "/2018/01/01/balls-into-bins.html"
+  - "/2022/10/21/nudge.html"
 ---
 {{ page.title }}
 ================

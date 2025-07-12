@@ -6,10 +6,11 @@ title: "The Operations Gradient: Improving Safety in Complex Systems"
 
 
 
+
 related_posts:
-  - "/2015/11/05/heuristics/"
-  - "/2016/01/03/correlation/"
-  - "/2021/02/22/postmortem/"
+  - "/2015/11/05/heuristics.html"
+  - "/2016/01/03/correlation.html"
+  - "/2021/02/22/postmortem.html"
 ---
 {{ page.title }}
 ================

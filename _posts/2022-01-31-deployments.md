@@ -6,10 +6,11 @@ title: "Software Deployment, Speed, and Safety"
 
 
 
+
 related_posts:
-  - "/2024/03/04/mousetrap/"
-  - "/2024/06/04/scale/"
-  - "/2024/04/17/formal/"
+  - "/2024/03/04/mousetrap.html"
+  - "/2024/06/04/scale.html"
+  - "/2024/04/17/formal.html"
 ---
 {{ page.title }}
 ================

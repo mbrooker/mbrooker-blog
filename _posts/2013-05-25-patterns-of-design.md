@@ -6,10 +6,11 @@ title: Some Patterns of Engineering Design Meetings
 
 
 
+
 related_posts:
-  - "/2015/01/25/patterns/"
-  - "/2020/10/19/big-changes/"
-  - "/2024/04/17/formal/"
+  - "/2015/01/25/patterns.html"
+  - "/2020/10/19/big-changes.html"
+  - "/2024/04/17/formal.html"
 ---
 {{ page.title }}
 ================

@@ -6,10 +6,11 @@ title: "Telling Stories About Little's Law"
 
 
 
+
 related_posts:
-  - "/2021/08/05/utilization/"
-  - "/2021/04/19/latency/"
-  - "/2017/12/28/mean/"
+  - "/2021/08/05/utilization.html"
+  - "/2021/04/19/latency.html"
+  - "/2017/12/28/mean.html"
 ---
 {{ page.title }}
 ================

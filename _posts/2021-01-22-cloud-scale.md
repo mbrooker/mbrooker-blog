@@ -6,10 +6,11 @@ title: "The Fundamental Mechanism of Scaling"
 
 
 
+
 related_posts:
-  - "/2019/05/01/emergent/"
-  - "/2020/10/05/consensus/"
-  - "/2024/06/04/scale/"
+  - "/2019/05/01/emergent.html"
+  - "/2020/10/05/consensus.html"
+  - "/2024/06/04/scale.html"
 ---
 {{ page.title }}
 ================

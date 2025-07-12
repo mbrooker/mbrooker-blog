@@ -6,10 +6,11 @@ title: "Metastability and Distributed Systems"
 
 
 
+
 related_posts:
-  - "/2019/05/01/emergent/"
-  - "/2018/02/25/availability-liveness/"
-  - "/2016/01/03/correlation/"
+  - "/2019/05/01/emergent.html"
+  - "/2018/02/25/availability-liveness.html"
+  - "/2016/01/03/correlation.html"
 ---
 {{ page.title }}
 ================

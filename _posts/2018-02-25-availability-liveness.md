@@ -6,10 +6,11 @@ title: "Availability and availability"
 
 
 
+
 related_posts:
-  - "/2024/07/25/cap-again/"
-  - "/2015/09/26/cap-durability/"
-  - "/2014/10/12/harvest-yield/"
+  - "/2024/07/25/cap-again.html"
+  - "/2015/09/26/cap-durability.html"
+  - "/2014/10/12/harvest-yield.html"
 ---
 {{ page.title }}
 ================
