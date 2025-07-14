@@ -16,7 +16,7 @@ const NUM_RELATED_POSTS: usize = 3;
 // Number of dissimilar posts to include
 const NUM_DISSIMILAR_POSTS: usize = 1;
 // Titan Text Embeddings model ID
-const TITAN_EMBEDDINGS_MODEL_ID: &str = "amazon.titan-embed-text-v1";
+const TITAN_EMBEDDINGS_MODEL_ID: &str = "amazon.titan-embed-text-v2:0";
 
 #[derive(Debug, Clone)]
 struct BlogPost {
