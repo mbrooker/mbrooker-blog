@@ -10,6 +10,9 @@ use aws_sdk_bedrockruntime::primitives::Blob;
 use serde::{Deserialize, Serialize};
 use ndarray::{Array1, ArrayView1};
 use futures::future::join_all;
+use rusqlite::{Connection, Result as SqliteResult};
+use sha2::{Sha256, Digest};
+use hex;
 
 // Number of related posts to include
 const NUM_RELATED_POSTS: usize = 3;
@@ -27,6 +30,7 @@ struct BlogPost {
     title: String,
     url: String,
     embedding: Option<Vec<f32>>,
+    content_hash: String,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -242,6 +246,67 @@ fn update_frontmatter(post: &BlogPost, related_posts: &[&BlogPost], dissimilar_p
     new_frontmatter
 }
 
+fn calculate_content_hash(content: &str) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update(content.as_bytes());
+    hex::encode(hasher.finalize())
+}
+
+fn init_embeddings_db(db_path: &Path) -> SqliteResult<Connection> {
+    let conn = Connection::open(db_path)?;
+    
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS embeddings (
+            content_hash TEXT PRIMARY KEY,
+            embedding BLOB NOT NULL,
+            model_id TEXT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )",
+        [],
+    )?;
+    
+    // Clean up embeddings from different models to save space
+    conn.execute(
+        "DELETE FROM embeddings WHERE model_id != ?1",
+        [TITAN_EMBEDDINGS_MODEL_ID],
+    )?;
+    
+    Ok(conn)
+}
+
+fn get_cached_embedding(conn: &Connection, content_hash: &str, model_id: &str) -> SqliteResult<Option<Vec<f32>>> {
+    let mut stmt = conn.prepare(
+        "SELECT embedding FROM embeddings WHERE content_hash = ?1 AND model_id = ?2"
+    )?;
+    
+    let mut rows = stmt.query_map([content_hash, model_id], |row| {
+        let blob: Vec<u8> = row.get(0)?;
+        // Deserialize the blob back to Vec<f32>
+        let embedding: Vec<f32> = bincode::deserialize(&blob)
+            .map_err(|e| rusqlite::Error::FromSqlConversionFailure(0, rusqlite::types::Type::Blob, Box::new(e)))?;
+        Ok(embedding)
+    })?;
+    
+    if let Some(row) = rows.next() {
+        Ok(Some(row?))
+    } else {
+        Ok(None)
+    }
+}
+
+fn cache_embedding(conn: &Connection, content_hash: &str, embedding: &[f32], model_id: &str) -> SqliteResult<()> {
+    // Serialize the embedding to bytes
+    let embedding_blob = bincode::serialize(embedding)
+        .map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(e)))?;
+    
+    conn.execute(
+        "INSERT OR REPLACE INTO embeddings (content_hash, embedding, model_id) VALUES (?1, ?2, ?3)",
+        rusqlite::params![content_hash, embedding_blob, model_id],
+    )?;
+    
+    Ok(())
+}
+
 fn find_blog_root() -> PathBuf {
     // First, try to use the current directory
     let current_dir = env::current_dir().expect("Failed to get current directory");
@@ -315,6 +380,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
             let (frontmatter, body) = extract_frontmatter_and_content(&content);
             let (title, url) = extract_title_and_url(path);
             
+            // Calculate content hash for memoization
+            let text_for_embedding = format!("{} {}", title, body);
+            let content_hash = calculate_content_hash(&text_for_embedding);
+            
             posts.push(BlogPost {
                 path: path.to_path_buf(),
                 content,
@@ -323,55 +392,104 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 title,
                 url,
                 embedding: None,
+                content_hash,
             });
         }
     }
     
     println!("Found {} posts", posts.len());
     
+    // Initialize SQLite database for embedding memoization
+    let db_path = blog_root.join("embeddings_cache.db");
+    println!("Initializing embeddings cache at: {}", db_path.display());
+    let conn = init_embeddings_db(&db_path)?;
+    
     // Initialize AWS SDK
     println!("Initializing AWS SDK...");
     let config = aws_config::load_defaults(aws_config::BehaviorVersion::latest()).await;
     let bedrock_client = BedrockClient::new(&config);
     
-    // Generate embeddings for all posts
-    println!("Generating embeddings using Amazon Bedrock Titan Text Embeddings...");
+    // Generate embeddings for all posts (using cache when available)
+    println!("Generating embeddings using Amazon Bedrock Titan Text Embeddings (with caching)...");
+    
+    let mut posts_with_embeddings = Vec::new();
+    let mut cache_hits = 0;
+    let mut cache_misses = 0;
     
     // Process posts in batches to avoid overwhelming the API
     let batch_size = 10;
-    let mut posts_with_embeddings = Vec::new();
+    let mut posts_needing_embeddings = Vec::new();
     
-    for chunk in posts.chunks(batch_size) {
-        let mut futures = Vec::new();
+    // First pass: check cache for all posts
+    for post in &posts {
+        let mut post_clone = post.clone();
         
-        for post in chunk {
-            let text_for_embedding = format!("{} {}", post.title, post.body);
-            let client = &bedrock_client;
-            
-            let future = async move {
-                let mut post_clone = post.clone();
-                match get_embedding(client, &text_for_embedding).await {
-                    Ok(embedding) => {
-                        post_clone.embedding = Some(embedding);
-                        println!("Generated embedding for: {}", post_clone.path.display());
-                        Ok(post_clone)
-                    },
-                    Err(e) => {
-                        eprintln!("Error generating embedding for {}: {}", post_clone.path.display(), e);
-                        Err(e)
-                    }
-                }
-            };
-            
-            futures.push(future);
+        // Try to get cached embedding
+        match get_cached_embedding(&conn, &post.content_hash, TITAN_EMBEDDINGS_MODEL_ID) {
+            Ok(Some(cached_embedding)) => {
+                post_clone.embedding = Some(cached_embedding);
+                posts_with_embeddings.push(post_clone);
+                cache_hits += 1;
+                println!("Using cached embedding for: {}", post.path.display());
+            },
+            Ok(None) => {
+                posts_needing_embeddings.push(post_clone);
+                cache_misses += 1;
+            },
+            Err(e) => {
+                eprintln!("Error checking cache for {}: {}", post.path.display(), e);
+                posts_needing_embeddings.push(post_clone);
+                cache_misses += 1;
+            }
         }
+    }
+    
+    println!("Cache stats: {} hits, {} misses", cache_hits, cache_misses);
+    
+    // Second pass: generate embeddings for posts not in cache
+    if !posts_needing_embeddings.is_empty() {
+        println!("Generating {} new embeddings...", posts_needing_embeddings.len());
         
-        let results = join_all(futures).await;
-        
-        for result in results {
-            match result {
-                Ok(post) => posts_with_embeddings.push(post),
-                Err(e) => return Err(e),
+        for chunk in posts_needing_embeddings.chunks(batch_size) {
+            let mut futures = Vec::new();
+            
+            for post in chunk {
+                let text_for_embedding = format!("{} {}", post.title, post.body);
+                let client = &bedrock_client;
+                
+                let future = async move {
+                    let mut post_clone = post.clone();
+                    match get_embedding(client, &text_for_embedding).await {
+                        Ok(embedding) => {
+                            post_clone.embedding = Some(embedding);
+                            println!("Generated embedding for: {}", post_clone.path.display());
+                            Ok(post_clone)
+                        },
+                        Err(e) => {
+                            eprintln!("Error generating embedding for {}: {}", post_clone.path.display(), e);
+                            Err(e)
+                        }
+                    }
+                };
+                
+                futures.push(future);
+            }
+            
+            let results = join_all(futures).await;
+            
+            for result in results {
+                match result {
+                    Ok(post) => {
+                        // Cache the new embedding
+                        if let Some(ref embedding) = post.embedding {
+                            if let Err(e) = cache_embedding(&conn, &post.content_hash, embedding, TITAN_EMBEDDINGS_MODEL_ID) {
+                                eprintln!("Warning: Failed to cache embedding for {}: {}", post.path.display(), e);
+                            }
+                        }
+                        posts_with_embeddings.push(post);
+                    },
+                    Err(e) => return Err(e),
+                }
             }
         }
     }
