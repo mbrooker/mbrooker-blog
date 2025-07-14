@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::env;
 use std::error::Error;
 use std::fs::File;
@@ -10,8 +10,6 @@ use aws_sdk_bedrockruntime::primitives::Blob;
 use serde::{Deserialize, Serialize};
 use ndarray::{Array1, ArrayView1};
 use futures::future::join_all;
-
-mod keyword_extraction;
 
 // Number of related posts to include
 const NUM_RELATED_POSTS: usize = 3;
@@ -29,7 +27,6 @@ struct BlogPost {
     title: String,
     url: String,
     embedding: Option<Vec<f32>>,
-    keywords: HashSet<String>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -289,17 +286,12 @@ fn find_blog_root() -> PathBuf {
 async fn main() -> Result<(), Box<dyn Error>> {
     println!("Starting related posts generator...");
     
-    // Check for dry-run flag and force-keywords flag
+    // Check for dry-run flag
     let args: Vec<String> = env::args().collect();
     let dry_run = args.iter().any(|arg| arg == "--dry-run");
-    let force_keywords = args.iter().any(|arg| arg == "--force-keywords");
     
     if dry_run {
         println!("Running in dry-run mode (no files will be modified)");
-    }
-    
-    if force_keywords {
-        println!("Forcing keyword-based similarity instead of embeddings");
     }
     
     // Find the blog root directory
@@ -323,10 +315,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
             let (frontmatter, body) = extract_frontmatter_and_content(&content);
             let (title, url) = extract_title_and_url(path);
             
-            // Extract keywords for fallback approach
-            let text_for_keywords = format!("{} {}", title, body);
-            let keywords = keyword_extraction::extract_keywords(&text_for_keywords);
-            
             posts.push(BlogPost {
                 path: path.to_path_buf(),
                 content,
@@ -335,129 +323,74 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 title,
                 url,
                 embedding: None,
-                keywords,
             });
         }
     }
     
     println!("Found {} posts", posts.len());
     
-    let mut use_embeddings = !force_keywords;
+    // Initialize AWS SDK
+    println!("Initializing AWS SDK...");
+    let config = aws_config::load_defaults(aws_config::BehaviorVersion::latest()).await;
+    let bedrock_client = BedrockClient::new(&config);
+    
+    // Generate embeddings for all posts
+    println!("Generating embeddings using Amazon Bedrock Titan Text Embeddings...");
+    
+    // Process posts in batches to avoid overwhelming the API
+    let batch_size = 10;
     let mut posts_with_embeddings = Vec::new();
     
-    if use_embeddings {
-        // Try to initialize AWS SDK
-        println!("Initializing AWS SDK...");
-        match aws_config::load_defaults(aws_config::BehaviorVersion::latest()).await {
-            config => {
-                let bedrock_client = BedrockClient::new(&config);
-                
-                // Generate embeddings for all posts
-                println!("Generating embeddings using Amazon Bedrock Titan Text Embeddings...");
-                
-                // Process posts in batches to avoid overwhelming the API
-                let batch_size = 10;
-                let mut embedding_failures = 0;
-                
-                for chunk in posts.chunks(batch_size) {
-                    let mut futures = Vec::new();
-                    
-                    for post in chunk {
-                        let text_for_embedding = format!("{} {}", post.title, post.body);
-                        let client = &bedrock_client;
-                        
-                        let future = async move {
-                            let mut post_clone = post.clone();
-                            match get_embedding(client, &text_for_embedding).await {
-                                Ok(embedding) => {
-                                    post_clone.embedding = Some(embedding);
-                                    println!("Generated embedding for: {}", post_clone.path.display());
-                                    post_clone
-                                },
-                                Err(e) => {
-                                    eprintln!("Error generating embedding for {}: {}", post_clone.path.display(), e);
-                                    post_clone
-                                }
-                            }
-                        };
-                        
-                        futures.push(future);
+    for chunk in posts.chunks(batch_size) {
+        let mut futures = Vec::new();
+        
+        for post in chunk {
+            let text_for_embedding = format!("{} {}", post.title, post.body);
+            let client = &bedrock_client;
+            
+            let future = async move {
+                let mut post_clone = post.clone();
+                match get_embedding(client, &text_for_embedding).await {
+                    Ok(embedding) => {
+                        post_clone.embedding = Some(embedding);
+                        println!("Generated embedding for: {}", post_clone.path.display());
+                        Ok(post_clone)
+                    },
+                    Err(e) => {
+                        eprintln!("Error generating embedding for {}: {}", post_clone.path.display(), e);
+                        Err(e)
                     }
-                    
-                    let results = join_all(futures).await;
-                    
-                    // Count failures
-                    for post in &results {
-                        if post.embedding.is_none() {
-                            embedding_failures += 1;
-                        }
-                    }
-                    
-                    posts_with_embeddings.extend(results);
                 }
-                
-                // If more than 50% of embeddings failed, fall back to keyword-based approach
-                if embedding_failures > posts.len() / 2 {
-                    println!("Too many embedding failures ({}). Falling back to keyword-based approach.", embedding_failures);
-                    use_embeddings = false;
-                    posts_with_embeddings = posts.clone();
-                }
+            };
+            
+            futures.push(future);
+        }
+        
+        let results = join_all(futures).await;
+        
+        for result in results {
+            match result {
+                Ok(post) => posts_with_embeddings.push(post),
+                Err(e) => return Err(e),
             }
         }
-    } else {
-        // Use keyword-based approach
-        posts_with_embeddings = posts.clone();
     }
     
-    // Calculate similarities and find related posts
-    println!("Finding related posts...");
+    // Calculate similarities and find related posts using embeddings
+    println!("Finding related posts using embedding-based similarity (cosine similarity)...");
     let mut related_posts_map: HashMap<PathBuf, Vec<&BlogPost>> = HashMap::new();
     let mut dissimilar_posts_map: HashMap<PathBuf, Vec<&BlogPost>> = HashMap::new();
     
-    if use_embeddings {
-        println!("Using embedding-based similarity (cosine similarity)");
-        for i in 0..posts_with_embeddings.len() {
-            let mut similarities: Vec<(usize, f32)> = Vec::new();
-            
-            if let Some(ref embedding_i) = posts_with_embeddings[i].embedding {
-                for j in 0..posts_with_embeddings.len() {
-                    if i != j {
-                        if let Some(ref embedding_j) = posts_with_embeddings[j].embedding {
-                            let similarity = cosine_similarity(embedding_i, embedding_j);
-                            similarities.push((j, similarity));
-                        }
-                    }
-                }
-                
-                // Sort by similarity (highest first)
-                similarities.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
-                
-                // Take top N related posts (most similar)
-                let related: Vec<&BlogPost> = similarities.iter()
-                    .take(NUM_RELATED_POSTS)
-                    .map(|(idx, _)| &posts_with_embeddings[*idx])
-                    .collect();
-                
-                // Take bottom N dissimilar posts (least similar)
-                let dissimilar: Vec<&BlogPost> = similarities.iter()
-                    .rev()
-                    .take(NUM_DISSIMILAR_POSTS)
-                    .map(|(idx, _)| &posts_with_embeddings[*idx])
-                    .collect();
-                
-                related_posts_map.insert(posts_with_embeddings[i].path.clone(), related);
-                dissimilar_posts_map.insert(posts_with_embeddings[i].path.clone(), dissimilar);
-            }
-        }
-    } else {
-        println!("Using keyword-based similarity");
-        for i in 0..posts_with_embeddings.len() {
-            let mut similarities: Vec<(usize, f32)> = Vec::new();
-            
+    for i in 0..posts_with_embeddings.len() {
+        let mut similarities: Vec<(usize, f32)> = Vec::new();
+        
+        if let Some(ref embedding_i) = posts_with_embeddings[i].embedding {
             for j in 0..posts_with_embeddings.len() {
                 if i != j {
-                    let similarity = keyword_extraction::calculate_keyword_similarity(&posts_with_embeddings[i], &posts_with_embeddings[j]);
-                    similarities.push((j, similarity));
+                    if let Some(ref embedding_j) = posts_with_embeddings[j].embedding {
+                        let similarity = cosine_similarity(embedding_i, embedding_j);
+                        similarities.push((j, similarity));
+                    }
                 }
             }
             
