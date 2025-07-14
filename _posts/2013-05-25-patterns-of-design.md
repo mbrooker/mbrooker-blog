@@ -9,12 +9,13 @@ title: Some Patterns of Engineering Design Meetings
 
 
 
+
 related_posts:
   - "/2015/01/25/patterns.html"
-  - "/2020/10/19/big-changes.html"
+  - "/2020/06/23/code.html"
   - "/2024/04/17/formal.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2023/09/08/exponential.html"
 ---
 {{ page.title }}
 ================

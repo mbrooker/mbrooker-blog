@@ -9,12 +9,13 @@ title: "Metastability and Distributed Systems"
 
 
 
+
 related_posts:
+  - "/2025/05/20/icpe.html"
+  - "/2024/08/14/gc-metastable.html"
   - "/2019/05/01/emergent.html"
-  - "/2018/02/25/availability-liveness.html"
-  - "/2016/01/03/correlation.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

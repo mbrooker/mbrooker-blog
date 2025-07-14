@@ -9,12 +9,13 @@ title: "Getting Big Things Done"
 
 
 
+
 related_posts:
-  - "/2024/02/06/time.html"
   - "/2024/03/04/mousetrap.html"
-  - "/2022/11/08/writing.html"
+  - "/2020/06/23/code.html"
+  - "/2019/04/03/learning.html"
 dissimilar_posts:
-  - "/2014/07/04/iostat-pct.html"
+  - "/2022/09/02/ecdf.html"
 ---
 {{ page.title }}
 ================

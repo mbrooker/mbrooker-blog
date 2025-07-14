@@ -9,10 +9,11 @@ title: "Telling Stories About Little's Law"
 
 
 
+
 related_posts:
-  - "/2021/08/05/utilization.html"
-  - "/2021/04/19/latency.html"
+  - "/2020/08/06/erlang.html"
   - "/2017/12/28/mean.html"
+  - "/2021/04/19/latency.html"
 dissimilar_posts:
   - "/2021/08/11/arecibo.html"
 ---

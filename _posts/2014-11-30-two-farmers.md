@@ -9,12 +9,13 @@ title: "Two Farmers and Common Knowledge"
 
 
 
+
 related_posts:
-  - "/2014/10/25/ice-cream.html"
-  - "/2015/03/03/sybil.html"
-  - "/2014/11/15/exactly-once.html"
+  - "/2014/01/12/ben-or.html"
+  - "/2014/05/10/lynch-pub.html"
+  - "/2014/09/21/liskov-pub.html"
 dissimilar_posts:
-  - "/2020/02/19/firecracker.html"
+  - "/2013/12/14/intel-hle.html"
 ---
 {{ page.title }}
 ================

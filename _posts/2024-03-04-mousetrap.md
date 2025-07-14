@@ -9,10 +9,11 @@ title: "The Builder's Guide to Better Mousetraps"
 
 
 
+
 related_posts:
   - "/2020/10/19/big-changes.html"
+  - "/2024/02/06/time.html"
   - "/2022/01/31/deployments.html"
-  - "/2024/06/04/scale.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---

@@ -9,12 +9,13 @@ title: "One or Two? How Many Queues?"
 
 
 
+
 related_posts:
   - "/2023/05/10/open-closed.html"
+  - "/2020/08/06/erlang.html"
   - "/2021/08/05/utilization.html"
-  - "/2022/10/21/nudge.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

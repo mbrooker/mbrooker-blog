@@ -9,12 +9,13 @@ title: "Some Virtualization Papers Worth Reading"
 
 
 
+
 related_posts:
-  - "/2025/06/02/hotos.html"
+  - "/2020/02/19/firecracker.html"
   - "/2023/07/13/osdi.html"
-  - "/2014/09/21/liskov-pub.html"
+  - "/2024/11/14/lambda-ten-years.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

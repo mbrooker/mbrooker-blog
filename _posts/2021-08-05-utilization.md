@@ -9,6 +9,7 @@ title: "Latency Sneaks Up On You"
 
 
 
+
 related_posts:
   - "/2020/08/06/erlang.html"
   - "/2021/04/19/latency.html"

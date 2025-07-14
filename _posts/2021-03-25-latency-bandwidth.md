@@ -9,10 +9,11 @@ title: "What You Can Learn From Old Hard Drive Adverts"
 
 
 
+
 related_posts:
   - "/2012/02/11/latency-lags-bandwidth.html"
   - "/2014/07/04/iostat-pct.html"
-  - "/2013/07/14/io-performance.html"
+  - "/2021/08/05/utilization.html"
 dissimilar_posts:
   - "/2015/05/24/sodium-carbonate.html"
 ---

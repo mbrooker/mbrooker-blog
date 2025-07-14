@@ -12,7 +12,7 @@ use ndarray::{Array1, ArrayView1};
 use futures::future::join_all;
 use rusqlite::{Connection, Result as SqliteResult};
 use sha2::{Sha256, Digest};
-use hex;
+
 
 // Number of related posts to include
 const NUM_RELATED_POSTS: usize = 3;
@@ -34,6 +34,7 @@ struct BlogPost {
 }
 
 #[derive(Serialize, Deserialize)]
+#[allow(non_snake_case)]
 struct TitanEmbeddingRequest {
     inputText: String,
 }
@@ -44,8 +45,8 @@ struct TitanEmbeddingResponse {
 }
 
 fn extract_frontmatter_and_content(content: &str) -> (String, String) {
-    if content.starts_with("---") {
-        if let Some(end_index) = content[3..].find("---") {
+    if let Some(stripped) = content.strip_prefix("---") {
+        if let Some(end_index) = stripped.find("---") {
             let frontmatter = &content[0..end_index + 6];
             let body = &content[end_index + 6..];
             return (frontmatter.to_string(), body.trim().to_string());
@@ -70,7 +71,7 @@ fn extract_title_and_url(path: &Path) -> (String, String) {
         let slug = slug_with_ext.trim_end_matches(".md");
         
         // Construct URL in Jekyll format (with trailing slash)
-        let url = format!("/{}/{}/{}/{}.html", year, month, day, slug);
+        let url = format!("/{year}/{month}/{day}/{slug}.html");
         
         // Try to extract title from frontmatter or use slug as fallback
         let title = slug.replace('-', " ");
@@ -78,7 +79,7 @@ fn extract_title_and_url(path: &Path) -> (String, String) {
         return (title, url);
     }
     
-    (file_name.to_string(), format!("/{}", file_name))
+    (file_name.to_string(), format!("/{file_name}"))
 }
 
 async fn get_embedding(client: &BedrockClient, text: &str) -> Result<Vec<f32>, Box<dyn Error>> {
@@ -97,13 +98,13 @@ async fn get_embedding(client: &BedrockClient, text: &str) -> Result<Vec<f32>, B
     let request_json = match serde_json::to_string(&request) {
         Ok(json) => json,
         Err(e) => {
-            eprintln!("Error serializing embedding request to JSON: {}", e);
+            eprintln!("Error serializing embedding request to JSON: {e}");
             eprintln!("Request data: input_text length = {}", truncated_text.len());
             return Err(Box::new(e));
         }
     };
     
-    eprintln!("Making embedding request to model: {}", TITAN_EMBEDDINGS_MODEL_ID);
+    eprintln!("Making embedding request to model: {TITAN_EMBEDDINGS_MODEL_ID}");
     eprintln!("Request payload size: {} bytes", request_json.len());
     
     let response = match client
@@ -117,13 +118,13 @@ async fn get_embedding(client: &BedrockClient, text: &str) -> Result<Vec<f32>, B
         Ok(resp) => resp,
         Err(e) => {
             eprintln!("Error invoking Bedrock model:");
-            eprintln!("  Model ID: {}", TITAN_EMBEDDINGS_MODEL_ID);
-            eprintln!("  Error: {}", e);
-            eprintln!("  Request payload: {}", request_json);
+            eprintln!("  Model ID: {TITAN_EMBEDDINGS_MODEL_ID}");
+            eprintln!("  Error: {e}");
+            eprintln!("  Request payload: {request_json}");
             
             // Try to extract more specific error information
             if let Some(service_err) = e.as_service_error() {
-                eprintln!("  Service error details: {:?}", service_err);
+                eprintln!("  Service error details: {service_err:?}");
             }
             
             return Err(Box::new(e));
@@ -136,20 +137,20 @@ async fn get_embedding(client: &BedrockClient, text: &str) -> Result<Vec<f32>, B
     let response_str = match std::str::from_utf8(response_body) {
         Ok(s) => s,
         Err(e) => {
-            eprintln!("Error converting response body to UTF-8 string: {}", e);
+            eprintln!("Error converting response body to UTF-8 string: {e}");
             eprintln!("Response body (first 500 bytes): {:?}", 
                 &response_body[..std::cmp::min(500, response_body.len())]);
             return Err(Box::new(e));
         }
     };
     
-    eprintln!("Response body: {}", response_str);
+    eprintln!("Response body: {response_str}");
     
     let response_json: TitanEmbeddingResponse = match serde_json::from_str(response_str) {
         Ok(json) => json,
         Err(e) => {
-            eprintln!("Error parsing response JSON: {}", e);
-            eprintln!("Raw response: {}", response_str);
+            eprintln!("Error parsing response JSON: {e}");
+            eprintln!("Raw response: {response_str}");
             eprintln!("Expected format: {{\"embedding\": [f32, ...]}}");
             return Err(Box::new(e));
         }
@@ -202,7 +203,7 @@ fn update_frontmatter(post: &BlogPost, related_posts: &[&BlogPost], dissimilar_p
                 ""
             };
             
-            new_frontmatter = format!("{}{}", before, after);
+            new_frontmatter = format!("{before}{after}");
         }
     }
     
@@ -220,7 +221,7 @@ fn update_frontmatter(post: &BlogPost, related_posts: &[&BlogPost], dissimilar_p
                 
                 posts_section.push_str("related_posts:\n");
                 posts_section.push_str(&related_urls.iter()
-                    .map(|url| format!("  - \"{}\"", url))
+                    .map(|url| format!("  - \"{url}\""))
                     .collect::<Vec<_>>()
                     .join("\n"));
                 posts_section.push('\n');
@@ -233,13 +234,13 @@ fn update_frontmatter(post: &BlogPost, related_posts: &[&BlogPost], dissimilar_p
                 
                 posts_section.push_str("dissimilar_posts:\n");
                 posts_section.push_str(&dissimilar_urls.iter()
-                    .map(|url| format!("  - \"{}\"", url))
+                    .map(|url| format!("  - \"{url}\""))
                     .collect::<Vec<_>>()
                     .join("\n"));
                 posts_section.push('\n');
             }
             
-            new_frontmatter = format!("{}{}{}", before, posts_section, after);
+            new_frontmatter = format!("{before}{posts_section}{after}");
         }
     }
     
@@ -318,7 +319,7 @@ fn find_blog_root() -> PathBuf {
     
     // Check if we're in the tools/related_posts directory
     let parent_dir = current_dir.parent().expect("Failed to get parent directory");
-    if parent_dir.file_name().map_or(false, |name| name == "tools") {
+    if parent_dir.file_name().is_some_and(|name| name == "tools") {
         let blog_root = parent_dir.parent().expect("Failed to get blog root directory");
         if blog_root.join("_posts").exists() {
             return blog_root.to_path_buf();
@@ -326,7 +327,7 @@ fn find_blog_root() -> PathBuf {
     }
     
     // If we're already in the tools directory
-    if current_dir.file_name().map_or(false, |name| name == "tools") {
+    if current_dir.file_name().is_some_and(|name| name == "tools") {
         let blog_root = current_dir.parent().expect("Failed to get blog root directory");
         if blog_root.join("_posts").exists() {
             return blog_root.to_path_buf();
@@ -334,9 +335,9 @@ fn find_blog_root() -> PathBuf {
     }
     
     // If we're in the related_posts directory
-    if current_dir.file_name().map_or(false, |name| name == "related_posts") {
+    if current_dir.file_name().is_some_and(|name| name == "related_posts") {
         let tools_dir = current_dir.parent().expect("Failed to get tools directory");
-        if tools_dir.file_name().map_or(false, |name| name == "tools") {
+        if tools_dir.file_name().is_some_and(|name| name == "tools") {
             let blog_root = tools_dir.parent().expect("Failed to get blog root directory");
             if blog_root.join("_posts").exists() {
                 return blog_root.to_path_buf();
@@ -372,7 +373,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Read all markdown files in the _posts directory
     for entry in WalkDir::new(&posts_dir).into_iter().filter_map(|e| e.ok()) {
         let path = entry.path();
-        if path.extension().map_or(false, |ext| ext == "md") {
+        if path.extension().is_some_and(|ext| ext == "md") {
             let mut file = File::open(path)?;
             let mut content = String::new();
             file.read_to_string(&mut content)?;
@@ -381,7 +382,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
             let (title, url) = extract_title_and_url(path);
             
             // Calculate content hash for memoization
-            let text_for_embedding = format!("{} {}", title, body);
+            let text_for_embedding = format!("{title} {body}");
             let content_hash = calculate_content_hash(&text_for_embedding);
             
             posts.push(BlogPost {
@@ -444,7 +445,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         }
     }
     
-    println!("Cache stats: {} hits, {} misses", cache_hits, cache_misses);
+    println!("Cache stats: {cache_hits} hits, {cache_misses} misses");
     
     // Second pass: generate embeddings for posts not in cache
     if !posts_needing_embeddings.is_empty() {
@@ -503,9 +504,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
         let mut similarities: Vec<(usize, f32)> = Vec::new();
         
         if let Some(ref embedding_i) = posts_with_embeddings[i].embedding {
-            for j in 0..posts_with_embeddings.len() {
+            for (j, post_j) in posts_with_embeddings.iter().enumerate() {
                 if i != j {
-                    if let Some(ref embedding_j) = posts_with_embeddings[j].embedding {
+                    if let Some(ref embedding_j) = post_j.embedding {
                         let similarity = cosine_similarity(embedding_i, embedding_j);
                         similarities.push((j, similarity));
                     }

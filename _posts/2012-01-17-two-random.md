@@ -9,12 +9,13 @@ title: The power of two random choices
 
 
 
+
 related_posts:
   - "/2024/03/25/needles.html"
   - "/2018/01/01/balls-into-bins.html"
   - "/2022/10/21/nudge.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2025/02/05/feketes.html"
 ---
 {{ page.title }}
 ================

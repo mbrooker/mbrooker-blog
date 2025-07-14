@@ -9,12 +9,13 @@ title: "Heuristic Traps for Systems Operators"
 
 
 
+
 related_posts:
   - "/2014/06/29/rasmussen.html"
-  - "/2023/04/20/hobbies.html"
-  - "/2021/02/22/postmortem.html"
+  - "/2022/12/15/thumb.html"
+  - "/2024/03/04/mousetrap.html"
 dissimilar_posts:
-  - "/2020/07/28/fish.html"
+  - "/2023/06/19/container.html"
 ---
 {{ page.title }}
 ================

@@ -9,12 +9,13 @@ title: "It's About Time!"
 
 
 
+
 related_posts:
-  - "/2023/10/18/optimism.html"
-  - "/2014/11/15/exactly-once.html"
   - "/2014/03/30/lamport-pub.html"
+  - "/2014/09/21/liskov-pub.html"
+  - "/2023/10/18/optimism.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2025/06/20/career.html"
 ---
 {{ page.title }}
 ================

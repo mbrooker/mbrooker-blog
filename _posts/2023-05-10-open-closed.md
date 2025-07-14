@@ -9,9 +9,10 @@ title: "Open and Closed, Omission and Collapse"
 
 
 
+
 related_posts:
-  - "/2021/08/05/utilization.html"
   - "/2020/08/06/erlang.html"
+  - "/2021/08/05/utilization.html"
   - "/2025/05/20/icpe.html"
 dissimilar_posts:
   - "/2015/05/24/sodium-carbonate.html"

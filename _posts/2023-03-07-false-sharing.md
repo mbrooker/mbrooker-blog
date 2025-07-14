@@ -9,12 +9,13 @@ title: "False Sharing versus Perfect Placement"
 
 
 
+
 related_posts:
   - "/2023/02/07/hot-keys.html"
   - "/2022/10/04/commitment.html"
-  - "/2024/02/12/parameters.html"
+  - "/2021/01/22/cloud-scale.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2021/08/11/arecibo.html"
 ---
 {{ page.title }}
 ================

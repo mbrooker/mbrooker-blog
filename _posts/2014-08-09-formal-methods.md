@@ -9,12 +9,13 @@ title: "Use of Formal Methods at Amazon Web Services"
 
 
 
+
 related_posts:
   - "/2022/07/29/getting-into-tla.html"
   - "/2015/03/29/formal.html"
-  - "/2022/06/02/formal.html"
+  - "/2024/04/17/formal.html"
 dissimilar_posts:
-  - "/2020/07/28/fish.html"
+  - "/2019/06/17/chernobyl.html"
 ---
 {{ page.title }}
 ================

@@ -9,12 +9,13 @@ title: "Exactly-Once Delivery May Not Be What You Want"
 
 
 
+
 related_posts:
-  - "/2020/10/05/consensus.html"
-  - "/2021/01/22/cloud-scale.html"
+  - "/2014/01/12/ben-or.html"
+  - "/2014/05/10/lynch-pub.html"
   - "/2021/04/14/redundancy.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2012/01/10/drive-failure.html"
 ---
 {{ page.title }}
 ================

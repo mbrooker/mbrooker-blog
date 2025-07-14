@@ -9,12 +9,13 @@ title: "The Essential Barbara Liskov"
 
 
 
+
 related_posts:
   - "/2014/03/30/lamport-pub.html"
   - "/2014/05/10/lynch-pub.html"
-  - "/2020/10/05/consensus.html"
+  - "/2014/05/19/vr.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

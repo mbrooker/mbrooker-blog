@@ -9,12 +9,13 @@ title: "Is Anatoly Dyatlov to blame?"
 
 
 
+
 related_posts:
   - "/2014/06/29/rasmussen.html"
-  - "/2019/08/12/kind-wicked.html"
   - "/2016/01/03/correlation.html"
+  - "/2015/11/05/heuristics.html"
 dissimilar_posts:
-  - "/2022/09/02/ecdf.html"
+  - "/2014/08/09/formal-methods.html"
 ---
 {{ page.title }}
 ================

@@ -9,12 +9,13 @@ title: "Exponential Value at Linear Cost"
 
 
 
+
 related_posts:
-  - "/2021/10/20/simulation.html"
-  - "/2021/01/06/quorum-availability.html"
-  - "/2024/02/12/parameters.html"
+  - "/2020/08/06/erlang.html"
+  - "/2023/02/07/hot-keys.html"
+  - "/2023/03/23/economics.html"
 dissimilar_posts:
-  - "/2020/07/28/fish.html"
+  - "/2013/05/25/patterns-of-design.html"
 ---
 {{ page.title }}
 ================

@@ -9,10 +9,11 @@ title: "Why do we need distributed systems?"
 
 
 
+
 related_posts:
   - "/2024/06/04/scale.html"
+  - "/2019/04/03/learning.html"
   - "/2021/01/22/cloud-scale.html"
-  - "/2021/04/14/redundancy.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---

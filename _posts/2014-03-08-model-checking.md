@@ -9,12 +9,13 @@ title: "Snark, Chord, and Trust in Algorithms"
 
 
 
+
 related_posts:
+  - "/2022/06/02/formal.html"
+  - "/2022/07/29/getting-into-tla.html"
   - "/2023/07/28/ds-testing.html"
-  - "/2014/03/30/lamport-pub.html"
-  - "/2015/03/29/formal.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

@@ -9,12 +9,13 @@ title: "What is a simple system?"
 
 
 
+
 related_posts:
-  - "/2022/12/15/thumb.html"
-  - "/2015/01/25/patterns.html"
   - "/2024/06/04/scale.html"
+  - "/2014/05/10/lynch-pub.html"
+  - "/2021/01/22/cloud-scale.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

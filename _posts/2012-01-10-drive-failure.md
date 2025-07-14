@@ -9,12 +9,13 @@ title: The benefits of having data
 
 
 
+
 related_posts:
   - "/2016/01/03/correlation.html"
-  - "/2021/03/25/latency-bandwidth.html"
-  - "/2014/07/04/iostat-pct.html"
+  - "/2012/02/11/latency-lags-bandwidth.html"
+  - "/2015/09/26/cap-durability.html"
 dissimilar_posts:
-  - "/2020/07/28/fish.html"
+  - "/2014/11/15/exactly-once.html"
 ---
 {{ page.title }}
 ================

@@ -9,12 +9,13 @@ title: "The Essential Leslie Lamport"
 
 
 
+
 related_posts:
   - "/2014/05/10/lynch-pub.html"
   - "/2014/09/21/liskov-pub.html"
-  - "/2014/03/08/model-checking.html"
+  - "/2014/01/12/ben-or.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2021/08/11/arecibo.html"
 ---
 {{ page.title }}
 ================

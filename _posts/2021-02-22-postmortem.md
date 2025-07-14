@@ -9,12 +9,13 @@ title: "Incident Response Isn't Enough"
 
 
 
+
 related_posts:
-  - "/2016/01/03/correlation.html"
-  - "/2019/06/20/redundancy.html"
   - "/2018/02/25/availability-liveness.html"
+  - "/2016/01/03/correlation.html"
+  - "/2015/09/26/cap-durability.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2012/01/17/two-random.html"
 ---
 {{ page.title }}
 ================

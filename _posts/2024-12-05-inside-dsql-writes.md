@@ -9,10 +9,11 @@ title: "DSQL Vignette: Transactions and Durability"
 
 
 
+
 related_posts:
   - "/2024/12/04/inside-dsql.html"
-  - "/2025/04/17/decomposing.html"
   - "/2024/12/17/occ-and-isolation.html"
+  - "/2025/04/17/decomposing.html"
 dissimilar_posts:
   - "/2015/05/24/sodium-carbonate.html"
 ---

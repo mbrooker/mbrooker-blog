@@ -9,12 +9,13 @@ title: "Amazon's Distributed Computing Manifesto"
 
 
 
+
 related_posts:
+  - "/2019/04/03/learning.html"
+  - "/2024/11/14/lambda-ten-years.html"
   - "/2024/06/04/scale.html"
-  - "/2021/01/22/cloud-scale.html"
-  - "/2019/03/17/control.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

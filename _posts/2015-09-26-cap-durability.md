@@ -9,10 +9,11 @@ title: "Is there a CAP theorem for Durability?"
 
 
 
+
 related_posts:
-  - "/2018/02/25/availability-liveness.html"
   - "/2024/07/25/cap-again.html"
   - "/2014/07/16/pacelc.html"
+  - "/2018/02/25/availability-liveness.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---

@@ -9,12 +9,13 @@ title: "Decomposing Aurora DSQL"
 
 
 
+
 related_posts:
+  - "/2024/12/04/inside-dsql.html"
   - "/2024/12/05/inside-dsql-writes.html"
-  - "/2025/02/04/versioning.html"
-  - "/2024/12/17/occ-and-isolation.html"
+  - "/2024/12/06/inside-dsql-cap.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

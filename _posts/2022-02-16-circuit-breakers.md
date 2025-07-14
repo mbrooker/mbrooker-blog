@@ -9,12 +9,13 @@ title: "Will circuit breakers solve my problems?"
 
 
 
+
 related_posts:
   - "/2022/02/28/retries.html"
-  - "/2018/02/25/availability-liveness.html"
   - "/2021/05/24/metastable.html"
+  - "/2016/01/03/correlation.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

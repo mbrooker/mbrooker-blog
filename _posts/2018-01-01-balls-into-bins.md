@@ -9,12 +9,13 @@ title: "Balls Into Bins In Distributed Systems"
 
 
 
+
 related_posts:
   - "/2024/03/25/needles.html"
-  - "/2012/01/17/two-random.html"
+  - "/2020/08/06/erlang.html"
   - "/2023/02/07/hot-keys.html"
 dissimilar_posts:
-  - "/2015/05/24/sodium-carbonate.html"
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================
