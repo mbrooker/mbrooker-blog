@@ -190,7 +190,7 @@ fn update_frontmatter(post: &BlogPost, related_posts: &[&BlogPost], dissimilar_p
     let mut new_frontmatter = post.frontmatter.clone();
     
     // Remove existing related_posts and dissimilar_posts if present
-    for field in &["related_posts:", "dissimilar_posts:"] {
+    for field in &["\nrelated_posts:", "\ndissimilar_posts:"] {
         if new_frontmatter.contains(field) {
             let start_idx = new_frontmatter.find(field).unwrap();
             let mut end_idx = new_frontmatter[start_idx..].find("\n---").unwrap_or_else(|| new_frontmatter[start_idx..].len());
