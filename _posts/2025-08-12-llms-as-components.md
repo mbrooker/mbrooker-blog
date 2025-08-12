@@ -53,7 +53,7 @@ I'm not proposing that these systems, systems composed of LLMs and other computa
 
 > We want AI agents that can discover like we can, not which contain what we have discovered. Building in our discoveries only makes it harder to see how the discovering process can be done.
 
-Indeed. Computing, from Python to SMT, has been a powerful tool of discovery for forty years. Making these tools available to the systems we build, and specifically to the AI agents we build, gives them more power and leverage. Not by encoding the way we think, but by encoding the things computer science has learned about the way the universe works.
+Indeed. Computing, from Python to SMT, has been a powerful tool of discovery for over eighty years. Making these tools available to the systems we build, and specifically to the AI agents we build, gives them more power and leverage. Not by encoding the way we think, but by encoding the things computer science has learned about the way the universe works.
 
 **Footnotes**
 
