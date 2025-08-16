@@ -2,6 +2,12 @@
 layout: post
 title: "Dynamo, DynamoDB, and Aurora DSQL"
 
+related_posts:
+  - "/2022/07/12/dynamodb.html"
+  - "/2024/12/04/inside-dsql.html"
+  - "/2024/12/03/aurora-dsql.html"
+dissimilar_posts:
+  - "/2015/04/11/zero-one.html"
 ---
 {{ page.title }}
 ================

@@ -12,8 +12,8 @@ title: "DynamoDB's Best Feature: Predictability"
 
 related_posts:
   - "/2022/07/12/dynamodb.html"
+  - "/2025/08/15/dynamo-dynamodb-dsql.html"
   - "/2024/12/03/aurora-dsql.html"
-  - "/2024/04/25/memorydb.html"
 dissimilar_posts:
   - "/2015/05/24/sodium-carbonate.html"
 ---
