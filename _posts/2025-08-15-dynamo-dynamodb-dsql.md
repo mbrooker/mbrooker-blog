@@ -58,7 +58,7 @@ It does, however, spend some effort ensuring that replicas converge, and the pap
 
 I'll admit that I'm a little confused by the way `R + W > N` is treated here, because it doesn't seem to align with the way the rest of the paper talks about consistency, and offers a path to stronger consistency as some Dynamo-inspired designs have achieved.
 
-DynamoDB, by constrast, offers strongly consistent writes, and a choice of strongly consistent and eventually consistent reads. The choice approach is rather simple:
+DynamoDB, by constrast, offers strongly consistent writes<sup>[3](#foot3)</sup>, and a choice of strongly consistent and eventually consistent reads. The choice approach is rather simple:
 
 > Only the leader replica can serve write and strongly consistent read requests.
 
@@ -108,3 +108,5 @@ The Amazon Dynamo paper is a classic. You should read it if you haven't. But tim
 
 1. <a name="foot1"></a> *et al* is doing some heavy lifting here, with other authors including Pat Selinger, Jim Gray, and Franco Putzolu. 
 2. <a name="foot2"></a> See the discussion of *read repair* in the Dynamo paper, and think about what happens with infrequently-read keys.
+3. <a name="foot3"></a> When I say *strongly consistent writes* here, I mean three things. First, writes are applied in a per-key total order (or a cross-key total order in the case of [DynamoDB's transactions](https://www.usenix.org/conference/atc23/presentation/idziorek)), meaning that there's no post-commit merging of writes<sup>[4](#foot4)</sup>. Second, writes are applied atomically at the same logical time as their preconditions are evaluated, meaning that no other writes can sneak in between precondition evaluation and writes being committed. In this way, you can roughly think of even a basic DynamoDB `UpdateItem` call as a strict serializable one-shot transaction. Third, a successful DynamoDB write is committed with full durability and synchronously replicated to the right number of replicas, unlike in Dynamo where writes are asynchronously replicated.
+4. <a name="foot4"></a> The exception being [DynamoDB Global Tables](https://aws.amazon.com/dynamodb/global-tables/) in eventual consistency mode, where *last writer wins* is used for conflict resolution and merging between writes from different regions. Global Tables also has a strong consistency mode, which avoids this post-merge.
