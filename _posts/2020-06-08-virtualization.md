@@ -12,8 +12,8 @@ title: "Some Virtualization Papers Worth Reading"
 
 related_posts:
   - "/2020/02/19/firecracker.html"
+  - "/2025/09/18/firecracker.html"
   - "/2023/07/13/osdi.html"
-  - "/2024/11/14/lambda-ten-years.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---

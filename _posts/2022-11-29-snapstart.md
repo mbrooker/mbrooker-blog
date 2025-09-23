@@ -12,8 +12,8 @@ title: "Lambda Snapstart, and snapshots as a tool for system builders"
 
 related_posts:
   - "/2023/05/23/snapshot-loading.html"
+  - "/2025/09/18/firecracker.html"
   - "/2024/04/25/memorydb.html"
-  - "/2024/11/14/lambda-ten-years.html"
 dissimilar_posts:
   - "/2023/09/21/audience.html"
 ---

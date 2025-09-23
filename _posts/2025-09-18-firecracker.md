@@ -2,6 +2,12 @@
 layout: post
 title: "Seven Years of Firecracker"
 
+related_posts:
+  - "/2020/02/19/firecracker.html"
+  - "/2024/12/03/aurora-dsql.html"
+  - "/2024/11/14/lambda-ten-years.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================
@@ -79,4 +85,4 @@ In a lot of ways this is similar to the approach we took with MVCC garbage colle
 **Footnotes**
 
 1. <a name="foot1"></a> I might quibble with the use of *LLM* here, because it excludes agents that are based on models of different sizes, modes, and architectures. But that's a minor point. What's important is the tools and the loop.
-2. <a name="foot2"></a> There's more detail, some out of date, in our paper [Restoring Uniqueness in MicroVM Snapshots](https://arxiv.org/abs/2102.12892). 
+2. <a name="foot2"></a> There's more detail, some out of date, in our paper [Restoring Uniqueness in MicroVM Snapshots](https://arxiv.org/abs/2102.12892).

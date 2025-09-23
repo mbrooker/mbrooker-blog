@@ -13,7 +13,7 @@ title: "What is a container?"
 related_posts:
   - "/2023/05/23/snapshot-loading.html"
   - "/2020/02/19/firecracker.html"
-  - "/2024/01/18/scalability.html"
+  - "/2025/09/18/firecracker.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---
