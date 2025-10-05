@@ -48,7 +48,7 @@ Firecracker is great here, because agent sessions vary from milliseconds (single
 
 *Aurora DSQL*
 
-We announced Aurora DSQL, our serverless relational database with PostgreSQL compatibility, in December 2014. I've written about [DSQL's architecture before](https://brooker.co.za/blog/2024/12/03/aurora-dsql.html), but here wanted to highlight the role of Firecracker.
+We announced Aurora DSQL, our serverless relational database with PostgreSQL compatibility, in December 2024. I've written about [DSQL's architecture before](https://brooker.co.za/blog/2024/12/03/aurora-dsql.html), but here wanted to highlight the role of Firecracker.
 
 Each active SQL transaction in DSQL runs inside its own Query Processor (QPs), including its own copy of PostgreSQL. These QPs are used multiple times (for the same DSQL database), but only handle one transaction at a time.
 
