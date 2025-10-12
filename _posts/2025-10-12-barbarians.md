@@ -24,7 +24,7 @@ A bit later, the paper highlights two of the challenges with building these veri
 
 > Prevent reward hacking. Reward hacking occurs when solutions exploit evaluator loopholes rather than solving the intended problem.
 
-These two pitfalls aren't new news to anybody who's built AI systems. They also shouldn't be new news to folks who read or write systems research. Overfitting to traces like benchmarks is a systemic problem in the systems world, and has been for decades. Benchmarks like TPC-C, which so poorly represent their target workloads as to be mostly meaningless, are ruthlessly overfit by both academic and commercial systems. Reward hacking is more of a meta problem, with excessive energy spent reward hacking the whole publishing system. A problem pre-AI, and a problem that the scalability of AI will no doubt exacerbate.
+These two pitfalls aren't new news to anybody who's built AI systems. They also shouldn't be new news to folks who read or write systems research. But they are important points, and well made here. Overfitting to traces like benchmarks is a systemic problem in the systems world, and has been for decades. Benchmarks like TPC-C, which so poorly represent their target workloads as to be mostly meaningless, are ruthlessly overfit by both academic and commercial systems. Reward hacking is more of a meta problem, with excessive energy spent reward hacking the whole publishing system. A problem pre-AI, and a problem that the scalability of AI will no doubt exacerbate.
 
 Then, right towards the end, the paper hits what I think is the most important point:
 
