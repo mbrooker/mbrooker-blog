@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "What is the Scope of Systems Research?"
+title: "Is Systems Research Really Just About Making Numbers Bigger?"
 
 ---
 {{ page.title }}
