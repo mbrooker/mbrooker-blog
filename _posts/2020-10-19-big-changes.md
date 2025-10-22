@@ -15,7 +15,7 @@ related_posts:
   - "/2020/06/23/code.html"
   - "/2019/04/03/learning.html"
 dissimilar_posts:
-  - "/2022/09/02/ecdf.html"
+  - "/2025/10/05/locality.html"
 ---
 {{ page.title }}
 ================

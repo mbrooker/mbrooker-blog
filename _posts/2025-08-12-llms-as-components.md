@@ -3,9 +3,9 @@ layout: post
 title: "LLMs as Parts of Systems"
 
 related_posts:
+  - "/2025/10/12/barbarians.html"
   - "/2022/07/29/getting-into-tla.html"
   - "/2019/04/03/learning.html"
-  - "/2014/03/30/lamport-pub.html"
 dissimilar_posts:
   - "/2022/02/28/retries.html"
 ---
