@@ -34,7 +34,8 @@ Application programmers don't really have a principled way to work around this, 
     while True:
       try:
         get_resource_state(id, ...)
-      catch ResourceDoesNotExist:
+        return
+      except ResourceDoesNotExist:
         sleep(100)
 
 Which fixes the problem. Sometimes. Other times, especially if `ResourceDoesNotExist` can be thrown if `id` is deleted, it causes an infinite loop. It also creates more work for client and server, adds latency, and requires the programmer to choose a magic number for `sleep` that balances between the two. Ugly.
