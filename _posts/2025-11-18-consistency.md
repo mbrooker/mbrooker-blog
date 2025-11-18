@@ -91,6 +91,8 @@ I go into some detail on how $\tau_{start}$ is picked here:
 
 Strong consistency sounds like a complex topic for distributed systems nerds, but is a real thing that applications built on traditional database replication architectures need to start dealing with at modest scale - or even at very small scale if they're trying to offer high availability. DSQL goes to some internal lengths to make all reads consistent - with the aim of saving application builders and end users from having to deal with this complexity.
 
+I don't mean to say that eventual consistency is always bad. Latency and connectivity trade-offs do exist (although the [choose-two framing of CAP is bunk](https://brooker.co.za/blog/2024/07/25/cap-again.html)), and eventual consistency has its place. However, that place is probably not in your services or API.
+
 *Footnotes*
 
 1. <a name="foot1"></a> You might point out that this particular problem can be fixed with a weaker set of guarantees, like Read Your Writes, provided by client stickiness. However, this falls down pretty quickly in more complex data models, and cases like IaC where 'your writes' is less well defined.
