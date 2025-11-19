@@ -42,16 +42,18 @@ Which fixes the problem. Kinda. Other times, especially if `ResourceDoesNotExist
 
 But that's not all. Marc Bowes pointed out that this problem is even more insidious:
 
-    def wait_for_resource(id):
-      try:
-        get_resource_state(id, ...)
-        return
-      except ResourceDoesNotExist:
-        sleep(100)
-    
-    id = create_resource(...)
-    wait_for_resource(id)
-    get_resource_state(id)    
+{% highlight python %}
+def wait_for_resource(id):
+  try:
+    get_resource_state(id, ...)
+    return
+  except ResourceDoesNotExist:
+    sleep(100)
+  
+id = create_resource(...)
+wait_for_resource(id)
+get_resource_state(id)    
+{% endhighlight %}
 
 Could *still* fail, because the second `get_resource_state` call could go to an entirely different read replica that hasn't heard the news yet<sup>[3](#foot3)</sup>.
 
