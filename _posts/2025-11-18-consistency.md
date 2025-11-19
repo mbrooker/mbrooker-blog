@@ -38,7 +38,22 @@ Application programmers don't really have a principled way to work around this, 
       except ResourceDoesNotExist:
         sleep(100)
 
-Which fixes the problem. Sometimes. Other times, especially if `ResourceDoesNotExist` can be thrown if `id` is deleted, it causes an infinite loop. It also creates more work for client and server, adds latency, and requires the programmer to choose a magic number for `sleep` that balances between the two. Ugly.
+Which fixes the problem. Kinda. Other times, especially if `ResourceDoesNotExist` can be thrown if `id` is deleted, it causes an infinite loop. It also creates more work for client and server, adds latency, and requires the programmer to choose a magic number for `sleep` that balances between the two. Ugly.
+
+But that's not all. Marc Bowes pointed out that this problem is even more insidious:
+
+    def wait_for_resource(id):
+      try:
+        get_resource_state(id, ...)
+        return
+      except ResourceDoesNotExist:
+        sleep(100)
+    
+    id = create_resource(...)
+    wait_for_resource(id)
+    get_resource_state(id)    
+
+Could *still* fail, because the second `get_resource_state` call could go to an entirely different read replica that hasn't heard the news yet<sup>[3](#foot3)</sup>.
 
 Strong consistency avoids this whole problem<sup>[1](#foot1)</sup>, ensuring that the first code snippet works as expected.
 
@@ -98,3 +113,4 @@ I don't mean to say that eventual consistency is always bad. Latency and connect
 
 1. <a name="foot1"></a> You might point out that this particular problem can be fixed with a weaker set of guarantees, like Read Your Writes, provided by client stickiness. However, this falls down pretty quickly in more complex data models, and cases like IaC where 'your writes' is less well defined.
 1. <a name="foot2"></a> Yes, I know there are other ways to do this.
+3. <a name="foot3"></a> If we want to get technical, this is because the typical database read replica pattern doesn't offer *monotonic reads*, where the set of writes a reader sees is increasing over time. Instead, writes at the tip can appear to come and go arbitrarily, as requests are routed to different replicas. See Doug Terry's [Replicated Data Consistency Explained Through Baseball](https://www.microsoft.com/en-us/research/wp-content/uploads/2011/10/ConsistencyAndBaseballReport.pdf) for an easy introduction into these terms.
