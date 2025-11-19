@@ -335,4 +335,23 @@ ul.pubs span {
      ul.pubs {
         width: 100%;
      }
+     
+     /* Mobile improvements for blog index */
+     ul.posts li {
+        line-height: 1.4em;
+        margin-bottom: 0.8em;
+        display: flex;
+        flex-direction: column;
+     }
+     
+     ul.posts span {
+        font-size: 85%;
+        margin-bottom: 0.2em;
+        order: 2;
+     }
+     
+     ul.posts a {
+        order: 1;
+        font-weight: bold;
+     }
  }
