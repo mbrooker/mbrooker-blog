@@ -265,20 +265,74 @@ ul.pubs span {
  /* Fix formatting on narrow-screen mobile devices, as suggested by @msjgriffiths on Twitter: https://twitter.com/msjgriffiths/status/1288162056902979585 */
 
  @media only screen and (max-width: 900px) {
+    body {
+       margin-left: 0.5em;
+       margin-right: 0.5em;
+       font-size: 1em;
+    }
+    
     .site { 
         display: flex; 
         flex-flow: column; 
-        width:100%;
+        width: 100%;
+        margin: 1em auto;
      }
+     
+     .site .title a {
+        font-size: 1.5em;
+     }
+     
+     .site .title a.extra {
+        display: block;
+        margin-left: 0;
+        margin-top: 0.5em;
+     }
+     
      #post {
-         order:1;
-         width:100%;
-         margin-top: -3em;
+         order: 1;
+         width: 100%;
+         margin-top: 0;
      }
+     
+     #post img {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+     }
+     
+     #post pre {
+        overflow-x: auto;
+        font-size: 85%;
+     }
+     
      #post code {
-        font-size: 100%;
+        font-size: 90%;
+        word-wrap: break-word;
      }
-     .about {order: 2; }
-     #related {order: 3;}
-     .footer {order: 4;}
+     
+     .site .about {
+        order: 2;
+        width: 100%;
+        float: none;
+     }
+     
+     #related {
+        order: 3;
+        width: 100%;
+        float: none;
+     }
+     
+     .site .footer {
+        order: 4;
+     }
+     
+     .site .footer .contact,
+     .site .footer .license {
+        float: none;
+        width: 100%;
+     }
+     
+     ul.pubs {
+        width: 100%;
+     }
  }
