@@ -71,6 +71,8 @@ table {
 /*
 /*****************************************************************************/
 
+@import "syntax.css";
+
 ul.posts {
     list-style-type: none;
     margin-bottom: 2em;
