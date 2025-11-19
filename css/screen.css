@@ -232,6 +232,7 @@ ul.pubs span {
      background-color: #f8f8f8;
      font-size: 95%;
      padding: 0 .2em;
+     line-height: 1em;
  }
  
  #post pre code {

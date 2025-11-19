@@ -23,20 +23,24 @@ Since then, managed databases like Aurora MySQL have made relational database op
 
 Consider the following piece of code, running against an API exposed by a database-backed service:
 
-    id = create_resource(...)
-    get_resource_state(id, ...)
+{% highlight python %}
+id = create_resource(...)
+get_resource_state(id, ...)
+{% endhighlight %}
 
 In the world of read replicas, the latter statement can do something a little baffling: reply '`id` does not exist'. The reason for this is simple: `get_resource_state` is a read-only call, likely routed to a read replica, and is racing the write from `create_resource`. If replication wins, this code works as expected. If the client wins, it has to handle to weird sensation of time moving backwards.
 
 Application programmers don't really have a principled way to work around this, so they end up writing code like this:
 
-    id = create_resource(...)
-    while True:
-      try:
-        get_resource_state(id, ...)
-        return
-      except ResourceDoesNotExist:
-        sleep(100)
+{% highlight python %}
+id = create_resource(...)
+while True:
+  try:
+    get_resource_state(id, ...)
+    return
+  except ResourceDoesNotExist:
+    sleep(100)
+{% endhighlight %}
 
 Which fixes the problem. Kinda. Other times, especially if `ResourceDoesNotExist` can be thrown if `id` is deleted, it causes an infinite loop. It also creates more work for client and server, adds latency, and requires the programmer to choose a magic number for `sleep` that balances between the two. Ugly.
 
@@ -63,10 +67,12 @@ Strong consistency avoids this whole problem<sup>[1](#foot1)</sup>, ensuring tha
 
 The folks building the service behind that API run into exactly the same problems. To get the benefits of read replicas, application builders need to route as much read traffic as possible to those read replicas. But consider the following code:
 
-    block_attachment_changes(id, ...)
-    for attachment in get_attachments_to_thing(id):
-      remove_attachment(id, attachment)
-    assert_is_empty(get_attachments_to_thing(id))
+{% highlight python %}
+block_attachment_changes(id, ...)
+for attachment in get_attachments_to_thing(id):
+  remove_attachment(id, attachment)
+assert_is_empty(get_attachments_to_thing(id))
+{% endhighlight %}
 
 This is a fairly common code pattern inside microservices. A kind a little workflow that cleans something up. But, in the wild world of eventual consistency, it has at least three possible bugs:
 
@@ -82,12 +88,16 @@ Which brings us to our third point: read-modify-write is the canonical transacti
 
 Consider the following code:
 
-    UPDATE dogs SET goodness = goodness + 1 WHERE name = 'sophie'
+{% highlight sql %}
+UPDATE dogs SET goodness = goodness + 1 WHERE name = 'sophie'
+{% endhighlight %}
 
 If the read for that read-modify-write is read from a read replica, then the value of `goodness` may not be changed in the way you expect. Now, the database could internally do something like this:
 
-    SELECT goodness AS g, version AS v FROM dogs WHERE name = 'sophie'; -- To read replica
-    UPDATE sophie SET goodness = g + 1, version = v + 1 WHERE name = 'sophie' AND version = v; -- To primary
+{% highlight sql %}
+SELECT goodness AS g, version AS v FROM dogs WHERE name = 'sophie'; -- To read replica
+UPDATE sophie SET goodness = g + 1, version = v + 1 WHERE name = 'sophie' AND version = v; -- To primary
+{% endhighlight %}
 
 And then checking it actually updated a row<sup>[2](#foot2)</sup>, but that adds a ton of work.
 
