@@ -302,11 +302,11 @@ ul.pubs span {
      
      #post pre {
         overflow-x: auto;
-        font-size: 85%;
+        font-size: 100%;
      }
      
      #post code {
-        font-size: 90%;
+        font-size: 100%;
         word-wrap: break-word;
      }
      
