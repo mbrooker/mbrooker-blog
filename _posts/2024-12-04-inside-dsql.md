@@ -12,8 +12,8 @@ title: "DSQL Vignette: Reads and Compute"
 
 related_posts:
   - "/2024/12/05/inside-dsql-writes.html"
+  - "/2025/11/02/thinking-dsql.html"
   - "/2024/12/03/aurora-dsql.html"
-  - "/2024/12/06/inside-dsql-cap.html"
 dissimilar_posts:
   - "/2015/05/24/sodium-carbonate.html"
 ---

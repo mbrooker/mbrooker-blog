@@ -2,6 +2,12 @@
 layout: post
 title: "Why Strong Consistency?"
 
+related_posts:
+  - "/2024/12/04/inside-dsql.html"
+  - "/2024/12/05/inside-dsql-writes.html"
+  - "/2025/08/15/dynamo-dynamodb-dsql.html"
+dissimilar_posts:
+  - "/2015/04/11/zero-one.html"
 ---
 {{ page.title }}
 ================

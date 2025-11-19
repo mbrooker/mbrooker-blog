@@ -15,7 +15,7 @@ related_posts:
   - "/2014/05/10/lynch-pub.html"
   - "/2014/09/21/liskov-pub.html"
 dissimilar_posts:
-  - "/2025/10/22/uuidv7.html"
+  - "/2013/12/14/intel-hle.html"
 ---
 {{ page.title }}
 ================

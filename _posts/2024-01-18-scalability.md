@@ -13,7 +13,7 @@ title: "What is Scalability Anyway?"
 related_posts:
   - "/2023/01/30/nosql.html"
   - "/2024/06/04/scale.html"
-  - "/2023/03/23/economics.html"
+  - "/2025/11/02/thinking-dsql.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---

@@ -12,8 +12,8 @@ title: "Exactly-Once Delivery May Not Be What You Want"
 
 related_posts:
   - "/2014/01/12/ben-or.html"
+  - "/2025/11/18/consistency.html"
   - "/2014/05/10/lynch-pub.html"
-  - "/2021/04/14/redundancy.html"
 dissimilar_posts:
   - "/2012/01/10/drive-failure.html"
 ---
