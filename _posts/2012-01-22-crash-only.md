@@ -11,9 +11,9 @@ title: The properties of crash-only software
 
 
 related_posts:
+  - "/2025/11/20/what-now.html"
   - "/2021/05/24/metastable.html"
   - "/2025/06/02/hotos.html"
-  - "/2020/06/23/code.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---
