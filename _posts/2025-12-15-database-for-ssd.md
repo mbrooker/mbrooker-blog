@@ -62,9 +62,9 @@ Here's me talking about the shape of that trade-off at re:Invent this year:
 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/SNnUpYvBfow?si=hRTXS5kyHtyXW7zB&amp;start=3260" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-There's no clear answer here, because there are real trade-offs between the two approaches. But do make sure to ask your database vendor whether those impressive latency benchmarks are running where you application actually runs. 
+There's no clear answer here, because there are real trade-offs between the two approaches. But do make sure to ask your database vendor whether those impressive latency benchmarks are running where you application actually runs. In the spirit of the original question, though, the incredible bandwidth and latency availability in modern datacenter networks is as transformative as SSDs in database designs. Or should be.
 
-While we're incurring the latency cost of synchronous replication, we may as well get [strongly consistent](https://brooker.co.za/blog/2025/11/18/consistency.html) scale-out reads for free. In DSQL, we do this using high-quality hardware clocks that [you can use too](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-time.html).
+While we're incurring the latency cost of synchronous replication, we may as well get [strongly consistent](https://brooker.co.za/blog/2025/11/18/consistency.html) scale-out reads for free. In DSQL, we do this using high-quality hardware clocks that [you can use too](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-time.html). Another nice win from modern hardware. There are other approaches too.
 
 That's answer number four for me: The modern database uses high-quality clocks and knowledge of actual application architectures to optimize for real-world performance (like latency in multiple availability zones or regions) without compromising on strong consistency.
 
