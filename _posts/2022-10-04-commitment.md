@@ -11,9 +11,9 @@ title: "Atomic Commitment: The Unscalability Protocol"
 
 
 related_posts:
+  - "/2025/12/15/database-for-ssd.html"
   - "/2023/02/07/hot-keys.html"
   - "/2024/02/12/parameters.html"
-  - "/2024/12/05/inside-dsql-writes.html"
 dissimilar_posts:
   - "/2015/05/24/sodium-carbonate.html"
 ---
