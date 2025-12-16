@@ -30,6 +30,10 @@ Over on X, [Ben Dicken asked](https://x.com/BenjDicken/status/200019774147838402
 
 How might we tackle this question quantitatively for the modern transaction-orientated database?
 
+But first, the bigger picture. It's not only SSDs that have come along since databases like Postgres were first designed. We also have the cloud, with deployments to excellent datacenter infrastructure, including multiple independent datacenters with great network connectivity between them, available to all. Datacenter networks offer 1000x (or more) increased throughput, along with latency in the microseconds. Servers with hundreds of cores and thousands of gigabytes of RAM are mainstream.
+
+Applications have changed too. Companies are global, businesses are 24/7. Down time is expensive, and that expense can be measured. The security and compliance environment is much more demanding. Builders want to deploy in seconds, not days.
+
 **Approach One: The Five Minute Rule**
 
 Perhaps my single favorite systems paper, [The 5 Minute Rule...](https://dsf.berkeley.edu/cs286/papers/fiveminute-tr1986.pdf) by Jim Gray and Franco Putzolu gives us a very simple way to answer one of the most important questions in systems: how big should caches be? The five minute rule is that, back in 1986, if you expected to read a page again within five minutes you should keep in in RAM. If not, you should keep it on disk. The basic logic is that you look at the page that's least likely to be re-used. If it's cheaper to keep around until it's next expected re-use, then you should keep more. If it's cheaper to reload from storage than keep around, then you should keep less<sup>[1](#foot1)</sup>. Let's update the numbers for 2025, assuming that pages are around 32kB<sup>[2](#foot2)</sup> (this becomes important later).
