@@ -32,13 +32,13 @@ How might we tackle this question quantitatively for the modern transaction-orie
 
 **Approach One: The Five Minute Rule**
 
-Perhaps my single favorite systems paper, [The 5 Minute Rule...](https://dsf.berkeley.edu/cs286/papers/fiveminute-tr1986.pdf) by Jim Gray and Franco Putzolu gives us a very simple way to answer one of the most important questions in systems: how big should caches be? The five minute rule is that, back in 1986, if you expected to read a page again within five minutes you should keep in in RAM. If not, you should keep it on disk<sup>[1](#foot1)</sup>. Let's update the numbers for 2025, assuming that pages are around 32kB<sup>[2](#foot2)</sup> (this becomes important later).
+Perhaps my single favorite systems paper, [The 5 Minute Rule...](https://dsf.berkeley.edu/cs286/papers/fiveminute-tr1986.pdf) by Jim Gray and Franco Putzolu gives us a very simple way to answer one of the most important questions in systems: how big should caches be? The five minute rule is that, back in 1986, if you expected to read a page again within five minutes you should keep in in RAM. If not, you should keep it on disk. The basic logic is that you look at the page that's least likely to be re-used. If it's cheaper to keep around until it's next expected re-use, then you should keep more. If it's cheaper to reload from storage than keep around, then you should keep less<sup>[1](#foot1)</sup>. Let's update the numbers for 2025, assuming that pages are around 32kB<sup>[2](#foot2)</sup> (this becomes important later).
 
- The EC2 `i8g.48xlarge` [delivers about 1.8 million](https://docs.aws.amazon.com/ec2/latest/instancetypes/so.html) read iops of this size, at a price of around $0.004576 per second, or \\(1 \times 10^{-9}\\) dollars per transfer (assuming we're allocating about 40% of the instance price to storage). It also has enough RAM for about 50 million pages of this size, costing around \\(3 \times 10^{-11}\\) to storage a page for one second.
+The EC2 `i8g.48xlarge` [delivers about 1.8 million](https://docs.aws.amazon.com/ec2/latest/instancetypes/so.html) read iops of this size, at a price of around $0.004576 per second, or \\(10^{-9}\\) dollars per transfer (assuming we're allocating about 40% of the instance price to storage). About one dollar per billion reads. It also has enough RAM for about 50 million pages of this size, costing around \\(3 \times 10^{-11}\\) dollars to storage a page for one second.
 
- So, on this instance type, we should size our RAM cache to store pages for about 30 seconds. Not too different from Gray and Putzolu's result 40 years ago!
+So, on this instance type, we should size our RAM cache to store pages for about 30 seconds. Not too different from Gray and Putzolu's result 40 years ago!
 
- That's answer number one: the database should have a cache sized so that the hot set contains pages expected to be accessed in the next 30 seconds, for optimal cost. For optimal latency, however, the cache may want to be considerably bigger.
+That's answer number one: the database should have a cache sized so that the hot set contains pages expected to be accessed in the next 30 seconds, for optimal cost. For optimal latency, however, the cache may want to be considerably bigger.
 
  **Approach Two: The Throughput/IOPS Breakeven Point**
 
@@ -46,11 +46,13 @@ The next question is what size accesses we want to send to our storage devices t
 
 SSDs are much faster on both throughput and iops. They're less sensitive than spinning drives to workload patterns, but read/write ratios and the fullness of the drives still matter. Absent benchmarking on the actual hardware with the real workload, my [rule of thumb](https://brooker.co.za/blog/2022/12/15/thumb.html) is that SSDs are throughput limited for transfers bigger than 32kB, and iops limited for transfers smaller than 32kB.
 
+Making transfers bigger than 32kB doesn't help throughput much, reduces IOPS, and probably makes the cache less effective because of [false sharing](https://en.wikipedia.org/wiki/False_sharing) and related effects. This is especially important for workloads with poor [spatial locality](https://brooker.co.za/blog/2025/10/22/uuidv7.html).
+
 So that's answer number two: we want our transfers to disk not to be much smaller than 32kB on average, or we're walking away from throughput.
 
 **Approach Three: Durability and Replication**
 
-Building reads on local SSDs is great: tons of throughput, tons of iops. Writes on local SSDs, on the other hand, have the distinct problem of only being durable on the local box, which is unacceptable for most workloads. Modern hardware is very reliable, but thinking through the business risks of losing data on failover isn't very fun at all, so let's assume that our modern database is going to replicate off-box, making at least one more synchronous copy. Ideally in a different availability zone.
+Building reads on local SSDs is great: tons of throughput, tons of iops. Writes on local SSDs, on the other hand, have the distinct problem of only being durable on the local box, which is unacceptable for most workloads. Modern hardware is very reliable, but thinking through the business risks of losing data on failover isn't very fun at all, so let's assume that our modern database is going to replicate off-box, making at least one more synchronous copy. Ideally in a different availability zone (AZ).
 
 That `i8g.48xlarge` we were using for our comparison earlier has 100Gb/s (or around 12GB/s) of network bandwidth. That puts a cap on how much write throughput we can have for a single-leader database. Cross-AZ latency in EC2 varies from a couple hundred microseconds to a millisecond or two, which puts a minimum on our commit latency. 
 
@@ -92,6 +94,6 @@ Other topics worth covering include avoiding copies on IO, co-design with virtua
 
 *Footnotes*
 
-1. <a name="foot1"></a> The reasoning is slightly smarter, thinking about the *marginal* page and *marginal* cost of memory, but this simplification works for our purposes here.
+1. <a name="foot1"></a> The reasoning is slightly smarter, thinking about the *marginal* page and *marginal* cost of memory, but this simplification works for our purposes here. The *marginal* cost of memory is particularly interesting in a provisioned system, because it varies between zero (you've paid for it already) and huge (you need a bigger instance size). One of the really nice things about serverless (like DSQL) and dynamic scaling (like Aurora Serverless) is that it makes the marginal cost constant, greatly simplifying the task of reasoning about cache size.
 2. <a name="foot2"></a> Yes, I know that pages are typically 4kB or 2MB, but bear with me here.
 3. <a name="foot3"></a> Sorry [ARIES](https://web.stanford.edu/class/cs345d-01/rl/aries.pdf).
