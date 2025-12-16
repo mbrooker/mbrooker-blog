@@ -28,7 +28,7 @@ Over on X, [Ben Dicken asked](https://x.com/BenjDicken/status/200019774147838402
 > Design decisions like write-ahead logs, large page sizes, and buffering table writes in bulk were built around disks where I/O was SLOW, and where sequential I/O was order(s)-of-magnitude faster than random.
 > If we had to throw these databases away and begin from scratch in 2025, what would change and what would remain?
 
-How might we tackle this question quantitatively? 
+How might we tackle this question quantitatively for the modern transaction-orientated database?
 
 **Approach One: The Five Minute Rule**
 
@@ -84,9 +84,11 @@ B-Trees versus LSM-trees vs B-Tree variants versus LSM variants versus other dat
 
 > If we had to throw these databases away and begin from scratch in 2025, what would change and what would remain?
 
-I'd keep the relational model, atomicity, isolation (but would probably pick `SNAPSHOT` as a default), strong consistency, SQL, and the other core design decisions of relational databases. But I'd move durability, read and write scale, and high availability into being distributed rather than single system concerns. I think that helps with performance and cost, while making these properties easier to achieve. I'd mostly toss out local durability and recovery, and all the huge history of optimizations and data structures around that<sup>[3](#foot3)</sup>, in favor of getting better properties in the distributed setting. I'd pay more attention to internal strong isolation (in the security sense) between clients and workloads. I'd size caches for a [working set](https://denninginstitute.com/pjd/PUBS/WSModel_1968.pdf) of between 30 seconds and 5 minutes of accesses. I'd optimize for read transfers around that 32kB sweet spot from local SSD, and the around 8kB sweet spot for networks.
+I'd keep the relational model, atomicity, isolation (but would probably pick `SNAPSHOT` as a default), strong consistency, SQL, interactive transactions, and the other core design decisions of relational databases. But I'd move durability, read and write scale, and high availability into being distributed rather than single system concerns. I think that helps with performance and cost, while making these properties easier to achieve. I'd mostly toss out local durability and recovery, and all the huge history of optimizations and data structures around that<sup>[3](#foot3)</sup>, in favor of getting better properties in the distributed setting. I'd pay more attention to internal strong isolation (in the security sense) between clients and workloads. I'd size caches for a [working set](https://denninginstitute.com/pjd/PUBS/WSModel_1968.pdf) of between 30 seconds and 5 minutes of accesses. I'd optimize for read transfers around that 32kB sweet spot from local SSD, and the around 8kB sweet spot for networks.
 
 Probably more stuff too, but this is long enough as-is.
+
+Other topics worth covering include avoiding copies on IO, co-design with virtualization (e.g. [see our Aurora Serverless paper](https://www.amazon.science/publications/resource-management-in-aurora-serverless)), trade-offs of batching, how the relative performance of different isolation levels changes, what promises to give clients, encryption and authorization of data at rest and in motion, dealing with very hot single items, new workloads like vector, verifiable replication journals, handing off changes to analytics systems, access control, multi-tenancy, forking and merging, and even locales.
 
 *Footnotes*
 
