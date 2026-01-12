@@ -3,9 +3,9 @@ layout: post
 title: "What Does a Database for SSDs Look Like?"
 
 related_posts:
-  - "/2024/04/25/memorydb.html"
-  - "/2025/11/02/thinking-dsql.html"
   - "/2022/10/04/commitment.html"
+  - "/2021/03/25/latency-bandwidth.html"
+  - "/2012/02/11/latency-lags-bandwidth.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---

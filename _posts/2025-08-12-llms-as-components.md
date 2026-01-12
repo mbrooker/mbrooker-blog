@@ -4,8 +4,8 @@ title: "LLMs as Parts of Systems"
 
 related_posts:
   - "/2025/10/12/barbarians.html"
+  - "/2025/12/16/natural-language.html"
   - "/2022/07/29/getting-into-tla.html"
-  - "/2019/04/03/learning.html"
 dissimilar_posts:
   - "/2022/02/28/retries.html"
 ---

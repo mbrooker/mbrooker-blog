@@ -15,7 +15,7 @@ related_posts:
   - "/2022/10/04/commitment.html"
   - "/2021/01/22/cloud-scale.html"
 dissimilar_posts:
-  - "/2021/08/11/arecibo.html"
+  - "/2025/12/16/natural-language.html"
 ---
 {{ page.title }}
 ================
