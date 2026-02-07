@@ -18,7 +18,7 @@ Where does that leave those of us who have built careers in technology? Our road
 
 On the first road we can see this as the end to a craft we have loved. The slow end of *programming* as an economic discipline, as weaving, ploughing, and coopering went before. It is reasonable and rational to feel a sense of loss, and a sense of uncertainty. With the loss of the craft comes the loss of the economic moment where that craft was valued beyond nearly any other. Perhaps any other in history. It is irrational to feel denial. You are here.
 
-On the second road we can see this moment as the beginning of something new. With new tools comes greater opportunity than ever. Greater economic opportunity for those who value that. Greater technical opportunity for those who value that. The most powerful set of new tools since the dawn of computing itself. With these tools come risks, and with risk comes opportunity. With these tools comes new industries, new fields of research, and new careers. All bring opportunity.
+On the second road we can see this moment as the beginning of something new. With new tools comes greater opportunity than ever. Greater economic opportunity for those who value that. Greater technical opportunity for those who value that. The most powerful set of new tools since the dawn of computing itself. With these tools come risk, and with risk comes opportunity. With these tools come new industries, new fields of research, and new careers. All bring opportunity.
 
 *The First Road*
 
@@ -28,7 +28,7 @@ He made a small fortune along this path. Not a large one, but enough to keep his
 
 But those that succeed along this road will increasingly be those that acknowledge what they're doing, and why they're doing it. Picking up the parts of an old world, now gone, but intentionally.
 
-There will still be joy in programming. Just as there's joy in joinery, knitting, and hiking. You're not wrong to love programming. I love it too. You're not wrong to feel a deep sense of loss. I feel it to.
+There will still be joy in programming. Just as there's joy in joinery, knitting, and hiking. You're not wrong to love programming. I love it too. You're not wrong to feel a deep sense of loss. I feel it too.
 
 *The Second Road*
 
