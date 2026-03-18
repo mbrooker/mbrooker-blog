@@ -10,7 +10,7 @@ title: "Music To Build Agents By"
 
 Press play, then start reading:
 
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/40xhyXscddY?si=sBIe6bSLtdeRcE4Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/40xhyXscddY?si=P4Vm3Ol3IhwNKlUj&amp;start=540" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 Want to learn how to think about agent policy? Start with Goethe's [Der Zauberlehrling](https://oxfordsong.org/song/der-zauberlehrling).
 
@@ -40,3 +40,12 @@ And this is also why they need policy (and should be [in a box](https://brooker.
 > Pour down on my head! 
 
 Policy layers like AgentCore Policy allow us to define limits on the agent's behavior. They allow us to make sure that agents stop when the basin is full, and to avoid pouring water all over the floor. That's important even if your agent is insulated from adversaries, and if your model is free from hallucinations. In fact, it becomes more and more important as models become more powerful, and able to solve longer-running problems.
+
+Now, jump ahead to here:
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/40xhyXscddY?si=P4Vm3Ol3IhwNKlUj&amp;start=650" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+> Ah, my master comes at last!
+> Sir, I'm in desperate straits!
+> The spirits I summoned -
+> I can't get rid of them.
