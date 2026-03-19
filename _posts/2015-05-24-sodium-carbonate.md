@@ -12,8 +12,8 @@ title: "Sodium Carbonate, and Ramenized Pasta"
 
 related_posts:
   - "/2013/01/20/two-phase.html"
+  - "/2026/02/25/sfq.html"
   - "/2014/03/08/model-checking.html"
-  - "/2019/06/17/chernobyl.html"
 dissimilar_posts:
   - "/2012/09/02/expect-less.html"
 ---

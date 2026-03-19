@@ -13,7 +13,7 @@ title: "Two Farmers and Common Knowledge"
 related_posts:
   - "/2014/01/12/ben-or.html"
   - "/2014/05/10/lynch-pub.html"
-  - "/2014/09/21/liskov-pub.html"
+  - "/2026/02/25/sfq.html"
 dissimilar_posts:
   - "/2013/12/14/intel-hle.html"
 ---

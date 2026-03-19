@@ -2,6 +2,12 @@
 layout: post
 title: "Music To Build Agents By"
 
+related_posts:
+  - "/2026/01/12/agent-box.html"
+  - "/2025/09/18/firecracker.html"
+  - "/2018/06/20/littles-law.html"
+dissimilar_posts:
+  - "/2013/01/06/volatile.html"
 ---
 {{ page.title }}
 ================

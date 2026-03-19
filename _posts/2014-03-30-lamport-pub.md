@@ -15,7 +15,7 @@ related_posts:
   - "/2014/09/21/liskov-pub.html"
   - "/2014/01/12/ben-or.html"
 dissimilar_posts:
-  - "/2021/08/11/arecibo.html"
+  - "/2026/03/18/apprentice.html"
 ---
 {{ page.title }}
 ================

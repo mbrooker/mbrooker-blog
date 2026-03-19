@@ -15,7 +15,7 @@ related_posts:
   - "/2014/07/16/pacelc.html"
   - "/2018/02/25/availability-liveness.html"
 dissimilar_posts:
-  - "/2020/07/28/fish.html"
+  - "/2026/03/18/apprentice.html"
 ---
 {{ page.title }}
 ================

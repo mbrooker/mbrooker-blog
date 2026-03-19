@@ -13,7 +13,7 @@ title: "Serial, Parallel, and Quorum Latencies"
 related_posts:
   - "/2022/04/11/simulation.html"
   - "/2022/10/21/nudge.html"
-  - "/2020/08/06/erlang.html"
+  - "/2026/02/25/sfq.html"
 dissimilar_posts:
   - "/2019/08/12/kind-wicked.html"
 ---

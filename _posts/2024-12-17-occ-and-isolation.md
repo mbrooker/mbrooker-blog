@@ -15,7 +15,7 @@ related_posts:
   - "/2024/01/23/big-deal.html"
   - "/2025/02/05/feketes.html"
 dissimilar_posts:
-  - "/2021/08/11/arecibo.html"
+  - "/2026/01/21/pass-k.html"
 ---
 {{ page.title }}
 ================

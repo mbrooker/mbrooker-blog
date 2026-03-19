@@ -15,7 +15,7 @@ related_posts:
   - "/2024/06/04/scale.html"
   - "/2025/11/02/thinking-dsql.html"
 dissimilar_posts:
-  - "/2020/07/28/fish.html"
+  - "/2026/03/18/apprentice.html"
 ---
 {{ page.title }}
 ================
