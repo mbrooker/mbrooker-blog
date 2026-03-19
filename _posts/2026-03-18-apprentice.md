@@ -19,7 +19,7 @@ Want to learn how to think about agent policy? Start with Goethe's [Der Zauberle
 > You've long been a servant;
 > Obey my orders now!
 
-When I talk to customers and teams around me about agents and agent policy, and the work we're doing on [AgentCore Policy](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html) (now [GA](https://aws.amazon.com/about-aws/whats-new/2026/03/policy-amazon-bedrock-agentcore-generally-available/)), I hear a lot of folks worried about adversarial agents, about prompt injection, and about hallucinations. That's not unreasonable, because all those things exist (and all are areas we're actively working on). But the most common problem is a more basic one, more Fantasia than James Bond. 
+When I talk to customers and teams around me about agents and agent policy, and the work we're doing on [AgentCore Policy](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html) (now [GA](https://aws.amazon.com/about-aws/whats-new/2026/03/policy-amazon-bedrock-agentcore-generally-available/)) and [Strands Steering](https://strandsagents.com/docs/user-guide/concepts/plugins/steering/), I hear a lot of folks worried about adversarial agents, about prompt injection, and about hallucinations. That's not unreasonable, because all those things exist, and are worth paying attention to. But the most common problem is a more basic one, more Fantasia than James Bond. 
 
 AI agents are persistent problem solvers. You ask them to solve a problem, and they'll go to work solving the problem.
 
@@ -39,7 +39,7 @@ And this is also why they need policy (and should be [in a box](https://brooker.
 > Alas! a hundred rivers
 > Pour down on my head! 
 
-Policy layers like AgentCore Policy allow us to define limits on the agent's behavior. They allow us to make sure that agents stop when the basin is full, and to avoid pouring water all over the floor. That's important even if your agent is insulated from adversaries, and if your model is free from hallucinations. In fact, it becomes more and more important as models become more powerful, and able to solve longer-running problems.
+Policy layers like AgentCore Policy and structured steering like Strands Steering allow us to define limits on the agent's behavior. They allow us to make sure that agents stop when the basin is full, and to avoid pouring water all over the floor. That's important even if your agent is insulated from adversaries, and if your model is free from hallucinations. In fact, it becomes more and more important as models become more powerful, and able to solve longer-running problems.
 
 Now, jump ahead to here:
 
