@@ -36,7 +36,9 @@ And the way you're going to know that, right now, is by getting back on the ice.
 
 Over the next couple of years, the most valuable people to have on a software team are going to be experienced folks who're actively working to keep their heuristics fresh. Who can combine curiosity with experience. Among the least valuable people to have on a software team are experienced folks who aren't willing to change their thinking. Beyond that, it's hard to see.
 
-This is going to be hard for some folks. It's hard to admit to admit where you're wrong. It's hard to go back to being a beginner. It's easy to stick your fingers in your ears and say "No, it's the children who are wrong". My advice is to not be that guy.
+This is going to be hard for some folks. It's hard to admit where you're wrong. It's hard to go back to being a beginner. It's easy to stick your fingers in your ears and say "No, it's the children who are wrong". My advice is to not be that guy.
+
+The good news? It's as fun as hell. Get building, get learning, make something exist that you couldn't imagine before. 
 
 **Footnotes**
 
