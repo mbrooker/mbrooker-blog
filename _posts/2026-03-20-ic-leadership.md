@@ -8,7 +8,7 @@ title: "My heuristics are wrong. What now?"
 
 <p class="meta">More words. More meaning?</p>
 
-*Some people who ask me for advice at get a lot of words in reply. Sometimes, those responses aren't specific to my particular workplace, and so I share them here. In the past, I've written about [echo chambers](https://brooker.co.za/blog/2025/06/20/career.html), [writing](https://brooker.co.za/blog/2022/11/08/writing.html), [writing for an audience](https://brooker.co.za/blog/2023/09/21/audience.html), [time management](https://brooker.co.za/blog/2024/02/06/time.html), and [getting big things done](https://brooker.co.za/blog/2020/10/19/big-changes.html).*
+*Some people who ask me for advice get a lot of words in reply. Sometimes, those responses aren't specific to my particular workplace, and so I share them here. In the past, I've written about [echo chambers](https://brooker.co.za/blog/2025/06/20/career.html), [writing](https://brooker.co.za/blog/2022/11/08/writing.html), [writing for an audience](https://brooker.co.za/blog/2023/09/21/audience.html), [time management](https://brooker.co.za/blog/2024/02/06/time.html), and [getting big things done](https://brooker.co.za/blog/2020/10/19/big-changes.html).*
 
 Do you remember *Cool Runnings*? In the movie, John Candy is a retired bobsled champion, who uses his experience, connections, and lovable curmudgeon character to turn a rag-tag group of sprinters into an olympic bobsled team. A lot of principal engineer types think of themselves this way: they used to bobsled, they don't bobsled, but they still know the skills and the people and the equipment. 
 
@@ -24,7 +24,7 @@ But you're a tech leader, and you need to lead, and leading is heavily based on 
 
 > The victorious man in the day of crisis is the man who has the serenity to accept what he cannot help and the courage to change what must be altered.<sup>[1](#foot1)</sup>
 
-Let me assume that you want to continue to be a valuable tech leader. You want your teams and organizations to succeed. That you're willing to sound less smart and less sure, in interests of being right and helpful.
+Let me assume that you want to continue to be a valuable tech leader. You want your teams and organizations to succeed. That you're willing to sound less smart and less sure, in the interests of being right and helpful.
 
 In that case, and I hope that is the case, your job has changed. Your job, for the foreseeable future, is to have the humility to accept that many of your heuristics are wrong, the courage to believe some are still right, and the curiosity to actively learn the difference. 
 
