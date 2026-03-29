@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>High-Frequency Hearing Test</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+.container { max-width: 540px; width: 100%; padding: 2rem; }
+h1 { text-align: center; margin-bottom: .5rem; color: #fff; font-size: 1.5rem; }
+.subtitle { text-align: center; color: #888; margin-bottom: 2rem; font-size: .9rem; }
+.card { background: #16213e; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+label { display: block; margin-bottom: .5rem; font-weight: 600; }
+select, button { font-size: 1rem; font-family: inherit; }
+select { width: 100%; padding: .6rem; border-radius: 8px; border: 1px solid #333; background: #0f3460; color: #fff; }
+button { padding: .7rem 1.4rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background .2s; }
+.btn-primary { background: #e94560; color: #fff; }
+.btn-primary:hover { background: #c73650; }
+.btn-play { background: #0f3460; color: #fff; min-width: 100px; }
+.btn-play:hover { background: #1a4a8a; }
+.btn-play:disabled { opacity: .4; cursor: default; }
+.actions { display: flex; gap: 1rem; justify-content: center; margin: 1rem 0; }
+.abx-buttons { display: flex; gap: 1rem; justify-content: center; margin-top: 1rem; }
+.abx-buttons button { min-width: 120px; padding: .8rem; font-size: 1.1rem; }
+.progress { text-align: center; color: #aaa; margin-bottom: .5rem; }
+.stats { text-align: center; color: #aaa; font-size: .85rem; margin-bottom: .5rem; }
+.pval { font-weight: 700; }
+.pval.sig { color: #95d5b2; }
+.pval.nonsig { color: #f4a0a0; }
+.pval.pending { color: #aaa; }
+.result { text-align: center; padding: 1rem; border-radius: 8px; font-weight: 700; font-size: 1.1rem; margin-top: 1rem; }
+.result.pass { background: #1b4332; color: #95d5b2; }
+.result.fail { background: #4a1520; color: #f4a0a0; }
+.history { margin-top: .5rem; }
+.history-item { display: flex; justify-content: space-between; padding: .3rem 0; border-bottom: 1px solid #1a1a2e; font-size: .9rem; }
+.tag { padding: .1rem .5rem; border-radius: 4px; font-size: .8rem; font-weight: 600; }
+.tag.pass { background: #1b4332; color: #95d5b2; }
+.tag.fail { background: #4a1520; color: #f4a0a0; }
+#setup .center { text-align: center; margin-top: 1rem; }
+.info { color: #888; font-size: .85rem; text-align: center; margin-top: .5rem; }
+.caveats p { color: #888; font-size: .82rem; line-height: 1.4; }
+.caveats b { color: #bbb; }
+kbd { background: #0f3460; border: 1px solid #444; border-radius: 4px; padding: .1rem .4rem; font-size: .75rem; font-family: inherit; color: #ccc; }
+.shortcuts { text-align: center; color: #666; font-size: .8rem; margin-top: .75rem; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🎧 High-Frequency Hearing Test</h1>
+<p class="subtitle">ABX test to find the limit of your high-frequency hearing</p>
+
+<div id="setup" class="card">
+  <label for="freq">Starting Frequency</label>
+  <select id="freq"></select>
+  <p class="info">Use headphones for best results. Make sure volume is at a comfortable level.</p>
+  <div class="center"><button class="btn-primary" onclick="startTest()">Start Test</button></div>
+</div>
+
+<div id="test" class="card" style="display:none">
+  <div class="progress" id="trialInfo"></div>
+  <div class="stats" id="statsInfo"></div>
+  <p style="text-align:center;margin-bottom:.5rem;" id="freqLabel"></p>
+  <div class="actions">
+    <button class="btn-play" id="btnA" onclick="playA()"><kbd>1</kbd> Play A</button>
+    <button class="btn-play" id="btnB" onclick="playB()"><kbd>2</kbd> Play B</button>
+    <button class="btn-play" id="btnX" onclick="playX()"><kbd>3</kbd> Play X</button>
+  </div>
+  <p style="text-align:center;font-size:.9rem;color:#aaa;">Is X the same as A or B?</p>
+  <div class="abx-buttons">
+    <button class="btn-primary" id="guessA" onclick="submitGuess('A')"><kbd>Z</kbd> X = A</button>
+    <button class="btn-primary" id="guessB" onclick="submitGuess('B')"><kbd>M</kbd> X = B</button>
+  </div>
+  <div class="shortcuts">Keyboard: <kbd>1</kbd> Play A · <kbd>2</kbd> Play B · <kbd>3</kbd> Play X · <kbd>Z</kbd> Answer A · <kbd>M</kbd> Answer B</div>
+  <div id="result"></div>
+</div>
+
+<div id="history" class="card history" style="display:none">
+  <label>Results</label>
+  <div id="historyList"></div>
+</div>
+
+<div class="card caveats">
+  <label>⚠ Caveats</label>
+  <p><b>False positives:</b> Non-linearities in your headphones or DAC can create intermodulation distortion, aliasing the high-frequency tone into audible lower frequencies. You may be detecting the distortion artifact, not the tone itself.</p>
+  <p style="margin-top:.5rem;"><b>False negatives:</b> Many headphones and speakers roll off well before 20 kHz. A "fail" may mean your equipment can't reproduce the frequency, not that you can't hear it.</p>
+  <p style="margin-top:.5rem;">For best results, use high-quality headphones with a known flat frequency response.</p>
+</div>
+</div>
+
+<script>
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let ctx, currentFreq, trials, correct, trialNum, xIsA, playing = false;
+let activeOscs = []; // track active oscillators for stopping
+const REQUIRED_TRIALS = 10;
+const SIGNIFICANCE_CORRECT = 8;
+
+const MELODY = [
+  [523.25, .25], [587.33, .25], [659.25, .25], [698.46, .25],
+  [783.99, .5], [783.99, .5],
+  [880, .25], [880, .25], [880, .25], [880, .25],
+  [783.99, 1]
+];
+
+// Binomial CDF: P(X >= k) where X ~ Bin(n, 0.5)
+function binomialPValue(k, n) {
+  let p = 0;
+  for (let i = k; i <= n; i++) {
+    p += comb(n, i) * Math.pow(0.5, n);
+  }
+  return p;
+}
+
+function comb(n, k) {
+  if (k > n) return 0;
+  if (k === 0 || k === n) return 1;
+  let r = 1;
+  for (let i = 0; i < k; i++) r = r * (n - i) / (i + 1);
+  return r;
+}
+
+function updateStats() {
+  const el = document.getElementById('statsInfo');
+  if (trials === 0) {
+    el.innerHTML = `<span class="pval pending">p-value: — (no data yet)</span>`;
+    return;
+  }
+  const p = binomialPValue(correct, trials);
+  const sig = p < 0.05;
+  const cls = sig ? 'sig' : (trials >= REQUIRED_TRIALS ? 'nonsig' : 'pending');
+  el.innerHTML = `${correct}/${trials} correct · <span class="pval ${cls}">p = ${p < 0.001 ? p.toExponential(1) : p.toFixed(3)}${sig ? ' ✓ significant' : ''}</span>`;
+}
+
+function startTest() {
+  ctx = ctx || new AudioCtx();
+  currentFreq = parseInt(document.getElementById('freq').value);
+  beginRound();
+}
+
+function beginRound() {
+  trials = 0; correct = 0; trialNum = 0;
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('test').style.display = 'block';
+  nextTrial();
+}
+
+function nextTrial() {
+  trialNum++;
+  xIsA = Math.random() < 0.5;
+  document.getElementById('freqLabel').textContent = `Testing: ${fmtFreq(currentFreq)}`;
+  document.getElementById('trialInfo').textContent = `Trial ${trialNum} of ${REQUIRED_TRIALS}`;
+  document.getElementById('result').innerHTML = '';
+  updateStats();
+  setGuessButtons(true);
+  setPlayButtons(true);
+}
+
+function setPlayButtons(enabled) {
+  ['btnA','btnB','btnX'].forEach(id => document.getElementById(id).disabled = !enabled);
+}
+
+function setGuessButtons(enabled) {
+  ['guessA','guessB'].forEach(id => document.getElementById(id).disabled = !enabled);
+}
+
+function setButtons(enabled) { setPlayButtons(enabled); setGuessButtons(enabled); }
+
+function stopPlayback() {
+  const now = ctx.currentTime;
+  activeOscs.forEach(o => {
+    try {
+      // Ramp down over 50ms to avoid click on early stop
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(1, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      o.disconnect();
+      o.connect(g).connect(ctx.destination);
+      o.stop(now + 0.06);
+    } catch(e) {}
+  });
+  activeOscs = [];
+  playing = false;
+  if (playbackTimeout) { clearTimeout(playbackTimeout); playbackTimeout = null; }
+}
+
+let playbackTimeout = null;
+
+function playTone(withHighFreq) {
+  if (playing) stopPlayback();
+  playing = true;
+  setPlayButtons(false);
+  // Keep guess buttons enabled so user can answer while playing
+
+  let t = ctx.currentTime;
+  MELODY.forEach(([freq, dur]) => {
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.3, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur - 0.02);
+    osc.connect(g).connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + dur);
+    activeOscs.push(osc);
+    t += dur;
+  });
+
+  if (withHighFreq) {
+    const hfOsc = ctx.createOscillator();
+    hfOsc.type = 'sine';
+    hfOsc.frequency.value = currentFreq;
+    const hfGain = ctx.createGain();
+    hfGain.gain.setValueAtTime(0.001, ctx.currentTime);
+    hfGain.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime + 0.02);
+    hfGain.gain.setValueAtTime(0.15, t - 0.2);
+    hfGain.gain.exponentialRampToValueAtTime(0.001, t);
+    hfOsc.connect(hfGain).connect(ctx.destination);
+    hfOsc.start(ctx.currentTime);
+    hfOsc.stop(t + 0.01);
+    activeOscs.push(hfOsc);
+  }
+
+  const totalDur = t - ctx.currentTime;
+  playbackTimeout = setTimeout(() => {
+    playing = false;
+    activeOscs = [];
+    setPlayButtons(true);
+    playbackTimeout = null;
+  }, totalDur * 1000 + 50);
+}
+
+function playA() { playTone(true); }
+function playB() { playTone(false); }
+function playX() { playTone(xIsA); }
+
+function submitGuess(guess) {
+  if (document.getElementById('guessA').disabled) return;
+  stopPlayback();
+  const isCorrect = (guess === 'A') === xIsA;
+  trials++;
+  if (isCorrect) correct++;
+
+  const p = binomialPValue(correct, trials);
+  if (trials >= REQUIRED_TRIALS || p <= 0.01) {
+    finishRound();
+  } else {
+    nextTrial();
+  }
+}
+
+function finishRound() {
+  const p = binomialPValue(correct, trials);
+  const passed = p <= 0.01;
+  updateStats();
+  const el = document.getElementById('result');
+  el.innerHTML = `<div class="result ${passed ? 'pass' : 'fail'}">${
+    passed
+      ? `✓ You can hear ${fmtFreq(currentFreq)}! (${correct}/${trials}, p=${p.toFixed(3)})`
+      : `✗ Cannot confirm you hear ${fmtFreq(currentFreq)} (${correct}/${trials}, p=${p.toFixed(3)})`
+  }</div>`;
+  addHistory(currentFreq, passed, correct, trials);
+
+  if (passed) {
+    const nextFreq = nextHigherFreq(currentFreq);
+    if (nextFreq) {
+      el.innerHTML += `<div style="text-align:center;margin-top:1rem;">
+        <button class="btn-primary" onclick="goNext(${nextFreq})">Try ${fmtFreq(nextFreq)} →</button>
+        <button class="btn-play" style="margin-left:.5rem" onclick="backToSetup()">Done</button></div>`;
+    } else {
+      el.innerHTML += `<div style="text-align:center;margin-top:.5rem;color:#95d5b2;">You've reached the top of the range!</div>
+        <div style="text-align:center;margin-top:.5rem;"><button class="btn-play" onclick="backToSetup()">Done</button></div>`;
+    }
+  } else {
+    el.innerHTML += `<div style="text-align:center;margin-top:1rem;">
+      <button class="btn-primary" onclick="beginRound()">Retry ${fmtFreq(currentFreq)}</button>
+      <button class="btn-play" style="margin-left:.5rem" onclick="backToSetup()">Done</button></div>`;
+  }
+  setButtons(false);
+}
+
+function goNext(freq) { currentFreq = freq; beginRound(); }
+function backToSetup() {
+  document.getElementById('test').style.display = 'none';
+  document.getElementById('setup').style.display = 'block';
+}
+
+function fmtFreq(f) { return f >= 1000 ? (f/1000) + ' kHz' : f + ' Hz'; }
+
+const FREQS = [];
+for (let f = 8000; f <= 20000; f += 500) FREQS.push(f);
+// Populate select
+const sel = document.getElementById('freq');
+FREQS.forEach(f => {
+  const o = document.createElement('option');
+  o.value = f; o.textContent = fmtFreq(f);
+  if (f === 16000) o.selected = true;
+  sel.appendChild(o);
+});
+function nextHigherFreq(f) { const i = FREQS.indexOf(f); return i >= 0 && i < FREQS.length - 1 ? FREQS[i+1] : null; }
+
+function addHistory(freq, passed, c, t) {
+  document.getElementById('history').style.display = 'block';
+  const list = document.getElementById('historyList');
+  list.innerHTML = `<div class="history-item"><span>${fmtFreq(freq)}</span><span>${c}/${t}</span><span class="tag ${passed?'pass':'fail'}">${passed?'PASS':'FAIL'}</span></div>` + list.innerHTML;
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (document.getElementById('test').style.display === 'none') return;
+  const key = e.key.toLowerCase();
+  if (key === '1' && !document.getElementById('btnA').disabled) playA();
+  else if (key === '2' && !document.getElementById('btnB').disabled) playB();
+  else if (key === '3' && !document.getElementById('btnX').disabled) playX();
+  else if (key === 'z') submitGuess('A');
+  else if (key === 'm') submitGuess('B');
+});
+</script>
+</body>
+</html>
