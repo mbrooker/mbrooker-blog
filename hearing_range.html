@@ -13,13 +13,15 @@ h1 { text-align: center; margin-bottom: .5rem; color: #fff; font-size: 1.5rem; }
 .card { background: #16213e; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
 label { display: block; margin-bottom: .5rem; font-weight: 600; }
 select, button { font-size: 1rem; font-family: inherit; }
-select { width: 100%; padding: .6rem; border-radius: 8px; border: 1px solid #333; background: #0f3460; color: #fff; }
+select { width: 100%; padding: .6rem; border-radius: 8px; border: 1px solid #333; background: #0f3460; color: #fff; margin-bottom: .5rem; }
 button { padding: .7rem 1.4rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background .2s; }
 .btn-primary { background: #e94560; color: #fff; }
 .btn-primary:hover { background: #c73650; }
 .btn-play { background: #0f3460; color: #fff; min-width: 100px; }
 .btn-play:hover { background: #1a4a8a; }
 .btn-play:disabled { opacity: .4; cursor: default; }
+.btn-back { background: none; color: #888; font-size: .85rem; padding: .4rem .8rem; }
+.btn-back:hover { color: #ccc; }
 .actions { display: flex; gap: 1rem; justify-content: center; margin: 1rem 0; }
 .abx-buttons { display: flex; gap: 1rem; justify-content: center; margin-top: 1rem; }
 .abx-buttons button { min-width: 120px; padding: .8rem; font-size: 1.1rem; }
@@ -43,6 +45,7 @@ button { padding: .7rem 1.4rem; border: none; border-radius: 8px; cursor: pointe
 .caveats b { color: #bbb; }
 kbd { background: #0f3460; border: 1px solid #444; border-radius: 4px; padding: .1rem .4rem; font-size: .75rem; font-family: inherit; color: #ccc; }
 .shortcuts { text-align: center; color: #666; font-size: .8rem; margin-top: .75rem; }
+.test-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .5rem; }
 </style>
 </head>
 <body>
@@ -53,12 +56,21 @@ kbd { background: #0f3460; border: 1px solid #444; border-radius: 4px; padding: 
 <div id="setup" class="card">
   <label for="freq">Starting Frequency</label>
   <select id="freq"></select>
+  <label for="signalType">Signal Type</label>
+  <select id="signalType">
+    <option value="tone">Pure tone</option>
+    <option value="noise">Narrowband noise (500 Hz bandwidth)</option>
+  </select>
   <p class="info">Use headphones for best results. Make sure volume is at a comfortable level.</p>
   <div class="center"><button class="btn-primary" onclick="startTest()">Start Test</button></div>
 </div>
 
 <div id="test" class="card" style="display:none">
-  <div class="progress" id="trialInfo"></div>
+  <div class="test-header">
+    <button class="btn-back" onclick="abortTest()">← Back</button>
+    <span id="trialInfo" class="progress" style="margin:0"></span>
+    <span style="width:60px"></span>
+  </div>
   <div class="stats" id="statsInfo"></div>
   <p style="text-align:center;margin-bottom:.5rem;" id="freqLabel"></p>
   <div class="actions">
@@ -82,7 +94,8 @@ kbd { background: #0f3460; border: 1px solid #444; border-radius: 4px; padding: 
 
 <div class="card caveats">
   <label>⚠ Caveats</label>
-  <p><b>False positives:</b> Non-linearities in your headphones or DAC can create intermodulation distortion, aliasing the high-frequency tone into audible lower frequencies. You may be detecting the distortion artifact, not the tone itself.</p>
+  <p><b>Entertainment only.</b> This is not a medical or audiological diagnostic. Do not use it to assess hearing loss or make health decisions.</p>
+  <p style="margin-top:.5rem;"><b>False positives:</b> Non-linearities in your headphones or DAC can create intermodulation distortion, aliasing the high-frequency tone into audible lower frequencies. You may be detecting the distortion artifact, not the tone itself.</p>
   <p style="margin-top:.5rem;"><b>False negatives:</b> Many headphones and speakers roll off well before 20 kHz. A "fail" may mean your equipment can't reproduce the frequency, not that you can't hear it.</p>
   <p style="margin-top:.5rem;">For best results, use high-quality headphones with a known flat frequency response.</p>
 </div>
@@ -90,10 +103,9 @@ kbd { background: #0f3460; border: 1px solid #444; border-radius: 4px; padding: 
 
 <script>
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
-let ctx, currentFreq, trials, correct, trialNum, xIsA, playing = false;
-let activeOscs = []; // track active oscillators for stopping
+let ctx, currentFreq, trials, correct, trialNum, xIsA, playing = false, useNoise = false;
+let activeNodes = []; // track active audio nodes for stopping
 const REQUIRED_TRIALS = 10;
-const SIGNIFICANCE_CORRECT = 8;
 
 const MELODY = [
   [523.25, .25], [587.33, .25], [659.25, .25], [698.46, .25],
@@ -102,12 +114,9 @@ const MELODY = [
   [783.99, 1]
 ];
 
-// Binomial CDF: P(X >= k) where X ~ Bin(n, 0.5)
 function binomialPValue(k, n) {
   let p = 0;
-  for (let i = k; i <= n; i++) {
-    p += comb(n, i) * Math.pow(0.5, n);
-  }
+  for (let i = k; i <= n; i++) p += comb(n, i) * Math.pow(0.5, n);
   return p;
 }
 
@@ -134,6 +143,11 @@ function updateStats() {
 function startTest() {
   ctx = ctx || new AudioCtx();
   currentFreq = parseInt(document.getElementById('freq').value);
+  useNoise = document.getElementById('signalType').value === 'noise';
+  // Pre-compute the filtered noise buffer for this frequency
+  if (useNoise) {
+    filteredNoiseBuf = createFilteredNoiseBuffer(currentFreq, 500, 250);
+  }
   beginRound();
 }
 
@@ -147,8 +161,9 @@ function beginRound() {
 function nextTrial() {
   trialNum++;
   xIsA = Math.random() < 0.5;
-  document.getElementById('freqLabel').textContent = `Testing: ${fmtFreq(currentFreq)}`;
-  document.getElementById('trialInfo').textContent = `Trial ${trialNum} of ${REQUIRED_TRIALS}`;
+  const mode = useNoise ? 'noise' : 'tone';
+  document.getElementById('freqLabel').textContent = `Testing: ${fmtFreq(currentFreq)} (${mode})`;
+  document.getElementById('trialInfo').textContent = `Trial ${trialNum} / ${REQUIRED_TRIALS}`;
   document.getElementById('result').innerHTML = '';
   updateStats();
   setGuessButtons(true);
@@ -158,18 +173,23 @@ function nextTrial() {
 function setPlayButtons(enabled) {
   ['btnA','btnB','btnX'].forEach(id => document.getElementById(id).disabled = !enabled);
 }
-
 function setGuessButtons(enabled) {
   ['guessA','guessB'].forEach(id => document.getElementById(id).disabled = !enabled);
 }
-
 function setButtons(enabled) { setPlayButtons(enabled); setGuessButtons(enabled); }
 
+// Stop all currently playing audio with a short fade-out.
+// We can't just call stop() immediately — that would create the same
+// broadband click artifact we're trying to avoid. Instead, we disconnect
+// each active node from its current destination, re-route it through a
+// new gain node that ramps to zero over 50ms, then schedule stop() after
+// the ramp completes. The 50ms duration is short enough to feel instant
+// to the user but long enough to avoid audible transients.
 function stopPlayback() {
+  if (!ctx) return;
   const now = ctx.currentTime;
-  activeOscs.forEach(o => {
+  activeNodes.forEach(o => {
     try {
-      // Ramp down over 50ms to avoid click on early stop
       const g = ctx.createGain();
       g.gain.setValueAtTime(1, now);
       g.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
@@ -178,19 +198,236 @@ function stopPlayback() {
       o.stop(now + 0.06);
     } catch(e) {}
   });
-  activeOscs = [];
+  activeNodes = [];
   playing = false;
   if (playbackTimeout) { clearTimeout(playbackTimeout); playbackTimeout = null; }
 }
 
-let playbackTimeout = null;
+function abortTest() {
+  stopPlayback();
+  backToSetup();
+}
 
+let playbackTimeout = null;
+let filteredNoiseBuf = null; // pre-computed AudioBuffer
+
+// ============================================================================
+// FIR Bandpass Filter Design: Windowed-Sinc Method with Blackman Window
+// ============================================================================
+//
+// Background:
+//   An ideal bandpass filter has a rectangular frequency response: unity gain
+//   inside the passband, zero gain outside. The inverse Fourier transform of
+//   this rectangular response is a sinc function, which is infinite in extent.
+//   To make a practical (finite-length) filter, we truncate the sinc and apply
+//   a window function to control spectral leakage.
+//
+// Method:
+//   A bandpass filter can be constructed as the difference of two lowpass
+//   filters. A lowpass filter with cutoff frequency fc has the ideal impulse
+//   response:
+//
+//       h_lp[n] = 2·fc · sinc(2·fc·n)    where sinc(x) = sin(πx)/(πx)
+//
+//   Subtracting a lowpass at fLow from a lowpass at fHigh gives a bandpass:
+//
+//       h_bp[n] = h_lp_high[n] - h_lp_low[n]
+//
+//   where fLow = centerFreq - bandwidth/2, fHigh = centerFreq + bandwidth/2.
+//
+// Window function:
+//   We use the Blackman window, which provides ~74 dB of stopband attenuation
+//   at the cost of a wider main lobe compared to simpler windows (e.g. Hamming
+//   at ~43 dB). The Blackman window is defined as:
+//
+//       w[i] = 0.42 - 0.5·cos(2πi/(N-1)) + 0.08·cos(4πi/(N-1))
+//
+// Filter length:
+//   The transition bandwidth (the region between passband and stopband) is
+//   inversely proportional to the filter length. For a Blackman window, the
+//   approximate relationship is:
+//
+//       N ≈ 4 · sampleRate / transitionBw
+//
+//   For example, at 48 kHz sample rate with a 250 Hz transition band:
+//   N ≈ 4 · 48000 / 250 = 768 taps. We round up to an odd number to get a
+//   Type I linear-phase FIR (symmetric coefficients, integer group delay).
+//
+// Parameters:
+//   centerFreq   - Center of the passband (Hz)
+//   bandwidth    - Width of the passband (Hz)
+//   transitionBw - Width of each transition band (Hz)
+//   sampleRate   - Audio sample rate (Hz)
+//
+// Returns: Float64Array of filter coefficients (impulse response)
+// ============================================================================
+function designBandpassFIR(centerFreq, bandwidth, transitionBw, sampleRate) {
+  // Compute filter length from the transition bandwidth.
+  // The factor of 4 is specific to the Blackman window; other windows have
+  // different constants (e.g., ~3.3 for Hamming, ~1.8 for rectangular).
+  let N = Math.ceil(4 * sampleRate / transitionBw);
+  if (N % 2 === 0) N++; // Odd length → Type I FIR: symmetric, integer delay
+
+  // M is the center index; the filter is symmetric around this point.
+  // The group delay of the filter is exactly M samples.
+  const M = (N - 1) / 2;
+
+  // Convert cutoff frequencies to normalized frequency (cycles per sample).
+  // Normalized frequency = f_Hz / sampleRate, range [0, 0.5].
+  const fLow = (centerFreq - bandwidth / 2) / sampleRate;
+  const fHigh = (centerFreq + bandwidth / 2) / sampleRate;
+
+  const h = new Float64Array(N);
+  for (let i = 0; i < N; i++) {
+    const n = i - M; // sample index relative to center (ranges from -M to +M)
+
+    // Blackman window value at this sample
+    const w = 0.42 - 0.5 * Math.cos(2 * Math.PI * i / (N - 1))
+                    + 0.08 * Math.cos(4 * Math.PI * i / (N - 1));
+
+    // Ideal (unwindowed) lowpass impulse responses.
+    // At n=0, sinc(0)=1, so h_lp[0] = 2·fc (the DC gain of the lowpass).
+    let sincHigh, sincLow;
+    if (n === 0) {
+      sincHigh = 2 * fHigh;
+      sincLow = 2 * fLow;
+    } else {
+      sincHigh = Math.sin(2 * Math.PI * fHigh * n) / (Math.PI * n);
+      sincLow  = Math.sin(2 * Math.PI * fLow * n)  / (Math.PI * n);
+    }
+
+    // Bandpass = highpass_cutoff_lowpass - lowpass_cutoff_lowpass, then window.
+    h[i] = (sincHigh - sincLow) * w;
+  }
+  return h;
+}
+
+// ============================================================================
+// Filtered Noise Buffer Generation
+// ============================================================================
+//
+// We pre-compute the entire filtered noise signal at test setup time rather
+// than filtering at playback time. This avoids any real-time computational
+// load and ensures consistent audio quality.
+//
+// Process:
+//   1. Generate white noise (uniform random samples in [-1, +1]).
+//      White noise has equal energy at all frequencies — a flat power spectral
+//      density — so after bandpass filtering, only energy in the passband
+//      remains.
+//
+//   2. Apply the FIR bandpass filter via direct-form convolution:
+//          y[n] = Σ_k  h[k] · x[n-k]     for k = 0..N-1
+//      This is O(signal_length × filter_length). For ~200k samples × ~770
+//      taps, this takes a few hundred milliseconds in JavaScript — acceptable
+//      for a one-time setup cost. (An FFT-based overlap-add approach would be
+//      O(n log n) but adds complexity for little practical benefit here.)
+//
+//   3. Normalize the output so its RMS power matches the pure tone reference.
+//      A sine wave of amplitude A has RMS = A/√2. Our pure tone uses A=0.15,
+//      so target RMS = 0.15/√2 ≈ 0.106. This ensures the noise and tone
+//      stimuli are equally loud (in terms of signal power), making the ABX
+//      comparison fair across signal types.
+//
+// Parameters:
+//   centerFreq   - Center of the passband (Hz)
+//   bandwidth    - Width of the passband (Hz), e.g. 500 Hz
+//   transitionBw - Width of each transition band (Hz), e.g. 250 Hz
+// ============================================================================
+function createFilteredNoiseBuffer(centerFreq, bandwidth, transitionBw) {
+  const sampleRate = ctx.sampleRate;
+  const melodyDur = MELODY.reduce((s, [, d]) => s + d, 0);
+  const len = Math.ceil((melodyDur + 0.5) * sampleRate);
+
+  // Step 1: Generate white noise.
+  // Math.random() is uniform on [0,1); we map to [-1,+1).
+  // This is not cryptographically random, but randomness quality is
+  // irrelevant for an audio test stimulus.
+  const noise = new Float32Array(len);
+  for (let i = 0; i < len; i++) noise[i] = Math.random() * 2 - 1;
+
+  // Step 2: Design the FIR filter and apply via direct convolution.
+  const h = designBandpassFIR(centerFreq, bandwidth, transitionBw, sampleRate);
+  const N = h.length;
+
+  const out = new Float32Array(len);
+  for (let i = 0; i < len; i++) {
+    let sum = 0;
+    for (let j = 0; j < N; j++) {
+      const idx = i - j;
+      if (idx >= 0) sum += noise[idx] * h[j];
+    }
+    out[i] = sum;
+  }
+  // Note: the first N-1 samples of output are the filter's transient response
+  // (not all filter taps have input data yet). This is fine because the
+  // playback gain envelope fades in over 20ms anyway, masking the transient.
+
+  // Step 3: RMS normalization.
+  // Compute current RMS: sqrt(mean of squared samples).
+  const targetRMS = 0.15 / Math.SQRT2; // match sine wave at amplitude 0.15
+  let sumSq = 0;
+  for (let i = 0; i < len; i++) sumSq += out[i] * out[i];
+  const currentRMS = Math.sqrt(sumSq / len);
+  const scale = currentRMS > 0 ? targetRMS / currentRMS : 0;
+  for (let i = 0; i < len; i++) out[i] *= scale;
+
+  const buf = ctx.createBuffer(1, len, sampleRate);
+  buf.getChannelData(0).set(out);
+  return buf;
+}
+
+// ============================================================================
+// Noise Playback
+// ============================================================================
+// Plays the pre-filtered noise buffer through a gain envelope that fades in
+// over 20ms and fades out over 200ms. The fade-in/fade-out prevents audible
+// clicks from discontinuities at the start/end of playback (the same reason
+// we taper the pure tone). The gain envelope is 0→1→1→0, with no additional
+// scaling, because the buffer is already RMS-normalized.
+// ============================================================================
+function playNoiseBand(startTime, endTime) {
+  const src = ctx.createBufferSource();
+  src.buffer = filteredNoiseBuf;
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.001, startTime);
+  gain.gain.exponentialRampToValueAtTime(1.0, startTime + 0.02);
+  gain.gain.setValueAtTime(1.0, endTime - 0.2);
+  gain.gain.exponentialRampToValueAtTime(0.001, endTime);
+  src.connect(gain).connect(ctx.destination);
+  src.start(startTime);
+  src.stop(endTime + 0.01);
+  activeNodes.push(src);
+}
+
+// ============================================================================
+// Audio Playback
+// ============================================================================
+// Each playback consists of two layers mixed together:
+//   1. A melody made of short sine-wave notes (always present in both A and B)
+//   2. Optionally, a high-frequency stimulus (the signal under test)
+//
+// The melody serves as a masking signal: it makes the test more realistic
+// (real-world listening involves complex audio, not silence) and prevents
+// the listener from using silence-vs-sound as a cue rather than actually
+// hearing the high frequency.
+//
+// Gain envelopes:
+//   All oscillators use exponentialRampToValueAtTime for smooth amplitude
+//   transitions. We never start or stop a signal at non-zero amplitude,
+//   because an instantaneous jump in the waveform creates a broadband click
+//   (a Dirac-delta-like impulse that contains energy at all frequencies,
+//   including audible ones). Even a 20ms ramp is sufficient to push the
+//   onset/offset transient energy below audibility.
+// ============================================================================
 function playTone(withHighFreq) {
   if (playing) stopPlayback();
   playing = true;
   setPlayButtons(false);
-  // Keep guess buttons enabled so user can answer while playing
 
+  // Schedule melody notes. Each note is an independent oscillator with its
+  // own gain envelope: attack at full level, then exponential decay to ~0
+  // just before the next note starts. This gives a plucked/staccato feel.
   let t = ctx.currentTime;
   MELODY.forEach(([freq, dur]) => {
     const osc = ctx.createOscillator();
@@ -198,33 +435,46 @@ function playTone(withHighFreq) {
     osc.frequency.value = freq;
     const g = ctx.createGain();
     g.gain.setValueAtTime(0.3, t);
+    // Ramp to near-zero 20ms before note end to avoid a click at note boundary
     g.gain.exponentialRampToValueAtTime(0.001, t + dur - 0.02);
     osc.connect(g).connect(ctx.destination);
     osc.start(t);
     osc.stop(t + dur);
-    activeOscs.push(osc);
+    activeNodes.push(osc);
     t += dur;
   });
 
+  // Overlay the high-frequency test stimulus for the full melody duration.
   if (withHighFreq) {
-    const hfOsc = ctx.createOscillator();
-    hfOsc.type = 'sine';
-    hfOsc.frequency.value = currentFreq;
-    const hfGain = ctx.createGain();
-    hfGain.gain.setValueAtTime(0.001, ctx.currentTime);
-    hfGain.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime + 0.02);
-    hfGain.gain.setValueAtTime(0.15, t - 0.2);
-    hfGain.gain.exponentialRampToValueAtTime(0.001, t);
-    hfOsc.connect(hfGain).connect(ctx.destination);
-    hfOsc.start(ctx.currentTime);
-    hfOsc.stop(t + 0.01);
-    activeOscs.push(hfOsc);
+    if (useNoise) {
+      // Narrowband noise: play the pre-filtered, RMS-normalized buffer.
+      playNoiseBand(ctx.currentTime, t);
+    } else {
+      // Pure tone: a single sine oscillator at the test frequency.
+      // Amplitude 0.15 was chosen to be clearly present but not dominant
+      // over the melody (which plays at 0.3). The gain envelope ramps:
+      //   0.001 → 0.15 over 20ms  (fade in, prevents onset click)
+      //   0.15 steady              (sustain)
+      //   0.15 → 0.001 over 200ms (fade out, prevents offset click)
+      const hfOsc = ctx.createOscillator();
+      hfOsc.type = 'sine';
+      hfOsc.frequency.value = currentFreq;
+      const hfGain = ctx.createGain();
+      hfGain.gain.setValueAtTime(0.001, ctx.currentTime);
+      hfGain.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime + 0.02);
+      hfGain.gain.setValueAtTime(0.15, t - 0.2);
+      hfGain.gain.exponentialRampToValueAtTime(0.001, t);
+      hfOsc.connect(hfGain).connect(ctx.destination);
+      hfOsc.start(ctx.currentTime);
+      hfOsc.stop(t + 0.01); // stop slightly after fade completes
+      activeNodes.push(hfOsc);
+    }
   }
 
   const totalDur = t - ctx.currentTime;
   playbackTimeout = setTimeout(() => {
     playing = false;
-    activeOscs = [];
+    activeNodes = [];
     setPlayButtons(true);
     playbackTimeout = null;
   }, totalDur * 1000 + 50);
@@ -279,7 +529,11 @@ function finishRound() {
   setButtons(false);
 }
 
-function goNext(freq) { currentFreq = freq; beginRound(); }
+function goNext(freq) {
+  currentFreq = freq;
+  if (useNoise) filteredNoiseBuf = createFilteredNoiseBuffer(currentFreq, 500, 250);
+  beginRound();
+}
 function backToSetup() {
   document.getElementById('test').style.display = 'none';
   document.getElementById('setup').style.display = 'block';
@@ -289,7 +543,6 @@ function fmtFreq(f) { return f >= 1000 ? (f/1000) + ' kHz' : f + ' Hz'; }
 
 const FREQS = [];
 for (let f = 8000; f <= 20000; f += 500) FREQS.push(f);
-// Populate select
 const sel = document.getElementById('freq');
 FREQS.forEach(f => {
   const o = document.createElement('option');
@@ -305,7 +558,6 @@ function addHistory(freq, passed, c, t) {
   list.innerHTML = `<div class="history-item"><span>${fmtFreq(freq)}</span><span>${c}/${t}</span><span class="tag ${passed?'pass':'fail'}">${passed?'PASS':'FAIL'}</span></div>` + list.innerHTML;
 }
 
-// Keyboard shortcuts
 document.addEventListener('keydown', e => {
   if (document.getElementById('test').style.display === 'none') return;
   const key = e.key.toLowerCase();
@@ -314,6 +566,7 @@ document.addEventListener('keydown', e => {
   else if (key === '3' && !document.getElementById('btnX').disabled) playX();
   else if (key === 'z') submitGuess('A');
   else if (key === 'm') submitGuess('B');
+  else if (key === 'escape') abortTest();
 });
 </script>
 </body>
