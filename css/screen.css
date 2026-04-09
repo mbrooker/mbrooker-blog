@@ -355,3 +355,8 @@ ul.pubs span {
         font-weight: bold;
      }
  }
+
+.footnote {
+    font-size: 0.85em;
+    color: #555;
+}
