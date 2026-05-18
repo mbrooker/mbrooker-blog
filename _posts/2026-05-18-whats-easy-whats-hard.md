@@ -39,7 +39,7 @@ On one hand, we should see this as uncontroversial. Anybody who has built code w
 But let's look forward a little bit, and compare two problems:
 
 * Building a delightful ergonomic photo editing website.
-* Building a correct high-performance database storage engine.
+* Building a correct high-performance database storage engine<sup>[5](#foot5)</sup>.
 
 For open-loop models, the former is easier than the latter. At least in that you'll get closer to real success with a pure *vibe coding* workflow, and much closer to success on the former after a single shot. The feedback loop hypothesis, however, makes me think that the latter is actually the *easier* long-term problem.
 
@@ -59,4 +59,4 @@ The future of software development is building these feedback loops. Many hard p
 2. <a name="foot2"></a> The MacBook on my desk can add 64 bit numbers about something like 100,000,000,000 times faster than I can.
 3. <a name="foot3"></a> Drawn with [CircuitLab](https://www.circuitlab.com), and adapted from this [Electronics StackExchange Answer](https://electronics.stackexchange.com/a/78298). In reality, a few more passive components are needed.
 4. <a name="foot4"></a> If you're not familiar with this stuff, here's an intuition for how this works. The *opamp* (the triangle) tries to adjust its output (on the right) so the two inputs are the same. So if you take the output, and multiply it by itself, then feed it into one of the inputs, it'll set the output to the square root of the input. If you are familiar with this stuff, I apologize deeply for that explanation.
-
+5. <a name="foot5"></a> I mean something on the scale of, say, [RocksDB](https://rocksdb.org/) or InnoDB, not something on the scale of [Aurora DSQL](https://aws.amazon.com/rds/aurora/dsql/) or even PostgreSQL. I think these large-scale distributed systems are going to be harder to hill climb to, at least for the future I can see.
