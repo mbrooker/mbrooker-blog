@@ -6,7 +6,7 @@ title: "What's Easy Now? What's Hard Now?"
 {{ page.title }}
 ================
 
-<p class="meta"></p>
+<p class="meta">Take it easy.</p>
 
 *This is the fourth in a series about how AI is changing software development, after [It’s time to be right.](https://brooker.co.za/blog/2026/04/30/be-right.html), [What about juniors?](https://brooker.co.za/blog/2026/03/25/ic-junior.html), and [My heuristics are wrong. What now?](https://brooker.co.za/blog/2026/03/20/ic-leadership.html). It stands alone, but if you found this interesting you may also find those interesting.*
 
