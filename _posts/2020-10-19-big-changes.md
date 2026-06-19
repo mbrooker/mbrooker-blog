@@ -13,7 +13,7 @@ title: "Getting Big Things Done"
 related_posts:
   - "/2024/03/04/mousetrap.html"
   - "/2020/06/23/code.html"
-  - "/2019/04/03/learning.html"
+  - "/2026/03/20/ic-leadership.html"
 dissimilar_posts:
   - "/2025/10/05/locality.html"
 ---

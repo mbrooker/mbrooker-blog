@@ -12,8 +12,8 @@ title: "Kindness, Wickedness and Safety"
 
 related_posts:
   - "/2014/06/29/rasmussen.html"
+  - "/2026/04/30/be-right.html"
   - "/2019/04/03/learning.html"
-  - "/2020/09/02/learning.html"
 dissimilar_posts:
   - "/2013/07/14/io-performance.html"
 ---

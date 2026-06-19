@@ -4,8 +4,8 @@ title: "You Are Here"
 
 related_posts:
   - "/2024/03/04/mousetrap.html"
+  - "/2026/03/20/ic-leadership.html"
   - "/2025/10/12/barbarians.html"
-  - "/2020/03/22/rust.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---

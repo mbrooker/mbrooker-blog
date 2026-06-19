@@ -11,9 +11,9 @@ title: Expect Less, Get More?
 
 
 related_posts:
+  - "/2026/03/25/ic-junior.html"
   - "/2020/09/02/learning.html"
   - "/2020/10/19/big-changes.html"
-  - "/2019/04/03/learning.html"
 dissimilar_posts:
   - "/2015/05/24/sodium-carbonate.html"
 ---

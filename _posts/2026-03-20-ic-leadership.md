@@ -2,6 +2,12 @@
 layout: post
 title: "My heuristics are wrong. What now?"
 
+related_posts:
+  - "/2026/03/25/ic-junior.html"
+  - "/2024/03/04/mousetrap.html"
+  - "/2026/02/07/you-are-here.html"
+dissimilar_posts:
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

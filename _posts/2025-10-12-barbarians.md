@@ -3,9 +3,9 @@ layout: post
 title: "Is Systems Research Really Just About Making Numbers Bigger?"
 
 related_posts:
+  - "/2026/04/30/be-right.html"
   - "/2025/08/12/llms-as-components.html"
   - "/2026/02/07/you-are-here.html"
-  - "/2023/07/13/osdi.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---

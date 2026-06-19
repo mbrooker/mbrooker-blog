@@ -15,7 +15,7 @@ related_posts:
   - "/2022/10/04/commitment.html"
   - "/2021/01/22/cloud-scale.html"
 dissimilar_posts:
-  - "/2025/12/16/natural-language.html"
+  - "/2026/04/09/waterfall-vs-spec.html"
 ---
 {{ page.title }}
 ================

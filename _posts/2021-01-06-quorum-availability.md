@@ -15,7 +15,7 @@ related_posts:
   - "/2020/10/05/consensus.html"
   - "/2019/05/01/emergent.html"
 dissimilar_posts:
-  - "/2023/09/21/audience.html"
+  - "/2026/04/09/waterfall-vs-spec.html"
 ---
 {{ page.title }}
 ================

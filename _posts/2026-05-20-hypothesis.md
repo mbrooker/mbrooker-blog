@@ -2,6 +2,12 @@
 layout: post
 title: "Agentic software development hypothesis"
 
+related_posts:
+  - "/2025/12/16/natural-language.html"
+  - "/2026/05/18/whats-easy-whats-hard.html"
+  - "/2023/10/18/optimism.html"
+dissimilar_posts:
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================

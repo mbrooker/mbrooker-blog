@@ -2,6 +2,12 @@
 layout: post
 title: "Spec Driven Development isn't Waterfall"
 
+related_posts:
+  - "/2025/12/16/natural-language.html"
+  - "/2022/07/29/getting-into-tla.html"
+  - "/2024/04/17/formal.html"
+dissimilar_posts:
+  - "/2023/03/07/false-sharing.html"
 ---
 {{ page.title }}
 ================

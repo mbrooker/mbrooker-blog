@@ -2,6 +2,12 @@
 layout: post
 title: "What's Easy Now? What's Hard Now?"
 
+related_posts:
+  - "/2026/04/30/be-right.html"
+  - "/2025/12/16/natural-language.html"
+  - "/2026/02/07/you-are-here.html"
+dissimilar_posts:
+  - "/2020/07/28/fish.html"
 ---
 {{ page.title }}
 ================
