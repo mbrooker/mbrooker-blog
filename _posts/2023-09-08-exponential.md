@@ -11,11 +11,11 @@ title: "Exponential Value at Linear Cost"
 
 
 related_posts:
-  - "/2026/06/19/waiting.html"
   - "/2020/08/06/erlang.html"
   - "/2023/02/07/hot-keys.html"
+  - "/2023/03/23/economics.html"
 dissimilar_posts:
-  - "/2013/05/25/patterns-of-design.html"
+  - "/2026/06/18/my-blog-and-ai.html"
 ---
 {{ page.title }}
 ================

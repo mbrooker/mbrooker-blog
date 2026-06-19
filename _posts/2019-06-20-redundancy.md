@@ -15,7 +15,7 @@ related_posts:
   - "/2019/05/01/emergent.html"
   - "/2016/01/03/correlation.html"
 dissimilar_posts:
-  - "/2023/09/21/audience.html"
+  - "/2026/06/18/my-blog-and-ai.html"
 ---
 {{ page.title }}
 ================

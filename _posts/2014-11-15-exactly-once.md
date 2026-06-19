@@ -15,7 +15,7 @@ related_posts:
   - "/2025/11/18/consistency.html"
   - "/2026/02/25/sfq.html"
 dissimilar_posts:
-  - "/2012/01/10/drive-failure.html"
+  - "/2026/06/18/my-blog-and-ai.html"
 ---
 {{ page.title }}
 ================
