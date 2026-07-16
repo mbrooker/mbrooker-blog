@@ -3,6 +3,12 @@ layout: post
 title: "Aurora DSQL: Scalable, Multi-Region OLTP"
 
 
+related_posts:
+  - "/2024/12/03/aurora-dsql.html"
+  - "/2024/12/04/inside-dsql.html"
+  - "/2025/11/02/thinking-dsql.html"
+dissimilar_posts:
+  - "/2015/05/24/sodium-carbonate.html"
 ---
 {{ page.title }}
 ================

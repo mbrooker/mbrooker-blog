@@ -12,8 +12,8 @@ title: "DSQL Vignette: Wait! Isn't That Impossible?"
 
 related_posts:
   - "/2024/12/04/inside-dsql.html"
+  - "/2026/07/19/dsql-paper.html"
   - "/2024/12/03/aurora-dsql.html"
-  - "/2025/11/02/thinking-dsql.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---

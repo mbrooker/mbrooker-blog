@@ -12,8 +12,8 @@ title: "DSQL Vignette: Aurora DSQL, and A Personal Story"
 
 related_posts:
   - "/2025/11/02/thinking-dsql.html"
+  - "/2026/07/19/dsql-paper.html"
   - "/2024/12/04/inside-dsql.html"
-  - "/2024/12/06/inside-dsql-cap.html"
 dissimilar_posts:
   - "/2020/07/28/fish.html"
 ---
