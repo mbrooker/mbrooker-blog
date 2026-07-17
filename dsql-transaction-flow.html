@@ -488,20 +488,20 @@
           <path id="path-adj2-journal" class="path" d="M498 246 L498 325"/>
           <path id="path-journal-crossbar" class="path" d="M322 397 C322 416 370 420 390 432"/>
           <path id="path-journalb-crossbar" class="path" d="M498 397 C498 416 450 420 430 432"/>
-          <path id="path-crossbar-storagea" class="path" d="M350 458 C285 460 244 448 190 423"/>
-          <path id="path-crossbar-storageb" class="path" d="M470 458 C535 460 576 448 630 423"/>
+          <path id="path-crossbar-storagea" class="path" d="M335 458 C285 460 244 448 190 423"/>
+          <path id="path-crossbar-storageb" class="path" d="M485 458 C535 460 576 448 630 423"/>
 
           <!-- Nodes -->
           <g id="node-appa" class="node"><rect x="63" y="69" width="114" height="40" rx="20"/><text x="120" y="94">Application A</text></g>
           <g id="node-appb" class="node"><rect x="643" y="69" width="114" height="40" rx="20"/><text x="700" y="94">Application B</text></g>
           <g id="node-qpa" class="node"><rect x="57" y="139" width="126" height="64" rx="11"/><text x="120" y="167">Query Processor</text><text class="sub" x="120" y="185">Firecracker MicroVM</text></g>
           <g id="node-qpb" class="node"><rect x="637" y="139" width="126" height="64" rx="11"/><text x="700" y="167">Query Processor</text><text class="sub" x="700" y="185">Firecracker MicroVM</text></g>
-          <g id="node-clock" class="node"><circle class="node-shape" cx="410" cy="91" r="34"/><text x="410" y="88">Precision</text><text x="410" y="103">time</text></g>
+          <g id="node-clock" class="node"><ellipse class="node-shape" cx="410" cy="91" rx="44" ry="34"/><text x="410" y="88">Precision</text><text x="410" y="103">time</text></g>
           <g id="node-adj1" class="node"><rect x="274" y="196" width="96" height="50" rx="10"/><text x="322" y="216">Adjudicator</text><text class="sub" x="322" y="233">keys a–m</text></g>
           <g id="node-adj2" class="node"><rect x="450" y="196" width="96" height="50" rx="10"/><text x="498" y="216">Adjudicator</text><text class="sub" x="498" y="233">keys n–z</text></g>
           <g id="node-journal" class="node"><rect x="249" y="325" width="146" height="72" rx="11"/><text x="322" y="348">Journal A</text><text class="sub journal-sub" x="322" y="365">ordered stream · keys a–m</text></g>
           <g id="node-journalb" class="node"><rect x="425" y="325" width="146" height="72" rx="11"/><text x="498" y="348">Journal B</text><text class="sub journal-sub" x="498" y="365">ordered stream · keys n–z</text></g>
-          <g id="node-crossbar" class="node"><rect x="350" y="432" width="120" height="52" rx="26"/><text x="410" y="454">Crossbar</text><text class="sub" x="410" y="470">merge ordered streams</text></g>
+          <g id="node-crossbar" class="node"><rect x="335" y="432" width="150" height="52" rx="26"/><text x="410" y="454">Crossbar</text><text class="sub" x="410" y="470">merge ordered streams</text></g>
           <g id="node-storagea" class="node"><rect x="50" y="377" width="140" height="91" rx="11"/><text x="120" y="401">MVCC storage</text><text class="sub" x="120" y="416">nearest replica</text><g id="rowA" class="replica-row"><rect x="70" y="430" width="100" height="23" rx="5"/><text id="rowValueA" x="120" y="446">dogs/5 · treats=7</text></g></g>
           <g id="node-storageb" class="node"><rect x="630" y="377" width="140" height="91" rx="11"/><text x="700" y="401">MVCC storage</text><text class="sub" x="700" y="416">nearest replica</text><g id="rowB" class="replica-row"><rect x="650" y="430" width="100" height="23" rx="5"/><text id="rowValueB" x="700" y="446">dogs/5 · treats=7</text></g></g>
 
