@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aurora DSQL transaction flow</title>
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #f6f2e9;
+    --card: #fffdf8;
+    --ink: #1d2a2d;
+    --muted: #657276;
+    --line: #ccd4d2;
+    --line-strong: #8b9997;
+    --teal: #087f7b;
+    --teal-soft: #d7efeb;
+    --orange: #db6b32;
+    --orange-soft: #f9e2d4;
+    --violet: #6854a5;
+    --violet-soft: #e9e3f6;
+    --red: #bb3f43;
+    --red-soft: #f8dcdb;
+    --green: #267a50;
+    --green-soft: #dbeee2;
+    --shadow: 0 18px 50px rgba(32, 43, 45, .10);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 10% 10%, rgba(8, 127, 123, .08), transparent 28rem),
+      radial-gradient(circle at 90% 0%, rgba(219, 107, 50, .08), transparent 25rem),
+      var(--paper);
+    color: var(--ink);
+    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  button { font: inherit; }
+
+  .page {
+    width: min(1500px, 100%);
+    margin: 0 auto;
+    padding: 32px clamp(16px, 3vw, 44px) 42px;
+  }
+
+  header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: 22px;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    margin: 0 0 8px;
+    color: var(--teal);
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .paper-link {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(8, 127, 123, .45);
+    letter-spacing: .07em;
+    transition: border-color .18s, color .18s;
+  }
+  .paper-link:hover { color: #064f4d; border-color: currentColor; }
+  .paper-link:focus-visible {
+    outline: 3px solid rgba(8, 127, 123, .28);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .footnote a { color: #536361; text-decoration-color: rgba(83, 99, 97, .45); text-underline-offset: 2px; }
+  .footnote a:hover { color: var(--teal); text-decoration-color: currentColor; }
+
+  h1 {
+    margin: 0;
+    max-width: 850px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2rem, 4.2vw, 4.5rem);
+    font-weight: 500;
+    letter-spacing: -.045em;
+    line-height: .98;
+  }
+
+  .dek {
+    max-width: 480px;
+    margin: 0 0 4px;
+    color: var(--muted);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    line-height: 1.45;
+  }
+
+  .shell {
+    overflow: hidden;
+    border: 1px solid rgba(90, 105, 104, .28);
+    border-radius: 22px;
+    background: rgba(255, 253, 248, .92);
+    box-shadow: var(--shadow);
+  }
+
+  .scenario-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 12px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(244, 241, 233, .84);
+  }
+
+  .scenario-tab {
+    flex: 0 0 auto;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 9px 15px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: .86rem;
+    font-weight: 750;
+    transition: background .18s, border-color .18s, color .18s;
+  }
+
+  .scenario-tab:hover { color: var(--ink); background: rgba(255, 255, 255, .75); }
+  .scenario-tab[aria-selected="true"] {
+    border-color: rgba(8, 127, 123, .35);
+    background: var(--teal-soft);
+    color: #075d5a;
+  }
+  .scenario-tab:focus-visible, .control:focus-visible {
+    outline: 3px solid rgba(8, 127, 123, .28);
+    outline-offset: 2px;
+  }
+
+  .workspace {
+    display: grid;
+    grid-template-columns: minmax(190px, 240px) minmax(520px, 1fr) minmax(190px, 240px);
+    min-height: 590px;
+  }
+
+  .sql-panel {
+    position: relative;
+    z-index: 2;
+    padding: 24px 18px;
+    background: rgba(249, 247, 241, .86);
+  }
+  .sql-panel:first-child { border-right: 1px solid var(--line); }
+  .sql-panel:last-child { border-left: 1px solid var(--line); }
+
+  .txn-heading {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 14px;
+    font-size: .78rem;
+    font-weight: 850;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .txn-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--teal); }
+  .txn-b .txn-dot { background: var(--orange); }
+
+  .region-name {
+    display: block;
+    margin: 2px 0 18px 19px;
+    color: var(--muted);
+    font-size: .76rem;
+  }
+
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    color: #435053;
+    font: .79rem/1.72 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .sql-line {
+    display: block;
+    margin: 0 -8px;
+    border-left: 3px solid transparent;
+    border-radius: 3px;
+    padding: 1px 6px;
+    transition: color .2s, background .2s, border-color .2s;
+  }
+  .sql-line.active-a { border-color: var(--teal); background: var(--teal-soft); color: #064f4d; }
+  .sql-line.active-b { border-color: var(--orange); background: var(--orange-soft); color: #7d3717; }
+  .sql-line.done { color: #98a09f; }
+
+  .txn-state {
+    min-height: 88px;
+    margin-top: 20px;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+  .state-label { color: var(--muted); font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  .state-value { margin-top: 5px; font-size: .88rem; font-weight: 760; line-height: 1.35; }
+  .state-value.committed { color: var(--green); }
+  .state-value.aborted { color: var(--red); }
+  .state-value.tentative { color: var(--violet); }
+
+  .diagram-wrap {
+    position: relative;
+    min-width: 0;
+    padding: 14px 10px 8px;
+    background:
+      linear-gradient(rgba(255,255,255,.55), rgba(255,255,255,.55)),
+      repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(97, 112, 110, .055) 32px),
+      repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(97, 112, 110, .055) 32px);
+  }
+
+  svg { display: block; width: 100%; height: auto; min-height: 480px; }
+
+  .zone { fill: rgba(255, 255, 255, .64); stroke: #cbd3d1; stroke-width: 1.4; }
+  .zone.coordination { fill: rgba(245, 242, 234, .72); stroke-dasharray: 6 5; }
+  .zone-label { fill: #697674; font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+
+  .node rect, .node .node-shape {
+    fill: #fffefb;
+    stroke: var(--line-strong);
+    stroke-width: 1.5;
+    filter: url(#nodeShadow);
+    transition: fill .22s, stroke .22s, stroke-width .22s, opacity .22s;
+  }
+  .node text { fill: var(--ink); font-size: 14px; font-weight: 760; text-anchor: middle; pointer-events: none; }
+  .node .sub { fill: var(--muted); font-size: 10.5px; font-weight: 550; }
+  .node .journal-sub { font-size: 9.2px; letter-spacing: -.015em; }
+  #journalText { font-size: 9.5px; }
+  .node.active-a rect, .node.active-a .node-shape { fill: var(--teal-soft); stroke: var(--teal); stroke-width: 2.6; }
+  .node.active-b rect, .node.active-b .node-shape { fill: var(--orange-soft); stroke: var(--orange); stroke-width: 2.6; }
+  .node.active-both rect, .node.active-both .node-shape { fill: var(--violet-soft); stroke: var(--violet); stroke-width: 2.6; }
+  .node.committed rect, .node.committed .node-shape { fill: var(--green-soft); stroke: var(--green); stroke-width: 2.8; }
+  .node.conflict rect, .node.conflict .node-shape { fill: var(--red-soft); stroke: var(--red); stroke-width: 3; }
+
+  .path {
+    fill: none;
+    stroke: #b7c0be;
+    stroke-width: 1.4;
+    opacity: .34;
+    transition: opacity .2s, stroke .2s, stroke-width .2s;
+  }
+  .path.clock-path { stroke-dasharray: 3 5; }
+  .path.active { opacity: 1; stroke-width: 3.3; stroke-dasharray: 8 7; animation: flow .72s linear infinite; }
+  .path.flow-a { stroke: var(--teal); marker-end: url(#arrowA); }
+  .path.flow-b { stroke: var(--orange); marker-end: url(#arrowB); }
+  .path.flow-both { stroke: var(--violet); marker-end: url(#arrowBoth); }
+  .path.flow-good { stroke: var(--green); marker-end: url(#arrowGood); }
+  .path.flow-bad { stroke: var(--red); marker-end: url(#arrowBad); }
+  @keyframes flow { to { stroke-dashoffset: -30; } }
+
+  .detail {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: opacity .2s, transform .2s;
+    pointer-events: none;
+  }
+  .detail.visible { opacity: 1; }
+  .badge rect { stroke-width: 1.4; }
+  .badge text { text-anchor: middle; font-size: 11px; font-weight: 800; }
+  .badge-a rect { fill: var(--teal-soft); stroke: var(--teal); }
+  .badge-a text { fill: #075d5a; }
+  .badge-b rect { fill: var(--orange-soft); stroke: var(--orange); }
+  .badge-b text { fill: #853817; }
+  .badge-purple rect { fill: var(--violet-soft); stroke: var(--violet); }
+  .badge-purple text { fill: #55418f; }
+  .badge-red rect { fill: var(--red-soft); stroke: var(--red); }
+  .badge-red text { fill: #8d2d31; }
+  .badge-green rect { fill: var(--green-soft); stroke: var(--green); }
+  .badge-green text { fill: #1d603e; }
+
+  .replica-row rect { fill: #eef2ef; stroke: #aeb9b6; }
+  .replica-row text { fill: #44514f; font-size: 10.5px; font-weight: 700; text-anchor: middle; }
+  .replica-row.fresh rect { fill: var(--green-soft); stroke: var(--green); }
+
+  .commit-curtain {
+    opacity: 0;
+    transition: opacity .25s;
+  }
+  .commit-curtain.visible { opacity: 1; }
+  .commit-curtain line { stroke: var(--orange); stroke-width: 2; stroke-dasharray: 5 5; }
+  .commit-curtain rect { fill: var(--orange); }
+  .commit-curtain text { fill: white; font-size: 11px; font-weight: 850; text-anchor: middle; letter-spacing: .05em; }
+
+  .narrative {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(260px, .8fr);
+    border-top: 1px solid var(--line);
+  }
+
+  .explanation { padding: 20px 24px; }
+  .step-kicker { color: var(--teal); font-size: .72rem; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+  .step-title { margin: 5px 0 5px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.25rem, 2vw, 1.7rem); font-weight: 500; }
+  .step-body { min-height: 44px; margin: 0; color: #526063; font-size: .94rem; line-height: 1.5; }
+  .step-body code { border-radius: 4px; padding: 1px 4px; background: #ece9e1; color: #394548; }
+
+  .step-title sub,
+  .step-body sub,
+  .state-value sub,
+  .time-marker sub {
+    position: relative;
+    bottom: -.24em;
+    font-size: .68em;
+    line-height: 0;
+    vertical-align: baseline;
+  }
+
+  .invariants {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .invariant { padding: 8px 10px; background: #fbfaf6; color: var(--muted); font-size: .7rem; line-height: 1.35; text-align: center; }
+  .invariant + .invariant { border-left: 1px solid var(--line); }
+  .invariant strong { display: block; color: #354346; font-size: .72rem; }
+  .invariant.on { background: var(--teal-soft); color: #17635f; }
+  .invariant.on strong { color: #075d5a; }
+
+  .metrics {
+    display: grid;
+    align-content: center;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    border-left: 1px solid var(--line);
+    background: var(--line);
+  }
+  .metric { min-height: 70px; padding: 14px; background: #f7f5ef; }
+  .metric-label { color: var(--muted); font-size: .67rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+  .metric-value { margin-top: 7px; font-size: .9rem; font-weight: 800; }
+
+  .timeline {
+    padding: 17px 24px 13px;
+    border-top: 1px solid var(--line);
+    background: #f8f6f0;
+  }
+  .timeline-head { display: flex; justify-content: space-between; margin-bottom: 11px; color: var(--muted); font-size: .7rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+  .lane { position: relative; height: 31px; margin-left: 28px; border-top: 1px solid #aeb8b5; }
+  .lane-label { position: absolute; top: -9px; left: -28px; font-size: 11px; font-weight: 850; }
+  .lane-label.a { color: var(--teal); }
+  .lane-label.b { color: var(--orange); }
+  .window { position: absolute; top: -4px; height: 8px; border-radius: 5px; opacity: .16; }
+  .window.a { background: var(--teal); }
+  .window.b { background: var(--orange); }
+  .time-marker { position: absolute; top: -5px; width: 2px; height: 11px; background: currentColor; }
+  .time-marker span { position: absolute; top: 13px; left: 50%; transform: translateX(-50%); white-space: nowrap; font: 10px ui-monospace, monospace; }
+  .time-marker.a { color: var(--teal); }
+  .time-marker.b { color: var(--orange); }
+  .time-marker.bad { color: var(--red); }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 16px;
+    border-top: 1px solid var(--line);
+    background: #eeebe3;
+  }
+  .control {
+    border: 1px solid #aeb8b5;
+    border-radius: 9px;
+    padding: 9px 13px;
+    background: #fffefb;
+    color: #354244;
+    cursor: pointer;
+    font-weight: 760;
+  }
+  .control:hover:not(:disabled) { border-color: var(--teal); color: var(--teal); }
+  .control.primary { border-color: var(--teal); background: var(--teal); color: white; min-width: 88px; }
+  .control.primary:hover:not(:disabled) { background: #086e6b; color: white; }
+  .control:disabled { opacity: .38; cursor: default; }
+  .progress-text { margin-left: auto; color: var(--muted); font-size: .78rem; font-weight: 700; }
+  .keyboard-note { color: #7a8583; font-size: .7rem; }
+
+  .footnote { max-width: 900px; margin: 18px auto 0; color: #6b7674; font: .88rem/1.55 Georgia, "Times New Roman", serif; text-align: center; }
+
+  @media (max-width: 1060px) {
+    header { align-items: flex-start; flex-direction: column; gap: 12px; }
+    .dek { max-width: 760px; }
+    .workspace { grid-template-columns: 1fr 1fr; }
+    .diagram-wrap { grid-column: 1 / -1; grid-row: 1; border-bottom: 1px solid var(--line); }
+    .sql-panel { grid-row: 2; min-height: 285px; }
+    .sql-panel:first-child { border-right: 1px solid var(--line); }
+    .sql-panel:last-child { border-left: 0; }
+  }
+
+  @media (max-width: 700px) {
+    .page { padding: 18px 10px 28px; }
+    .shell { border-radius: 14px; }
+    .workspace { display: block; }
+    .diagram-wrap { overflow-x: auto; padding: 4px; }
+    svg { width: 720px; max-width: none; min-height: 0; }
+    .sql-panel { border: 0 !important; border-top: 1px solid var(--line) !important; min-height: 0; }
+    .narrative { grid-template-columns: 1fr; }
+    .metrics { border-top: 1px solid var(--line); border-left: 0; }
+    .invariants { grid-template-columns: 1fr; }
+    .invariant + .invariant { border-top: 1px solid var(--line); border-left: 0; }
+    .controls { flex-wrap: wrap; }
+    .progress-text { width: 100%; order: -1; margin: 0; }
+    .keyboard-note { display: none; }
+    .timeline { padding-left: 15px; padding-right: 15px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div>
+      <p class="eyebrow"><span>Aurora DSQL transaction anatomy</span><a class="paper-link" href="https://arxiv.org/abs/2607.13276" target="_blank" rel="noopener noreferrer">Read the paper ↗</a></p>
+      <h1>Everything is local until <em>COMMIT</em>.</h1>
+    </div>
+    <p class="dek">Step through two transactions in different regions. Reads use a local snapshot. Writes become durable only after optimistic conflict detection.</p>
+  </header>
+
+  <section class="shell" aria-label="Interactive Aurora DSQL transaction flow">
+    <div class="scenario-bar" role="tablist" aria-label="Transaction scenarios">
+      <button class="scenario-tab" role="tab" data-scenario="read" aria-selected="false">Read only</button>
+      <button class="scenario-tab" role="tab" data-scenario="write" aria-selected="false">Successful write</button>
+      <button class="scenario-tab" role="tab" data-scenario="conflict" aria-selected="true">Conflicting writes</button>
+      <button class="scenario-tab" role="tab" data-scenario="multi" aria-selected="false">Multi-shard commit</button>
+    </div>
+
+    <div class="workspace">
+      <aside class="sql-panel txn-a" aria-label="Transaction A SQL">
+        <div class="txn-heading"><span class="txn-dot"></span>Transaction A</div>
+        <span class="region-name">Region A · local Query Processor</span>
+        <pre id="sqlA"></pre>
+        <div class="txn-state">
+          <div class="state-label">State</div>
+          <div id="stateA" class="state-value">Ready</div>
+        </div>
+      </aside>
+
+      <div class="diagram-wrap">
+        <svg id="architecture" viewBox="0 0 820 540" role="img" aria-labelledby="diagramTitle diagramDesc">
+          <title id="diagramTitle">Aurora DSQL transaction flow</title>
+          <desc id="diagramDesc">Two regions use local query processors and storage. Each sharded adjudicator has its own durable, ordered Journal; the crossbar merges those Journal streams and distributes committed post-images.</desc>
+          <defs>
+            <filter id="nodeShadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#263638" flood-opacity=".10"/></filter>
+            <marker id="arrowA" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#087f7b"/></marker>
+            <marker id="arrowB" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#db6b32"/></marker>
+            <marker id="arrowBoth" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#6854a5"/></marker>
+            <marker id="arrowGood" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#267a50"/></marker>
+            <marker id="arrowBad" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#bb3f43"/></marker>
+          </defs>
+
+          <rect class="zone" x="10" y="22" width="220" height="492" rx="16"/>
+          <rect class="zone coordination" x="244" y="22" width="332" height="492" rx="16"/>
+          <rect class="zone" x="590" y="22" width="220" height="492" rx="16"/>
+          <text class="zone-label" x="28" y="48">Region A</text>
+          <text class="zone-label" x="410" y="48" text-anchor="middle">Commit coordination</text>
+          <text class="zone-label" x="792" y="48" text-anchor="end">Region B</text>
+
+          <!-- Always-visible topology -->
+          <path id="path-clock-qpa" class="path clock-path" d="M377 97 C315 100 250 120 180 154"/>
+          <path id="path-clock-qpb" class="path clock-path" d="M443 97 C505 100 570 120 640 154"/>
+          <path id="path-clock-adj1" class="path clock-path" d="M393 108 L322 196"/>
+          <path id="path-clock-adj2" class="path clock-path" d="M427 108 L498 196"/>
+          <path id="path-app-qpa" class="path" d="M120 109 L120 139"/>
+          <path id="path-app-qpb" class="path" d="M700 109 L700 139"/>
+          <path id="path-qpa-storagea" class="path" d="M120 203 L120 377"/>
+          <path id="path-qpb-storageb" class="path" d="M700 203 L700 377"/>
+          <path id="path-qpa-adj1" class="path" d="M183 171 C225 169 244 202 274 218"/>
+          <path id="path-qpa-adj2" class="path" d="M183 183 C285 198 360 219 450 220"/>
+          <path id="path-qpb-adj1" class="path" d="M637 183 C535 198 460 219 370 220"/>
+          <path id="path-qpb-adj2" class="path" d="M637 171 C595 169 576 202 546 218"/>
+          <path id="path-adj1-journal" class="path" d="M322 246 L322 325"/>
+          <path id="path-adj2-journal" class="path" d="M498 246 L498 325"/>
+          <path id="path-journal-crossbar" class="path" d="M322 397 C322 416 370 420 390 432"/>
+          <path id="path-journalb-crossbar" class="path" d="M498 397 C498 416 450 420 430 432"/>
+          <path id="path-crossbar-storagea" class="path" d="M350 458 C285 460 244 448 190 423"/>
+          <path id="path-crossbar-storageb" class="path" d="M470 458 C535 460 576 448 630 423"/>
+
+          <!-- Nodes -->
+          <g id="node-appa" class="node"><rect x="63" y="69" width="114" height="40" rx="20"/><text x="120" y="94">Application A</text></g>
+          <g id="node-appb" class="node"><rect x="643" y="69" width="114" height="40" rx="20"/><text x="700" y="94">Application B</text></g>
+          <g id="node-qpa" class="node"><rect x="57" y="139" width="126" height="64" rx="11"/><text x="120" y="167">Query Processor</text><text class="sub" x="120" y="185">Firecracker MicroVM</text></g>
+          <g id="node-qpb" class="node"><rect x="637" y="139" width="126" height="64" rx="11"/><text x="700" y="167">Query Processor</text><text class="sub" x="700" y="185">Firecracker MicroVM</text></g>
+          <g id="node-clock" class="node"><circle class="node-shape" cx="410" cy="91" r="34"/><text x="410" y="88">Precision</text><text x="410" y="103">time</text></g>
+          <g id="node-adj1" class="node"><rect x="274" y="196" width="96" height="50" rx="10"/><text x="322" y="216">Adjudicator</text><text class="sub" x="322" y="233">keys a–m</text></g>
+          <g id="node-adj2" class="node"><rect x="450" y="196" width="96" height="50" rx="10"/><text x="498" y="216">Adjudicator</text><text class="sub" x="498" y="233">keys n–z</text></g>
+          <g id="node-journal" class="node"><rect x="249" y="325" width="146" height="72" rx="11"/><text x="322" y="348">Journal A</text><text class="sub journal-sub" x="322" y="365">ordered stream · keys a–m</text></g>
+          <g id="node-journalb" class="node"><rect x="425" y="325" width="146" height="72" rx="11"/><text x="498" y="348">Journal B</text><text class="sub journal-sub" x="498" y="365">ordered stream · keys n–z</text></g>
+          <g id="node-crossbar" class="node"><rect x="350" y="432" width="120" height="52" rx="26"/><text x="410" y="454">Crossbar</text><text class="sub" x="410" y="470">merge ordered streams</text></g>
+          <g id="node-storagea" class="node"><rect x="50" y="377" width="140" height="91" rx="11"/><text x="120" y="401">MVCC storage</text><text class="sub" x="120" y="416">nearest replica</text><g id="rowA" class="replica-row"><rect x="70" y="430" width="100" height="23" rx="5"/><text id="rowValueA" x="120" y="446">dogs/5 · treats=7</text></g></g>
+          <g id="node-storageb" class="node"><rect x="630" y="377" width="140" height="91" rx="11"/><text x="700" y="401">MVCC storage</text><text class="sub" x="700" y="416">nearest replica</text><g id="rowB" class="replica-row"><rect x="650" y="430" width="100" height="23" rx="5"/><text id="rowValueB" x="700" y="446">dogs/5 · treats=7</text></g></g>
+
+          <!-- Step-specific details -->
+          <g id="detail-buffer-a" class="detail badge badge-a"><rect x="64" y="218" width="112" height="27" rx="13"/><text id="bufferTextA" x="120" y="236">tentative: 8</text></g>
+          <g id="detail-buffer-b" class="detail badge badge-b"><rect x="644" y="218" width="112" height="27" rx="13"/><text id="bufferTextB" x="700" y="236">tentative: 8</text></g>
+          <g id="detail-write-a" class="detail badge badge-a"><rect x="260" y="263" width="124" height="27" rx="13"/><text x="322" y="281">Wₐ = {dogs/5}</text></g>
+          <g id="detail-write-b" class="detail badge badge-b"><rect x="436" y="263" width="124" height="27" rx="13"/><text x="498" y="281">Wᵦ = {dogs/5}</text></g>
+          <g id="detail-promises" class="detail badge badge-purple"><rect x="327" y="265" width="166" height="27" rx="13"/><text x="410" y="283">YES votes + promises</text></g>
+          <g id="detail-journal-entry" class="detail badge badge-green"><rect x="256" y="368" width="132" height="23" rx="11"/><text id="journalText" x="322" y="384">dogs/5 → 8</text></g>
+          <g id="detail-conflict" class="detail badge badge-red"><rect x="334" y="292" width="152" height="30" rx="15"/><text x="410" y="311">Wᵦ ∩ Wconflict ≠ ∅</text></g>
+          <g id="detail-wait" class="detail badge badge-purple"><rect x="621" y="475" width="158" height="27" rx="13"/><text x="700" y="493">wait until caught up</text></g>
+          <g id="detail-commit" class="commit-curtain"><line x1="244" y1="144" x2="576" y2="144"/><rect x="333" y="130" width="154" height="27" rx="13"/><text x="410" y="148">COORDINATION BEGINS</text></g>
+        </svg>
+      </div>
+
+      <aside class="sql-panel txn-b" aria-label="Transaction B SQL">
+        <div class="txn-heading"><span class="txn-dot"></span>Transaction B</div>
+        <span class="region-name">Region B · local Query Processor</span>
+        <pre id="sqlB"></pre>
+        <div class="txn-state">
+          <div class="state-label">State</div>
+          <div id="stateB" class="state-value">Ready</div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="narrative">
+      <div class="explanation" aria-live="polite">
+        <div id="stepKicker" class="step-kicker">Step 1</div>
+        <h2 id="stepTitle" class="step-title">Two regions, no writer</h2>
+        <p id="stepBody" class="step-body">Choose Play or step forward to race two transactions.</p>
+        <div class="invariants" aria-label="Transaction invariants">
+          <div id="invariantTentative" class="invariant"><strong>Before Journal</strong>Tentative</div>
+          <div id="invariantDurable" class="invariant"><strong>In Journal</strong>Atomic + durable</div>
+          <div id="invariantDistributed" class="invariant"><strong>After Journal</strong>Ordered distribution</div>
+        </div>
+      </div>
+      <div class="metrics" aria-label="Current transaction properties">
+        <div class="metric"><div class="metric-label">Locks held</div><div id="metricLocks" class="metric-value">0</div></div>
+        <div class="metric"><div class="metric-label">Remote coordination</div><div id="metricRemote" class="metric-value">None</div></div>
+        <div class="metric"><div class="metric-label">Visible value</div><div id="metricValue" class="metric-value">7</div></div>
+        <div class="metric"><div class="metric-label">Outcome</div><div id="metricOutcome" class="metric-value">Pending</div></div>
+      </div>
+    </div>
+
+    <div class="timeline" aria-label="Transaction timeline">
+      <div class="timeline-head"><span>Snapshot and conflict windows</span><span>time →</span></div>
+      <div id="laneA" class="lane"><span class="lane-label a">A</span></div>
+      <div id="laneB" class="lane"><span class="lane-label b">B</span></div>
+    </div>
+
+    <div class="controls">
+      <button id="backButton" class="control" type="button" aria-label="Previous step">← Back</button>
+      <button id="playButton" class="control primary" type="button">Play</button>
+      <button id="nextButton" class="control" type="button">Next →</button>
+      <button id="resetButton" class="control" type="button">Reset</button>
+      <span class="keyboard-note">Space: play/pause · arrows: step</span>
+      <span id="progressText" class="progress-text">1 / 10</span>
+    </div>
+  </section>
+
+  <p class="footnote">Conceptual animation based on the transaction protocol in <a href="https://arxiv.org/abs/2607.13276" target="_blank" rel="noopener noreferrer"><em>Aurora DSQL: Scalable, Multi-Region OLTP</em></a>. Timing and topology are illustrative; the invariants are the point.</p>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  const SQL = {
+    conflictA: ["BEGIN;", "SELECT treats", "  FROM dogs WHERE id = 5;", "-- → 7", "UPDATE dogs SET treats = treats + 1", "  WHERE id = 5;", "COMMIT;"],
+    conflictB: ["BEGIN;", "SELECT treats", "  FROM dogs WHERE id = 5;", "-- → 7", "UPDATE dogs SET treats = treats + 1", "  WHERE id = 5;", "COMMIT;"],
+    readA: ["BEGIN READ ONLY;", "SELECT name, treats", "  FROM dogs WHERE id = 5;", "-- → 'Mochi', 7", "COMMIT;"],
+    empty: ["-- no second transaction"],
+    writeA: ["BEGIN;", "SELECT treats", "  FROM dogs WHERE id = 5;", "-- → 7", "UPDATE dogs SET treats = treats + 1", "  WHERE id = 5;", "COMMIT;"],
+    multiA: ["BEGIN;", "UPDATE dogs SET treats = treats + 1", "  WHERE id = 5;", "UPDATE owners SET credits = credits - 1", "  WHERE id = 42;", "COMMIT;"]
+  };
+
+  const commonReady = {
+    title: "Two regions, one strongly consistent database",
+    body: "Query processors are close to clients. Storage serves timestamped MVCC snapshots. The adjudicators and their ordered Journals stay off the path until a write transaction commits; the crossbar merges the Journal streams afterward.",
+    activeNodes: [], paths: [], details: [], sqlA: -1, sqlB: -1,
+    stateA: "Ready", stateB: "Ready", phase: 0,
+    remote: "None", value: "7", outcome: "Pending"
+  };
+
+  const scenarios = {
+    read: {
+      label: "Read only",
+      sqlA: SQL.readA, sqlB: SQL.empty,
+      timeline: [
+        { lane: "A", pos: 16, label: "τstart", showAt: 1, tone: "a" },
+        { lane: "A", pos: 69, label: "local COMMIT", showAt: 4, tone: "a" }
+      ],
+      windows: [{ lane: "A", from: 16, to: 69, showAt: 2, tone: "a" }],
+      steps: [
+        { ...commonReady, title: "A read needs no coordinator", body: "This transaction will execute entirely inside Region A." },
+        { title: "Pick a precise start time", body: "The Query Processor samples its local precision clock. <code>τstart</code> fixes the transaction's snapshot.", activeNodes: [{id:"node-clock",tone:"a"},{id:"node-qpa",tone:"a"}], paths: [{id:"path-clock-qpa",tone:"a"}], details: [], sqlA: 0, sqlB: -1, stateA: "Snapshot at τstart", stateB: "Idle", phase: 0, remote: "None", value: "7", outcome: "Pending" },
+        { title: "Read the nearest complete replica", body: "Storage returns the newest row version committed before <code>τstart</code>. No primary or lock server is consulted.", activeNodes: [{id:"node-qpa",tone:"a"},{id:"node-storagea",tone:"a"}], paths: [{id:"path-qpa-storagea",tone:"a"}], details: [], sqlA: 2, sqlB: -1, stateA: "Reading snapshot", stateB: "Idle", phase: 0, remote: "None", value: "7", outcome: "Pending" },
+        { title: "The snapshot is stable", body: "Concurrent writers may advance the database, but this transaction continues to see its point-in-time view.", activeNodes: [{id:"node-storagea",tone:"a"}], paths: [], details: [], sqlA: 3, sqlB: -1, stateA: "Read 'Mochi', 7", stateB: "Idle", phase: 0, remote: "None", value: "7", outcome: "Pending" },
+        { title: "Read-only COMMIT is a local no-op", body: "The Query Processor forgets the transaction. There are no locks to release, no conflict check, and no possibility of an OCC abort.", activeNodes: [{id:"node-qpa",tone:"committed"}], paths: [], details: [], sqlA: 4, sqlB: -1, stateA: "Committed locally", stateB: "Idle", phase: 0, remote: "None", value: "7", outcome: "Never aborts" }
+      ]
+    },
+
+    write: {
+      label: "Successful write",
+      sqlA: SQL.writeA, sqlB: SQL.empty,
+      timeline: [
+        { lane: "A", pos: 13, label: "τstart", showAt: 1, tone: "a" },
+        { lane: "A", pos: 67, label: "τcommit", showAt: 4, tone: "a" }
+      ],
+      windows: [{ lane: "A", from: 13, to: 67, showAt: 4, tone: "a" }],
+      steps: [
+        { ...commonReady, title: "A write begins like a read", body: "The transaction first takes a timestamped snapshot in Region A." },
+        { title: "Choose τstart and read locally", body: "The Query Processor reads <code>dogs/5</code> from nearby MVCC storage at a consistent snapshot.", activeNodes: [{id:"node-clock",tone:"a"},{id:"node-qpa",tone:"a"},{id:"node-storagea",tone:"a"}], paths: [{id:"path-clock-qpa",tone:"a"},{id:"path-qpa-storagea",tone:"a"}], details: [], sqlA: 2, sqlB: -1, stateA: "Read treats=7", stateB: "Idle", phase: 0, remote: "None", value: "7", outcome: "Pending" },
+        { title: "UPDATE stays inside the Query Processor", body: "The logical post-image is buffered locally. Storage still contains 7; other transactions are neither blocked nor exposed to the tentative 8.", activeNodes: [{id:"node-qpa",tone:"a"}], paths: [], details: ["detail-buffer-a"], sqlA: 5, sqlB: -1, stateA: "Tentative: treats=8", stateAClass: "tentative", stateB: "Idle", phase: 0, remote: "None", value: "7", outcome: "Pending" },
+        { title: "COMMIT opens the coordination path", body: "An adjudicator selects a candidate <code>τcommit</code> and checks for writes to the same keys since <code>τstart</code>.", activeNodes: [{id:"node-qpa",tone:"a"},{id:"node-adj1",tone:"a"}], paths: [{id:"path-qpa-adj1",tone:"a"},{id:"path-clock-adj1",tone:"a"}], details: ["detail-buffer-a","detail-write-a","detail-commit"], sqlA: 6, sqlB: -1, stateA: "Checking Wₐ={dogs/5}", stateB: "Idle", phase: 0, remote: "COMMIT only", value: "7", outcome: "No conflict" },
+        { title: "One Journal write is the commit point", body: "The adjudicator writes the complete logical post-image atomically. At this moment the transaction is ordered, durable, and committed.", activeNodes: [{id:"node-adj1",tone:"a"},{id:"node-journal",tone:"committed"}], paths: [{id:"path-adj1-journal",tone:"good"}], details: ["detail-journal-entry"], journalText: "dogs/5 → 8", sqlA: 6, sqlB: -1, stateA: "Committed at τcommit", stateAClass: "committed", stateB: "Idle", phase: 1, remote: "COMMIT only", value: "7", outcome: "Committed" },
+        { title: "Crossbar merges the Journal streams", body: "Each Journal is ordered independently. Crossbar merge-sorts those streams into commit-time order for each subscriber shard, then storage consumes the committed post-images deterministically. A reader that is not caught up to its requested timestamp waits rather than returning stale data.", activeNodes: [{id:"node-journal",tone:"committed"},{id:"node-journalb",tone:"both"},{id:"node-crossbar",tone:"committed"},{id:"node-storagea",tone:"committed"},{id:"node-storageb",tone:"committed"}], paths: [{id:"path-journal-crossbar",tone:"good"},{id:"path-journalb-crossbar",tone:"both"},{id:"path-crossbar-storagea",tone:"good"},{id:"path-crossbar-storageb",tone:"good"}], details: ["detail-journal-entry"], journalText: "dogs/5 → 8", sqlA: 6, sqlB: -1, stateA: "Client knows COMMIT succeeded", stateAClass: "committed", stateB: "Idle", phase: 2, remote: "Replication", value: "8", rowValue: "dogs/5 · treats=8", outcome: "Visible everywhere" },
+        { title: "Local work, then one decisive commit", body: "Reads and tentative writes avoided cross-region coordination. Only COMMIT paid the cost of conflict detection and durable replication.", activeNodes: [{id:"node-storagea",tone:"committed"},{id:"node-storageb",tone:"committed"}], paths: [], details: [], sqlA: 6, sqlB: -1, stateA: "Complete", stateAClass: "committed", stateB: "Idle", phase: 2, remote: "Complete", value: "8", rowValue: "dogs/5 · treats=8", outcome: "Committed" }
+      ]
+    },
+
+    conflict: {
+      label: "Conflicting writes",
+      sqlA: SQL.conflictA, sqlB: SQL.conflictB,
+      timeline: [
+        { lane: "A", pos: 10, label: "τstart A", showAt: 1, tone: "a" },
+        { lane: "B", pos: 19, label: "τstart B", showAt: 1, tone: "b" },
+        { lane: "A", pos: 57, label: "τcommit A", showAt: 5, tone: "a" },
+        { lane: "B", pos: 71, label: "conflict", showAt: 6, tone: "bad" },
+        { lane: "B", pos: 81, label: "τstart B′", showAt: 10, tone: "b" },
+        { lane: "B", pos: 94, label: "τcommit B′", showAt: 12, tone: "b" }
+      ],
+      windows: [
+        { lane: "A", from: 10, to: 57, showAt: 4, tone: "a" },
+        { lane: "B", from: 19, to: 71, showAt: 4, tone: "b" },
+        { lane: "B", from: 81, to: 94, showAt: 11, tone: "b" }
+      ],
+      steps: [
+        { ...commonReady, title: "Can both transactions commit?", body: "A and B will read the same row in different regions, calculate the same update, and race at COMMIT." },
+        { title: "Two independent snapshots", body: "Each Query Processor chooses <code>τstart</code> from its local precision clock. Neither transaction registers with a lock manager.", activeNodes: [{id:"node-clock",tone:"both"},{id:"node-qpa",tone:"a"},{id:"node-qpb",tone:"b"}], paths: [{id:"path-clock-qpa",tone:"a"},{id:"path-clock-qpb",tone:"b"}], details: [], sqlA: 0, sqlB: 0, stateA: "Snapshot A", stateB: "Snapshot B", phase: 0, remote: "None", value: "7", outcome: "Pending" },
+        { title: "Both reads stay in-region", body: "A and B independently read <code>treats=7</code> from nearby storage. Readers do not block one another or a writer.", activeNodes: [{id:"node-qpa",tone:"a"},{id:"node-storagea",tone:"a"},{id:"node-qpb",tone:"b"},{id:"node-storageb",tone:"b"}], paths: [{id:"path-qpa-storagea",tone:"a"},{id:"path-qpb-storageb",tone:"b"}], details: [], sqlA: 3, sqlB: 3, stateA: "Read treats=7", stateB: "Read treats=7", phase: 0, remote: "None", value: "7", outcome: "Pending" },
+        { title: "Both calculate 8—still without writing", body: "Each UPDATE is a tentative post-image held by its Query Processor. The durable database remains at 7.", activeNodes: [{id:"node-qpa",tone:"a"},{id:"node-qpb",tone:"b"}], paths: [], details: ["detail-buffer-a","detail-buffer-b"], sqlA: 5, sqlB: 5, stateA: "Tentative: treats=8", stateAClass: "tentative", stateB: "Tentative: treats=8", stateBClass: "tentative", phase: 0, remote: "None", value: "7", outcome: "Pending" },
+        { title: "Both ask to COMMIT", body: "Coordination starts only now. Each candidate carries its write set and snapshot interval to the adjudicator for <code>dogs/5</code>.", activeNodes: [{id:"node-qpa",tone:"a"},{id:"node-qpb",tone:"b"},{id:"node-adj1",tone:"both"}], paths: [{id:"path-qpa-adj1",tone:"a"},{id:"path-qpb-adj1",tone:"b"}], details: ["detail-buffer-a","detail-buffer-b","detail-write-a","detail-write-b","detail-commit"], sqlA: 6, sqlB: 6, stateA: "Candidate A", stateB: "Candidate B", phase: 0, remote: "COMMIT only", value: "7", outcome: "Adjudicating" },
+        { title: "A wins the commit order", body: "No conflicting write committed inside A's interval, so the Journal atomically accepts A's post-image at <code>τcommit A</code>.", activeNodes: [{id:"node-adj1",tone:"a"},{id:"node-journal",tone:"committed"}], paths: [{id:"path-adj1-journal",tone:"good"}], details: ["detail-write-a","detail-journal-entry"], journalText: "A · dogs/5 → 8", sqlA: 6, sqlB: 6, stateA: "Committed at τcommit A", stateAClass: "committed", stateB: "Waiting for decision", phase: 1, remote: "COMMIT only", value: "7", outcome: "A committed" },
+        { title: "B's conflict window contains A", body: "A wrote the same key after B's <code>τstart</code> and before B's candidate commit. The intersection is non-empty, so B cannot commit this snapshot.", activeNodes: [{id:"node-adj1",tone:"conflict"},{id:"node-journal",tone:"committed"}], paths: [{id:"path-qpb-adj1",tone:"bad"}], details: ["detail-write-a","detail-write-b","detail-conflict","detail-journal-entry"], journalText: "A · dogs/5 → 8", sqlA: 6, sqlB: 6, stateA: "Committed", stateAClass: "committed", stateB: "Conflict: dogs/5", stateBClass: "aborted", phase: 1, remote: "COMMIT only", value: "7", outcome: "B must abort" },
+        { title: "The loser aborts; it never blocked the winner", body: "B discards its tentative post-image. No client-held lock needs to be released, and a paused client could not have held A back.", activeNodes: [{id:"node-qpa",tone:"committed"},{id:"node-qpb",tone:"conflict"}], paths: [], details: ["detail-journal-entry"], journalText: "A · dogs/5 → 8", sqlA: 6, sqlB: 6, stateA: "Committed", stateAClass: "committed", stateB: "Aborted safely", stateBClass: "aborted", phase: 1, remote: "Complete", value: "7", outcome: "A wins; B retries" },
+        { title: "Crossbar merges A's committed post-image", body: "A is already committed and durable in Journal A, but storage still contains 7. Crossbar reads the independently ordered Journal streams and merge-sorts them into the stream for each subscriber shard.", activeNodes: [{id:"node-journal",tone:"committed"},{id:"node-journalb",tone:"both"},{id:"node-crossbar",tone:"committed"}], paths: [{id:"path-journal-crossbar",tone:"good"},{id:"path-journalb-crossbar",tone:"both"}], details: ["detail-journal-entry"], journalText: "A · dogs/5 → 8", sqlA: 6, sqlB: 6, stateA: "Committed and durable: 8", stateAClass: "committed", stateB: "Aborted; waiting to retry", stateBClass: "aborted", phase: 2, remote: "Replication", value: "7", outcome: "A is flowing to storage" },
+        { title: "Storage applies A's value", body: "Crossbar routes A's logical post-image to the storage shards that own <code>dogs/5</code>. Both replicas install the MVCC version <code>treats=8</code> at <code>τcommit A</code>.", activeNodes: [{id:"node-journal",tone:"committed"},{id:"node-crossbar",tone:"committed"},{id:"node-storagea",tone:"committed"},{id:"node-storageb",tone:"committed"}], paths: [{id:"path-crossbar-storagea",tone:"good"},{id:"path-crossbar-storageb",tone:"good"}], details: ["detail-journal-entry"], journalText: "A · dogs/5 → 8", sqlA: 6, sqlB: 6, stateA: "Applied to storage: 8", stateAClass: "committed", stateB: "Aborted; ready to retry", stateBClass: "aborted", phase: 2, remote: "Replication", value: "8", rowValue: "dogs/5 · treats=8", outcome: "A is now readable" },
+        { title: "B retries with a new τstart", body: "The aborted transaction is over. B begins a new transaction and samples the precision clock again, obtaining <code>τstart B′</code> after A's commit. This creates a new snapshot and a new conflict window.", activeNodes: [{id:"node-clock",tone:"b"},{id:"node-qpb",tone:"b"},{id:"node-journal",tone:"committed"}], paths: [{id:"path-clock-qpb",tone:"b"}], details: ["detail-journal-entry"], journalText: "A · dogs/5 → 8", sqlA: 6, sqlB: 0, stateA: "Committed: 8", stateAClass: "committed", stateB: "New snapshot at τstart B′", phase: 0, remote: "None", value: "8", rowValue: "dogs/5 · treats=8", outcome: "Fresh retry begins" },
+        { title: "The new snapshot includes A's write", body: "B's local replica must be complete through <code>τstart B′</code>. It now returns 8, so B computes a new tentative post-image with <code>treats=9</code>.", activeNodes: [{id:"node-qpb",tone:"b"},{id:"node-storageb",tone:"b"}], paths: [{id:"path-qpb-storageb",tone:"b"}], details: ["detail-buffer-b","detail-journal-entry"], bufferB: "retry: 8 → 9", journalText: "A · dogs/5 → 8", sqlA: 6, sqlB: 5, stateA: "Committed: 8", stateAClass: "committed", stateB: "Tentative retry: 9", stateBClass: "tentative", phase: 0, remote: "None", value: "8", rowValue: "dogs/5 · treats=8", outcome: "Retrying from 8" },
+        { title: "B's retry can now commit", body: "Because A committed before <code>τstart B′</code>, A is not inside the retry's conflict window. With no newer conflicting write, Journal A accepts B at <code>τcommit B′</code>.", activeNodes: [{id:"node-qpb",tone:"b"},{id:"node-adj1",tone:"b"},{id:"node-journal",tone:"committed"}], paths: [{id:"path-qpb-adj1",tone:"b"},{id:"path-adj1-journal",tone:"good"}], details: ["detail-buffer-b","detail-write-b","detail-journal-entry"], bufferB: "retry: 8 → 9", journalText: "B retry · dogs/5 → 9", sqlA: 6, sqlB: 6, stateA: "Committed: 8", stateAClass: "committed", stateB: "Committed at τcommit B′", stateBClass: "committed", phase: 1, remote: "Retry COMMIT", value: "8", rowValue: "dogs/5 · treats=8", outcome: "Both effects ordered" },
+        { title: "One order, no lost update", body: "Crossbar distributes the committed post-images in order: first A's 8, then B's retried 9. All complete readers converge on the same history.", activeNodes: [{id:"node-journal",tone:"committed"},{id:"node-journalb",tone:"both"},{id:"node-crossbar",tone:"committed"},{id:"node-storagea",tone:"committed"},{id:"node-storageb",tone:"committed"}], paths: [{id:"path-journal-crossbar",tone:"good"},{id:"path-journalb-crossbar",tone:"both"},{id:"path-crossbar-storagea",tone:"good"},{id:"path-crossbar-storageb",tone:"good"}], details: ["detail-journal-entry"], journalText: "ordered: A→8, B→9", sqlA: 6, sqlB: 6, stateA: "Complete", stateAClass: "committed", stateB: "Complete after retry", stateBClass: "committed", phase: 2, remote: "Replication", value: "9", rowValue: "dogs/5 · treats=9", outcome: "No lost update" }
+      ]
+    },
+
+    multi: {
+      label: "Multi-shard commit",
+      sqlA: SQL.multiA, sqlB: SQL.empty,
+      timeline: [
+        { lane: "A", pos: 12, label: "τstart", showAt: 1, tone: "a" },
+        { lane: "A", pos: 68, label: "max(τadj)", showAt: 4, tone: "a" }
+      ],
+      windows: [{ lane: "A", from: 12, to: 68, showAt: 3, tone: "a" }],
+      steps: [
+        { ...commonReady, title: "One transaction, two adjudicator shards", body: "The two updated keys map to independent adjudicators, but the transaction must still become atomic with one commit time." },
+        { title: "Execution remains local", body: "The Query Processor chooses <code>τstart</code> and executes SQL in Region A without holding remote locks.", activeNodes: [{id:"node-clock",tone:"a"},{id:"node-qpa",tone:"a"}], paths: [{id:"path-clock-qpa",tone:"a"}], details: [], sqlA: 0, sqlB: -1, stateA: "Snapshot at τstart", stateB: "Idle", phase: 0, remote: "None", value: "7", outcome: "Pending" },
+        { title: "Buffer every logical change", body: "The Query Processor creates post-images for <code>dogs/5</code>, <code>owners/42</code>, and any affected indexes. None is durable yet.", activeNodes: [{id:"node-qpa",tone:"a"}], paths: [], details: ["detail-buffer-a"], bufferA: "2 keys tentative", sqlA: 4, sqlB: -1, stateA: "Two tentative post-images", stateAClass: "tentative", stateB: "Idle", phase: 0, remote: "None", value: "7", outcome: "Pending" },
+        { title: "Prepare fans out at COMMIT", body: "The Query Processor broadcasts the candidate to every adjudicator owning a written key. Each checks its slice for conflicts.", activeNodes: [{id:"node-qpa",tone:"a"},{id:"node-adj1",tone:"a"},{id:"node-adj2",tone:"a"}], paths: [{id:"path-qpa-adj1",tone:"a"},{id:"path-qpa-adj2",tone:"a"}], details: ["detail-buffer-a","detail-commit"], bufferA: "W = {dogs/5, owners/42}", sqlA: 5, sqlB: -1, stateA: "Preparing on 2 shards", stateB: "Idle", phase: 0, remote: "COMMIT fan-out", value: "7", outcome: "Voting" },
+        { title: "Adjudicators vote and make short promises", body: "Positive votes and clock values go to one selected leader. The leader chooses <code>τcommit = max(τadj)</code>; promises prevent a conflicting earlier commit.", activeNodes: [{id:"node-adj1",tone:"both"},{id:"node-adj2",tone:"both"},{id:"node-clock",tone:"both"}], paths: [{id:"path-clock-adj1",tone:"both"},{id:"path-clock-adj2",tone:"both"}], details: ["detail-promises"], sqlA: 5, sqlB: -1, stateA: "All YES; τcommit chosen", stateB: "Idle", phase: 0, remote: "COMMIT fan-out", value: "7", outcome: "Candidate accepted" },
+        { title: "Only the leader's Journal is written", body: "The entire transaction—not one fragment per adjudicator—is appended atomically to a single Journal. This is the actual commit point.", activeNodes: [{id:"node-adj1",tone:"a"},{id:"node-adj2",tone:"both"},{id:"node-journal",tone:"committed"}], paths: [{id:"path-adj1-journal",tone:"good"}], details: ["detail-journal-entry"], journalText: "2 rows + indexes", sqlA: 5, sqlB: -1, stateA: "Committed atomically", stateAClass: "committed", stateB: "Idle", phase: 1, remote: "COMMIT only", value: "7", outcome: "One Journal write" },
+        { title: "Crossbar merges order, then routes", body: "After commitment, crossbar merge-sorts the independent per-adjudicator Journal streams by commit timestamp for each subscriber shard, then routes each logical post-image to the storage shard that owns it. Storage applies an already-decided order.", activeNodes: [{id:"node-journal",tone:"committed"},{id:"node-journalb",tone:"both"},{id:"node-crossbar",tone:"committed"},{id:"node-storagea",tone:"committed"},{id:"node-storageb",tone:"committed"}], paths: [{id:"path-journal-crossbar",tone:"good"},{id:"path-journalb-crossbar",tone:"both"},{id:"path-crossbar-storagea",tone:"good"},{id:"path-crossbar-storageb",tone:"good"}], details: ["detail-journal-entry"], journalText: "2 rows + indexes", sqlA: 5, sqlB: -1, stateA: "Complete", stateAClass: "committed", stateB: "Idle", phase: 2, remote: "Replication", value: "8", rowValue: "dogs/5 · treats=8", outcome: "Atomic across shards" }
+      ]
+    }
+  };
+
+  const dom = {
+    tabs: [...document.querySelectorAll(".scenario-tab")],
+    sqlA: document.getElementById("sqlA"), sqlB: document.getElementById("sqlB"),
+    stateA: document.getElementById("stateA"), stateB: document.getElementById("stateB"),
+    kicker: document.getElementById("stepKicker"), title: document.getElementById("stepTitle"), body: document.getElementById("stepBody"),
+    locks: document.getElementById("metricLocks"), remote: document.getElementById("metricRemote"), value: document.getElementById("metricValue"), outcome: document.getElementById("metricOutcome"),
+    laneA: document.getElementById("laneA"), laneB: document.getElementById("laneB"),
+    back: document.getElementById("backButton"), play: document.getElementById("playButton"), next: document.getElementById("nextButton"), reset: document.getElementById("resetButton"), progress: document.getElementById("progressText"),
+    invariants: [document.getElementById("invariantTentative"), document.getElementById("invariantDurable"), document.getElementById("invariantDistributed")],
+    rowA: document.getElementById("rowA"), rowB: document.getElementById("rowB"), rowValueA: document.getElementById("rowValueA"), rowValueB: document.getElementById("rowValueB"),
+    bufferA: document.getElementById("bufferTextA"), bufferB: document.getElementById("bufferTextB"), journalText: document.getElementById("journalText")
+  };
+
+  let scenarioKey = "conflict";
+  let stepIndex = 0;
+  let timer = null;
+
+  function validateScenarios() {
+    const required = ["title","body","activeNodes","paths","details","sqlA","sqlB","stateA","stateB","phase","remote","value","outcome"];
+    Object.entries(scenarios).forEach(([key, scenario]) => {
+      if (!scenario.steps.length) throw new Error(`Scenario ${key} has no steps`);
+      scenario.steps.forEach((step, index) => required.forEach(field => {
+        if (!(field in step)) throw new Error(`Scenario ${key}, step ${index} is missing ${field}`);
+      }));
+    });
+  }
+
+  function renderSQL(target, lines, activeIndex, tone) {
+    target.replaceChildren();
+    lines.forEach((line, index) => {
+      const span = document.createElement("span");
+      span.className = "sql-line";
+      if (index === activeIndex) span.classList.add(tone === "a" ? "active-a" : "active-b");
+      else if (index < activeIndex) span.classList.add("done");
+      span.textContent = line;
+      target.appendChild(span);
+    });
+  }
+
+  function clearDiagram() {
+    document.querySelectorAll(".node").forEach(node => node.classList.remove("active-a","active-b","active-both","committed","conflict"));
+    document.querySelectorAll(".path").forEach(path => path.classList.remove("active","flow-a","flow-b","flow-both","flow-good","flow-bad"));
+    document.querySelectorAll(".detail, .commit-curtain").forEach(detail => detail.classList.remove("visible"));
+    dom.rowA.classList.remove("fresh");
+    dom.rowB.classList.remove("fresh");
+  }
+
+  function applyNode({id, tone}) {
+    const node = document.getElementById(id);
+    const classes = { a:"active-a", b:"active-b", both:"active-both", committed:"committed", conflict:"conflict" };
+    if (node && classes[tone]) node.classList.add(classes[tone]);
+  }
+
+  function applyPath({id, tone}) {
+    const path = document.getElementById(id);
+    const classes = { a:"flow-a", b:"flow-b", both:"flow-both", good:"flow-good", bad:"flow-bad" };
+    if (path) path.classList.add("active", classes[tone] || "flow-a");
+  }
+
+  function formatTimestamps(value) {
+    return String(value).replace(/τ(start|commit|adj)/g, "τ<sub>$1</sub>");
+  }
+
+  function setState(element, text, stateClass) {
+    element.innerHTML = formatTimestamps(text);
+    element.className = "state-value";
+    if (stateClass) element.classList.add(stateClass);
+  }
+
+  function renderTimeline(scenario) {
+    [dom.laneA, dom.laneB].forEach(lane => lane.querySelectorAll(":scope > :not(.lane-label)").forEach(child => child.remove()));
+    scenario.windows.filter(item => item.showAt <= stepIndex).forEach(item => {
+      const windowEl = document.createElement("div");
+      windowEl.className = `window ${item.tone}`;
+      windowEl.style.left = `${item.from}%`;
+      windowEl.style.width = `${item.to - item.from}%`;
+      (item.lane === "A" ? dom.laneA : dom.laneB).appendChild(windowEl);
+    });
+    scenario.timeline.filter(item => item.showAt <= stepIndex).forEach(item => {
+      const marker = document.createElement("div");
+      marker.className = `time-marker ${item.tone}`;
+      marker.style.left = `${item.pos}%`;
+      const label = document.createElement("span");
+      label.innerHTML = formatTimestamps(item.label);
+      marker.appendChild(label);
+      (item.lane === "A" ? dom.laneA : dom.laneB).appendChild(marker);
+    });
+  }
+
+  function render() {
+    const scenario = scenarios[scenarioKey];
+    const step = scenario.steps[stepIndex];
+
+    dom.tabs.forEach(tab => tab.setAttribute("aria-selected", String(tab.dataset.scenario === scenarioKey)));
+    renderSQL(dom.sqlA, scenario.sqlA, step.sqlA, "a");
+    renderSQL(dom.sqlB, scenario.sqlB, step.sqlB, "b");
+    setState(dom.stateA, step.stateA, step.stateAClass);
+    setState(dom.stateB, step.stateB, step.stateBClass);
+
+    clearDiagram();
+    step.activeNodes.forEach(applyNode);
+    step.paths.forEach(applyPath);
+    step.details.forEach(id => document.getElementById(id)?.classList.add("visible"));
+
+    dom.bufferA.textContent = step.bufferA || "tentative: 7 → 8";
+    dom.bufferB.textContent = step.bufferB || "tentative: 7 → 8";
+    dom.journalText.textContent = step.journalText || "dogs/5 → 8";
+    const rowValue = step.rowValue || "dogs/5 · treats=7";
+    dom.rowValueA.textContent = rowValue;
+    dom.rowValueB.textContent = rowValue;
+    if (step.phase === 2) { dom.rowA.classList.add("fresh"); dom.rowB.classList.add("fresh"); }
+
+    dom.kicker.textContent = `${scenario.label} · step ${stepIndex + 1}`;
+    dom.title.innerHTML = formatTimestamps(step.title);
+    dom.body.innerHTML = formatTimestamps(step.body);
+    dom.locks.textContent = "0";
+    dom.remote.textContent = step.remote;
+    dom.value.textContent = step.value;
+    dom.outcome.textContent = step.outcome;
+    dom.invariants.forEach((item, index) => item.classList.toggle("on", index === step.phase));
+    renderTimeline(scenario);
+
+    dom.back.disabled = stepIndex === 0;
+    dom.next.disabled = stepIndex === scenario.steps.length - 1;
+    dom.progress.textContent = `${stepIndex + 1} / ${scenario.steps.length}`;
+  }
+
+  function stop() {
+    if (timer) window.clearInterval(timer);
+    timer = null;
+    dom.play.textContent = "Play";
+  }
+
+  function next() {
+    const steps = scenarios[scenarioKey].steps;
+    if (stepIndex < steps.length - 1) {
+      stepIndex += 1;
+      render();
+    } else {
+      stop();
+    }
+  }
+
+  function back() {
+    stop();
+    if (stepIndex > 0) { stepIndex -= 1; render(); }
+  }
+
+  function togglePlay() {
+    if (timer) { stop(); return; }
+    if (stepIndex === scenarios[scenarioKey].steps.length - 1) stepIndex = 0;
+    dom.play.textContent = "Pause";
+    render();
+    timer = window.setInterval(next, 1850);
+  }
+
+  function selectScenario(key) {
+    if (!scenarios[key]) return;
+    stop();
+    scenarioKey = key;
+    stepIndex = 0;
+    render();
+  }
+
+  dom.tabs.forEach(tab => tab.addEventListener("click", () => selectScenario(tab.dataset.scenario)));
+  dom.back.addEventListener("click", back);
+  dom.next.addEventListener("click", () => { stop(); next(); });
+  dom.play.addEventListener("click", togglePlay);
+  dom.reset.addEventListener("click", () => { stop(); stepIndex = 0; render(); });
+  document.addEventListener("keydown", event => {
+    if (event.target.matches("button")) return;
+    if (event.key === "ArrowRight") { event.preventDefault(); stop(); next(); }
+    if (event.key === "ArrowLeft") { event.preventDefault(); back(); }
+    if (event.code === "Space") { event.preventDefault(); togglePlay(); }
+  });
+
+  validateScenarios();
+  render();
+})();
+</script>
+</body>
+</html>
