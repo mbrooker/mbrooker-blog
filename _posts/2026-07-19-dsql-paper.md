@@ -19,7 +19,7 @@ Our new paper, [Aurora DSQL: Scalable, Multi-Region OLTP](https://arxiv.org/abs/
 
 You should [read it](https://arxiv.org/abs/2607.13276).
 
-Or check out the [interactive transaction simulator](dsql-transaction-flow.html) to get a feel for how it works.
+Or check out the [interactive transaction simulator](https://brooker.co.za/dsql-transaction-flow.html) to get a feel for how it works.
 
 *Some highlights*
 
