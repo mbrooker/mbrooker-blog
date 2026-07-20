@@ -426,10 +426,10 @@
 <main class="page">
   <header>
     <div>
-      <p class="eyebrow"><span>Aurora DSQL transaction anatomy</span><a class="paper-link" href="https://arxiv.org/abs/2607.13276" target="_blank" rel="noopener noreferrer">Read the paper ↗</a></p>
-      <h1>Everything is local until <em>COMMIT</em>.</h1>
+      <p class="eyebrow"><span>Everything is local until COMMIT.</span><a class="paper-link" href="https://arxiv.org/abs/2607.13276" target="_blank" rel="noopener noreferrer">Read the paper ↗</a></p>
+      <h1>How Aurora DSQL transactions work.</h1>
     </div>
-    <p class="dek">Step through two transactions in different regions. Reads use a local snapshot. Writes become durable only after optimistic conflict detection.</p>
+    <p class="dek">Choose a scenario below, and then step through how the transactions flow and conflicts are detected.</p>
   </header>
 
   <section class="shell" aria-label="Interactive Aurora DSQL transaction flow">
