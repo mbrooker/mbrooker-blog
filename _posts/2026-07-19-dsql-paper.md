@@ -17,7 +17,9 @@ dissimilar_posts:
 
 Our new paper, [Aurora DSQL: Scalable, Multi-Region OLTP](https://arxiv.org/abs/2607.13276), is now available on Arxiv. I'm excited about this one: it's a fully end-to-end look at how Aurora DSQL works, from query processing, to transactions, to replication, to the control plane. We've shared most of this content before in other forms, on this blog, on [Marc Bowes' Blog](https://marc-bowes.com/), [Werner's Blog](https://www.allthingsdistributed.com/2025/05/just-make-it-scale-an-aurora-dsql-story.html), in talks, and on the AWS blog. But this version covers all the ground, all in one place.
 
-You should read it.
+You should [read it](https://arxiv.org/abs/2607.13276).
+
+Or check out the [interactive transaction simulator](dsql-transaction-flow.html) to get a feel for how it works.
 
 *Some highlights*
 
@@ -28,6 +30,8 @@ I've written about this argument before (in [DSQL: Simplifying Architectures](ht
 > DSQL’s architecture is disaggregated. Multiple independent services, each focused on a small number of well-defined concerns.
 
 DSQL isn't the first disaggregated OLTP database. Many, including Aurora and DynamoDB, came before. What's interesting here is how we learned from those systems, and the lessons that came from operating them at scale: avoiding large caches (they make failovers and read scale tricky), offering strongly consistent scalable reads (avoiding whole classes of hot key and partition problems), and pushing expensive operations like scans down to storage where they run right next to local SSD.
+
+We've also taken the approach further than others, especially in completely disaggregating replication from transaction isolation and storage.
 
 >  Packing multiple workloads reduces the peak-to-average ratio of load on each physical machine (approximately at the rate of √loads). Given that resource cost typically scales with peak, and revenue scales with average, the economic benefit is obvious.
 
@@ -43,6 +47,6 @@ And figure 6, another big advantage of the architecture, showing fast `SELECT`s 
 
 > The 2007 Amazon Dynamo paper’s embrace of eventual consistency [12], and Werner Vogels 2009 article Eventually Consistent [36], reflected the thinking at the time that cloud-scale systems needed to embrace eventual consistency to achieve their availability and latency goals. Since then, advancements in time distribution, data-center networks, power and cooling infrastructure, and distributed protocols have changed the trade-offs.
 
-A perfect illustration of ongoing benefits to databases and software systems coming from hardware and datacenter innovations. It's hard to overstate the power of this trend (and the opportunity still available).
+A perfect illustration of ongoing benefits to databases and software systems coming from hardware, datacenter design, and networking innovations. It's hard to overstate the power of this trend (and the opportunity still available). I continue to believe that [strong consistency](https://brooker.co.za/blog/2025/11/18/consistency.html) is the right default, and the right choice for nearly all applications.
 
 Check out out paper here: [Aurora DSQL: Scalable, Multi-Region OLTP](https://arxiv.org/abs/2607.13276)

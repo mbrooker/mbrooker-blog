@@ -435,6 +435,7 @@
   <section class="shell" aria-label="Interactive Aurora DSQL transaction flow">
     <div class="scenario-bar" role="tablist" aria-label="Transaction scenarios">
       <button class="scenario-tab" role="tab" data-scenario="read" aria-selected="false">Read only</button>
+      <button class="scenario-tab" role="tab" data-scenario="readTwo" aria-selected="false">Read only (two region)</button>
       <button class="scenario-tab" role="tab" data-scenario="write" aria-selected="false">Successful write</button>
       <button class="scenario-tab" role="tab" data-scenario="conflict" aria-selected="true">Conflicting writes</button>
       <button class="scenario-tab" role="tab" data-scenario="multi" aria-selected="false">Multi-shard commit</button>
@@ -564,7 +565,7 @@
     </div>
   </section>
 
-  <p class="footnote">Conceptual animation based on the transaction protocol in <a href="https://arxiv.org/abs/2607.13276" target="_blank" rel="noopener noreferrer"><em>Aurora DSQL: Scalable, Multi-Region OLTP</em></a>. Timing and topology are illustrative; the invariants are the point.</p>
+  <p class="footnote">Conceptual animation based on the transaction protocol in <a href="https://arxiv.org/abs/2607.13276" target="_blank" rel="noopener noreferrer"><em>Aurora DSQL: Scalable, Multi-Region OLTP</em></a>. Timing and topology are illustrative.</p>
 </main>
 
 <script>
@@ -603,6 +604,28 @@
         { title: "Read the nearest complete replica", body: "Storage returns the newest row version committed before <code>τstart</code>. No primary or lock server is consulted.", activeNodes: [{id:"node-qpa",tone:"a"},{id:"node-storagea",tone:"a"}], paths: [{id:"path-qpa-storagea",tone:"a"}], details: [], sqlA: 2, sqlB: -1, stateA: "Reading snapshot", stateB: "Idle", phase: 0, remote: "None", value: "7", outcome: "Pending" },
         { title: "The snapshot is stable", body: "Concurrent writers may advance the database, but this transaction continues to see its point-in-time view.", activeNodes: [{id:"node-storagea",tone:"a"}], paths: [], details: [], sqlA: 3, sqlB: -1, stateA: "Read 'Mochi', 7", stateB: "Idle", phase: 0, remote: "None", value: "7", outcome: "Pending" },
         { title: "Read-only COMMIT is a local no-op", body: "The Query Processor forgets the transaction. There are no locks to release, no conflict check, and no possibility of an OCC abort.", activeNodes: [{id:"node-qpa",tone:"committed"}], paths: [], details: [], sqlA: 4, sqlB: -1, stateA: "Committed locally", stateB: "Idle", phase: 0, remote: "None", value: "7", outcome: "Never aborts" }
+      ]
+    },
+
+    readTwo: {
+      label: "Read only (two region)",
+      sqlA: SQL.readA, sqlB: SQL.readA,
+      timeline: [
+        { lane: "A", pos: 12, label: "τstart A", showAt: 1, tone: "a" },
+        { lane: "B", pos: 23, label: "τstart B", showAt: 1, tone: "b" },
+        { lane: "A", pos: 69, label: "local COMMIT A", showAt: 4, tone: "a" },
+        { lane: "B", pos: 80, label: "local COMMIT B", showAt: 4, tone: "b" }
+      ],
+      windows: [
+        { lane: "A", from: 12, to: 69, showAt: 2, tone: "a" },
+        { lane: "B", from: 23, to: 80, showAt: 2, tone: "b" }
+      ],
+      steps: [
+        { ...commonReady, title: "Two regions, zero read coordination", body: "A and B will run independent read-only transactions against the same strongly consistent database. No read request crosses the region boundary." },
+        { title: "Each region chooses its own τstart", body: "Each Query Processor samples the precision clock available locally in its region. This is not a request to a shared timestamp server or to the other region; <code>τstart A</code> and <code>τstart B</code> independently define the two snapshots.", activeNodes: [{id:"node-clock",tone:"both"},{id:"node-qpa",tone:"a"},{id:"node-qpb",tone:"b"}], paths: [{id:"path-clock-qpa",tone:"a"},{id:"path-clock-qpb",tone:"b"}], details: [], sqlA: 0, sqlB: 0, stateA: "Snapshot at τstart A", stateB: "Snapshot at τstart B", phase: 0, remote: "None", value: "7", outcome: "Two local snapshots" },
+        { title: "Both reads stay inside their region", body: "Each Query Processor asks only its nearest complete MVCC replica for the newest version before its own <code>τstart</code>. Neither read contacts a primary, lock server, adjudicator, Journal, crossbar, or the other region.", activeNodes: [{id:"node-qpa",tone:"a"},{id:"node-storagea",tone:"a"},{id:"node-qpb",tone:"b"},{id:"node-storageb",tone:"b"}], paths: [{id:"path-qpa-storagea",tone:"a"},{id:"path-qpb-storageb",tone:"b"}], details: [], sqlA: 2, sqlB: 2, stateA: "Reading local snapshot A", stateB: "Reading local snapshot B", phase: 0, remote: "None", value: "7", outcome: "No coordinator involved" },
+        { title: "Strong snapshots without a global read path", body: "Both replicas return <code>'Mochi', 7</code>. A replica serves only after it is complete through the requested timestamp; if one is behind, that read waits locally rather than coordinating with the other region. The entire commit path remains idle.", activeNodes: [{id:"node-storagea",tone:"a"},{id:"node-storageb",tone:"b"}], paths: [], details: [], sqlA: 3, sqlB: 3, stateA: "Read 'Mochi', 7", stateB: "Read 'Mochi', 7", phase: 0, remote: "None", value: "7", outcome: "Independent snapshots" },
+        { title: "Both read-only COMMITs are local no-ops", body: "Each Query Processor simply forgets its transaction. There are no locks to release, no OCC conflict checks, and no messages between regions. Both transactions finish independently and cannot lose a conflict race.", activeNodes: [{id:"node-qpa",tone:"committed"},{id:"node-qpb",tone:"committed"}], paths: [], details: [], sqlA: 4, sqlB: 4, stateA: "Committed locally", stateAClass: "committed", stateB: "Committed locally", stateBClass: "committed", phase: 0, remote: "None", value: "7", outcome: "Zero cross-region messages" }
       ]
     },
 
