@@ -18,7 +18,7 @@ title: "Lorenz and Little: How Much Does Your Tail Cost?"
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-It's time for Marc's Amateur Statistics Corner! Today: why I pay a lot of attention to tail latency.
+It's time for Marc's Amateur Statistics Corner! Today: why I pay a lot of attention to tail latency when optimizing cost.
 
 I've written before on the importance of tail latency for customer experience (e.g. [in 2026](https://brooker.co.za/blog/2026/06/19/waiting.html), [2021](https://brooker.co.za/blog/2021/10/20/simulation.html), and [2021](https://brooker.co.za/blog/2021/04/19/latency.html), and [2017](https://brooker.co.za/blog/2017/12/28/mean.html)). Today, I want to talk about tail latency from the perspective of cost and capacity.
 
@@ -26,7 +26,7 @@ Like many system operators, I think about tail latency using percentiles.
 
 Here's a question: how much does each of my latency percentiles contributed to the mean latency? Intuitively, the answer is "quite a lot", but can we quantify that? We can! The thing we're looking for is the [empirical Lorenz Curve](https://en.wikipedia.org/wiki/Lorenz_curve). It directly calculates the answer to the question: given a latency percentile $P$ (e.g. p99=100ms), how much do requests taking shorter than $P$ contribute to the mean latency? (Let's call it $L(P)$ , so the real answer to our question is $1 - L(P)$).
 
-Starting from latency samples, the calculation is pretty simple: `L(p) = sum(sorted(x)[-ceil(p*n):]) / sum(x)` (for a set of n latency samples x). From a vector of quantiles, things get a little more complicated, because we have to choose how to interpolate between the samples. Here I'm interpolating using a power law, which is a little bit of a sin, but good enough for our purposes.
+Starting from latency samples, the calculation is pretty simple: `L = sum(sorted(x)[:k]) / sum(x)` (for a set of `n` latency samples `x`, and `k=p*n`). From a vector of quantiles, things get a little more complicated, because we have to choose how to interpolate between the samples and extrapolate out to the maximum. Here I'm interpolating using a power law, which is a little bit of a sin<sup>[1](#foot1)</sup>, but good enough for our purposes.
 
 <style>
   .one-minus-l-code summary {
@@ -94,14 +94,13 @@ print(OneMinusL([1, 10, 200, 10000, 20000], [0, 0.5, 0.9, 0.99, 0.999]))
 [1. 0.99377318 0.93082759 0.51712644 0.10342529]
 </code></pre>
 
-That tells us that, for this distribution, requests at or longer than the median (p50) contribute about 99% of the mean latency, at requests at or longer than the p99 contribute about 52% of the mean latency.
+That tells us that, for this distribution, requests at or longer than the median (p50) contribute about 99% of the mean latency, at requests at or longer than the p99 contribute about 52% of the mean latency<sup>[2](#foot2)</sup>.
 
-That's fun, but why do I care? Because [Little's law](https://en.wikipedia.org/wiki/Little%27s_law) tells us that this same value (contribution to the mean) is also the contribution to the concurrency in the system. In a simple threaded system, if $1 - L(p) = k$ , then $k$% of the threads in our service are busy with requests with a latency above the $p$th percentile. In my experience, it's not unusual in services for $1 - L(0.99)$ to be greater than $0.5$ or even $0.75$. That tells us that optimizing the tail could be a much bigger than expected contributor to reducing concurrency, and along with that reducing capacity demand, lock contention, and other things that come with higher concurrency.
+That's fun, but why do I care? Because [Little's law](https://en.wikipedia.org/wiki/Little%27s_law) tells us that this same value (contribution to the mean) is also the contribution to the concurrency in the system. In a simple threaded system, if $1 - L(p) = k$ , then $k%%$ of the busy threads in our service are busy with requests with a latency above the $p$th percentile. Queues, event-based implementations, etc complicate the mapping of concurrency to cost, so you'll need to think about those in context of your own system.
 
-Tails tend to be disproportionately expensive to serve, and so disproportionately important to focus on as we think about optimization. We shouldn't make the mistake of trimming them off, because they're often the thing that's driving costs! (And, of course, bad customer experiences).
+In my experience, it's not unusual in services for $1 - L(0.99)$ to be greater than $0.5$ or even $0.75$. That tells us that optimizing the tail could be a much bigger than expected contributor to reducing concurrency, and along with that reducing capacity demand, lock contention, and other things that come with higher concurrency. Tails tend to be disproportionately expensive to serve, and so disproportionately important to focus on as we think about optimization. We shouldn't make the mistake of trimming them off, because they're often the thing that's driving costs! (And, of course, bad customer experiences).
 
 If you want to play with some values, type your percentiles in here, and see your curve:
-
 
 <div markdown="0" style="margin: 1.5em 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;">
 <p style="line-height: 2.1;">
@@ -337,3 +336,8 @@ If you want to play with some values, type your percentiles in here, and see you
   draw();
 })();
 </script>
+
+**Footnotes**
+
+1. <a name="foot1"></a> There are two sins here: one of them is that I'm arbitrarily choosing a way to interpolate, and the other than I'm arbitrarily choosing a way to extrapolate. The denser your percentiles and closer your data fits a Pareto distribution, the less that matters. But if you want an exact empirical answer, you'll need to use a different approach (specifically, the approach based on the sorted raw samples). I did say it was amateur statistics corner.
+2. <a name="foot2"></a> The other sin here, of course, is that our measured percentiles are estimates of the true percentiles, and the uncertainty goes up as the percentile gets larger. You might get very variable results if you have heavy tails and small samples. Not ideal, but doesn't change the conclusion.
