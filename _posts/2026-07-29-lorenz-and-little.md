@@ -28,6 +28,45 @@ Here's a question: how much does each of my latency percentiles contributed to t
 
 Starting from latency samples, the calculation is pretty simple: `L(p) = sum(sorted(x)[-ceil(p*n):]) / sum(x)` (for a set of n latency samples x). From a vector of quantiles, things get a little more complicated, because we have to choose how to interpolate between the samples. Here I'm interpolating using a power law, which is a little bit of a sin, but good enough for our purposes.
 
+<style>
+  .one-minus-l-code summary {
+    cursor: pointer;
+    list-style: none;
+  }
+  .one-minus-l-code summary::-webkit-details-marker {
+    display: none;
+  }
+  .one-minus-l-code .code-preview {
+    display: block;
+    overflow-x: auto;
+    padding: 1em;
+    background: #f5f2f0;
+    white-space: pre;
+  }
+  .one-minus-l-code .code-toggle {
+    display: inline-block;
+    margin: 0.4em 0 1em;
+    color: #555;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 0.9em;
+  }
+  .one-minus-l-code .when-open,
+  .one-minus-l-code[open] .code-preview,
+  .one-minus-l-code[open] .when-closed {
+    display: none;
+  }
+  .one-minus-l-code[open] .when-open {
+    display: inline;
+  }
+</style>
+
+<details class="one-minus-l-code">
+<summary><code class="code-preview language-python"># Calculate 1 - L(p) for a vector of measured quantiles
+# q - an array of quantiles (e.g. [1, 10, 200, 10000, 20000])
+# p - an array of percentiles they're measured at (e.g. [0, 0.5, 0.9, 0.99, 0.999])
+# OneMinusL - One minus the empirical Lorenz curve for each of the percentiles
+def OneMinusL(q, p):
+  ...</code><span class="code-toggle"><span class="when-closed">Show full implementation</span><span class="when-open">Hide implementation</span></span></summary>
 <pre><code class="language-python">
 # Calculate 1 - L(p) for a vector of measured quantiles
 # q - an array of quantiles (e.g. [1, 10, 200, 10000, 20000])
@@ -46,6 +85,7 @@ def OneMinusL(q, p):
   c = np.r_[0, np.cumsum(a/(a-1)*(w[:-1]-w[1:]))]
   return 1 - c/(c[-1] + a[-1]/(a[-1]-1)*w[-1])
 </code></pre>
+</details>
 
 For example:
 
@@ -56,7 +96,7 @@ print(OneMinusL([1, 10, 200, 10000, 20000], [0, 0.5, 0.9, 0.99, 0.999]))
 
 That tells us that, for this distribution, requests at or longer than the median (p50) contribute about 99% of the mean latency, at requests at or longer than the p99 contribute about 52% of the mean latency.
 
-That's fun, but Why do I care? Because [Little's law](https://en.wikipedia.org/wiki/Little%27s_law) tells us that this same value (contribution to the mean) is also the contribution to the concurrency in the system. In a simple threaded system, if $1 - L(p) = k$ , then $k$% of the threads in our service are busy with requests with a latency above the $p$th percentile. In my experience, it's not unusual in services for $1 - L(0.99)$ to be greater than $0.5$ or even $0.75$. That tells us that optimizing the tail could be a much bigger than expected contributor to reducing concurrency, and along with that reducing capacity demand, lock contention, and other things that come with higher concurrency.
+That's fun, but why do I care? Because [Little's law](https://en.wikipedia.org/wiki/Little%27s_law) tells us that this same value (contribution to the mean) is also the contribution to the concurrency in the system. In a simple threaded system, if $1 - L(p) = k$ , then $k$% of the threads in our service are busy with requests with a latency above the $p$th percentile. In my experience, it's not unusual in services for $1 - L(0.99)$ to be greater than $0.5$ or even $0.75$. That tells us that optimizing the tail could be a much bigger than expected contributor to reducing concurrency, and along with that reducing capacity demand, lock contention, and other things that come with higher concurrency.
 
 Tails tend to be disproportionately expensive to serve, and so disproportionately important to focus on as we think about optimization. We shouldn't make the mistake of trimming them off, because they're often the thing that's driving costs! (And, of course, bad customer experiences).
 
