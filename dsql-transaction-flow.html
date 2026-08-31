@@ -438,6 +438,7 @@
       <button class="scenario-tab" role="tab" data-scenario="readTwo" aria-selected="false">Read only (two region)</button>
       <button class="scenario-tab" role="tab" data-scenario="write" aria-selected="false">Successful write</button>
       <button class="scenario-tab" role="tab" data-scenario="conflict" aria-selected="true">Conflicting writes</button>
+      <button class="scenario-tab" role="tab" data-scenario="foreignKey" aria-selected="false">Foreign-key conflict</button>
       <button class="scenario-tab" role="tab" data-scenario="multi" aria-selected="false">Multi-shard commit</button>
     </div>
 
@@ -509,6 +510,8 @@
           <!-- Step-specific details -->
           <g id="detail-buffer-a" class="detail badge badge-a"><rect x="64" y="218" width="112" height="27" rx="13"/><text id="bufferTextA" x="120" y="236">tentative: 8</text></g>
           <g id="detail-buffer-b" class="detail badge badge-b"><rect x="644" y="218" width="112" height="27" rx="13"/><text id="bufferTextB" x="700" y="236">tentative: 8</text></g>
+          <g id="detail-fk-delete" class="detail badge badge-a"><rect x="52" y="218" width="136" height="27" rx="13"/><text x="120" y="236">DELETE products/1</text></g>
+          <g id="detail-fk-read" class="detail badge badge-b"><rect x="622" y="218" width="156" height="27" rx="13"/><text x="700" y="236">KEY SHARE · products/1</text></g>
           <g id="detail-write-a" class="detail badge badge-a"><rect x="260" y="263" width="124" height="27" rx="13"/><text x="322" y="281">Wₐ = {dogs/5}</text></g>
           <g id="detail-write-b" class="detail badge badge-b"><rect x="436" y="263" width="124" height="27" rx="13"/><text x="498" y="281">Wᵦ = {dogs/5}</text></g>
           <g id="detail-promises" class="detail badge badge-purple"><rect x="327" y="265" width="166" height="27" rx="13"/><text x="410" y="283">YES votes + promises</text></g>
@@ -565,7 +568,7 @@
     </div>
   </section>
 
-  <p class="footnote">Conceptual animation based on the transaction protocol in <a href="https://arxiv.org/abs/2607.13276" target="_blank" rel="noopener noreferrer"><em>Aurora DSQL: Scalable, Multi-Region OLTP</em></a>. Timing and topology are illustrative.</p>
+  <p class="footnote">Conceptual animation based on the transaction protocol in <a href="https://arxiv.org/abs/2607.13276" target="_blank" rel="noopener noreferrer"><em>Aurora DSQL: Scalable, Multi-Region OLTP</em></a>. Foreign-key behavior follows the <a href="https://docs.aws.amazon.com/aurora-dsql/latest/userguide/working-with-foreign-key-constraints.html" target="_blank" rel="noopener noreferrer">Aurora DSQL documentation</a>. Timing and topology are illustrative.</p>
 </main>
 
 <script>
@@ -575,6 +578,8 @@
   const SQL = {
     conflictA: ["BEGIN;", "SELECT treats", "  FROM dogs WHERE id = 5;", "-- → 7", "UPDATE dogs SET treats = treats + 1", "  WHERE id = 5;", "COMMIT;"],
     conflictB: ["BEGIN;", "SELECT treats", "  FROM dogs WHERE id = 5;", "-- → 7", "UPDATE dogs SET treats = treats + 1", "  WHERE id = 5;", "COMMIT;"],
+    fkDeleteA: ["BEGIN;", "DELETE FROM products", "  WHERE product_id = 1;", "COMMIT;", "-- succeeds"],
+    fkInsertB: ["BEGIN;", "INSERT INTO orders", "  VALUES (100, 1, 5);", "-- FK reads products/1", "COMMIT;", "-- ERROR OC000 · SQLSTATE 40001"],
     readA: ["BEGIN READ ONLY;", "SELECT name, treats", "  FROM dogs WHERE id = 5;", "-- → 'Mochi', 7", "COMMIT;"],
     empty: ["-- no second transaction"],
     writeA: ["BEGIN;", "SELECT treats", "  FROM dogs WHERE id = 5;", "-- → 7", "UPDATE dogs SET treats = treats + 1", "  WHERE id = 5;", "COMMIT;"],
@@ -679,6 +684,31 @@
         { title: "The new snapshot includes A's write", body: "B's local replica must be complete through <code>τstart B′</code>. It now returns 8, so B computes a new tentative post-image with <code>treats=9</code>.", activeNodes: [{id:"node-qpb",tone:"b"},{id:"node-storageb",tone:"b"}], paths: [{id:"path-qpb-storageb",tone:"b"}], details: ["detail-buffer-b","detail-journal-entry"], bufferB: "retry: 8 → 9", journalText: "A · dogs/5 → 8", sqlA: 6, sqlB: 5, stateA: "Committed: 8", stateAClass: "committed", stateB: "Tentative retry: 9", stateBClass: "tentative", phase: 0, remote: "None", value: "8", rowValue: "dogs/5 · treats=8", outcome: "Retrying from 8" },
         { title: "B's retry can now commit", body: "Because A committed before <code>τstart B′</code>, A is not inside the retry's conflict window. With no newer conflicting write, Journal A accepts B at <code>τcommit B′</code>.", activeNodes: [{id:"node-qpb",tone:"b"},{id:"node-adj1",tone:"b"},{id:"node-journal",tone:"committed"}], paths: [{id:"path-qpb-adj1",tone:"b"},{id:"path-adj1-journal",tone:"good"}], details: ["detail-buffer-b","detail-write-b","detail-journal-entry"], bufferB: "retry: 8 → 9", journalText: "B retry · dogs/5 → 9", sqlA: 6, sqlB: 6, stateA: "Committed: 8", stateAClass: "committed", stateB: "Committed at τcommit B′", stateBClass: "committed", phase: 1, remote: "Retry COMMIT", value: "8", rowValue: "dogs/5 · treats=8", outcome: "Both effects ordered" },
         { title: "One order, no lost update", body: "Crossbar distributes the committed post-images in order: first A's 8, then B's retried 9. All complete readers converge on the same history.", activeNodes: [{id:"node-journal",tone:"committed"},{id:"node-journalb",tone:"both"},{id:"node-crossbar",tone:"committed"},{id:"node-storagea",tone:"committed"},{id:"node-storageb",tone:"committed"}], paths: [{id:"path-journal-crossbar",tone:"good"},{id:"path-journalb-crossbar",tone:"both"},{id:"path-crossbar-storagea",tone:"good"},{id:"path-crossbar-storageb",tone:"good"}], details: ["detail-journal-entry"], journalText: "ordered: A→8, B→9", sqlA: 6, sqlB: 6, stateA: "Complete", stateAClass: "committed", stateB: "Complete after retry", stateBClass: "committed", phase: 2, remote: "Replication", value: "9", rowValue: "dogs/5 · treats=9", outcome: "No lost update" }
+      ]
+    },
+
+    foreignKey: {
+      label: "Foreign-key conflict",
+      sqlA: SQL.fkDeleteA, sqlB: SQL.fkInsertB,
+      timeline: [
+        { lane: "A", pos: 10, label: "τstart A", showAt: 1, tone: "a" },
+        { lane: "B", pos: 18, label: "τstart B", showAt: 1, tone: "b" },
+        { lane: "A", pos: 58, label: "τcommit A", showAt: 4, tone: "a" },
+        { lane: "B", pos: 72, label: "40001", showAt: 5, tone: "bad" }
+      ],
+      windows: [
+        { lane: "A", from: 10, to: 58, showAt: 3, tone: "a" },
+        { lane: "B", from: 18, to: 72, showAt: 3, tone: "b" }
+      ],
+      steps: [
+        { ...commonReady, title: "An FK reader races a key writer", body: "<code>orders.product_id</code> references <code>products.product_id</code>. A will delete <code>products/1</code>; B will insert an order whose foreign-key check reads that same key.", value: "exists", rowValue: "products/1 · exists" },
+        { title: "Both transactions take snapshots", body: "A and B choose independent start times. Snapshot isolation lets them proceed concurrently instead of taking a client-held lock on <code>products/1</code>.", activeNodes: [{id:"node-clock",tone:"both"},{id:"node-qpa",tone:"a"},{id:"node-qpb",tone:"b"}], paths: [{id:"path-clock-qpa",tone:"a"},{id:"path-clock-qpb",tone:"b"}], details: [], sqlA: 0, sqlB: 0, stateA: "Snapshot A", stateB: "Snapshot B", phase: 0, remote: "None", value: "exists", rowValue: "products/1 · exists", outcome: "Checks can overlap" },
+        { title: "Snapshot verification passes twice", body: "A's DELETE reads the referencing table and sees no orders. B's INSERT reads its snapshot of <code>products/1</code> and sees the referenced key. Both changes remain tentative.", activeNodes: [{id:"node-qpa",tone:"a"},{id:"node-storagea",tone:"a"},{id:"node-qpb",tone:"b"},{id:"node-storageb",tone:"b"}], paths: [{id:"path-qpa-storagea",tone:"a"},{id:"path-qpb-storageb",tone:"b"}], details: ["detail-fk-delete","detail-fk-read"], sqlA: 2, sqlB: 3, stateA: "Tentative DELETE", stateAClass: "tentative", stateB: "Tentative order; FK valid", stateBClass: "tentative", phase: 0, remote: "None", value: "exists", rowValue: "products/1 · exists", outcome: "Both snapshots valid" },
+        { title: "KEY SHARE is checked at COMMIT", body: "To cover changes after B's snapshot, Aurora DSQL implicitly applies <code>KEY SHARE</code> to the referenced row. This is optimistic conflict detection—not a lock that makes A wait.", activeNodes: [{id:"node-qpa",tone:"a"},{id:"node-qpb",tone:"b"},{id:"node-adj1",tone:"both"}], paths: [{id:"path-qpa-adj1",tone:"a"},{id:"path-qpb-adj1",tone:"b"}], details: ["detail-fk-delete","detail-fk-read","detail-commit"], sqlA: 3, sqlB: 4, stateA: "DELETE candidate", stateB: "FK candidate", phase: 0, remote: "COMMIT only", value: "exists", rowValue: "products/1 · exists", outcome: "Adjudicating" },
+        { title: "The DELETE commits first", body: "A's snapshot found no referencing row, so its deletion is accepted and atomically recorded in the Journal at <code>τcommit A</code>.", activeNodes: [{id:"node-adj1",tone:"a"},{id:"node-journal",tone:"committed"}], paths: [{id:"path-adj1-journal",tone:"good"}], details: ["detail-fk-delete","detail-journal-entry"], journalText: "DELETE products/1", sqlA: 4, sqlB: 4, stateA: "Committed at τcommit A", stateAClass: "committed", stateB: "Waiting for decision", phase: 1, remote: "COMMIT only", value: "exists", rowValue: "products/1 · exists", outcome: "A committed" },
+        { title: "B's foreign-key snapshot is invalid", body: "A deleted the key that B's implicit <code>KEY SHARE</code> depended on. B cannot commit an orphaned order and fails with <code>OC000</code> / SQLSTATE <code>40001</code>: change conflicts with another transaction.", activeNodes: [{id:"node-adj1",tone:"conflict"},{id:"node-journal",tone:"committed"},{id:"node-qpb",tone:"conflict"}], paths: [{id:"path-qpb-adj1",tone:"bad"}], details: ["detail-fk-read","detail-journal-entry"], journalText: "DELETE products/1", sqlA: 4, sqlB: 5, stateA: "Committed", stateAClass: "committed", stateB: "Serialization error 40001", stateBClass: "aborted", phase: 1, remote: "COMMIT only", value: "exists", rowValue: "products/1 · exists", outcome: "B must abort" },
+        { title: "No orphaned order can commit", body: "B discards its tentative INSERT. The application can retry from a fresh snapshot, which will observe that <code>products/1</code> no longer exists.", activeNodes: [{id:"node-qpa",tone:"committed"},{id:"node-qpb",tone:"conflict"},{id:"node-journal",tone:"committed"}], paths: [], details: ["detail-journal-entry"], journalText: "DELETE products/1", sqlA: 4, sqlB: 5, stateA: "Committed", stateAClass: "committed", stateB: "Aborted safely", stateBClass: "aborted", phase: 1, remote: "Complete", value: "exists", rowValue: "products/1 · exists", outcome: "Retry B" },
+        { title: "Only the valid history is distributed", body: "Crossbar distributes A's committed deletion to storage. There is no committed <code>orders/100</code>, so every complete snapshot preserves referential integrity.", activeNodes: [{id:"node-journal",tone:"committed"},{id:"node-crossbar",tone:"committed"},{id:"node-storagea",tone:"committed"},{id:"node-storageb",tone:"committed"}], paths: [{id:"path-journal-crossbar",tone:"good"},{id:"path-crossbar-storagea",tone:"good"},{id:"path-crossbar-storageb",tone:"good"}], details: ["detail-journal-entry"], journalText: "DELETE products/1", sqlA: 4, sqlB: 5, stateA: "Deletion distributed", stateAClass: "committed", stateB: "Order absent", stateBClass: "aborted", phase: 2, remote: "Replication", value: "deleted", rowValue: "products/1 · absent", outcome: "FK preserved" }
       ]
     },
 
@@ -858,12 +888,37 @@
     timer = window.setInterval(next, 1850);
   }
 
-  function selectScenario(key) {
+  function scenarioHash(key) {
+    return key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+  }
+
+  function scenarioFromHash() {
+    let hash;
+    try {
+      hash = decodeURIComponent(window.location.hash.slice(1));
+    } catch {
+      return null;
+    }
+    return Object.keys(scenarios).find(key => hash === key || hash === scenarioHash(key)) || null;
+  }
+
+  function selectScenario(key, updateUrl = true) {
     if (!scenarios[key]) return;
     stop();
     scenarioKey = key;
     stepIndex = 0;
+    const hash = `#${scenarioHash(key)}`;
+    if (updateUrl && window.location.hash !== hash) window.history.pushState(null, "", hash);
     render();
+  }
+
+  function selectScenarioFromHash() {
+    const key = scenarioFromHash();
+    if (!key) {
+      window.history.replaceState(null, "", `#${scenarioHash(scenarioKey)}`);
+    } else if (key !== scenarioKey) {
+      selectScenario(key, false);
+    }
   }
 
   dom.tabs.forEach(tab => tab.addEventListener("click", () => selectScenario(tab.dataset.scenario)));
@@ -871,6 +926,8 @@
   dom.next.addEventListener("click", () => { stop(); next(); });
   dom.play.addEventListener("click", togglePlay);
   dom.reset.addEventListener("click", () => { stop(); stepIndex = 0; render(); });
+  window.addEventListener("hashchange", selectScenarioFromHash);
+  window.addEventListener("popstate", selectScenarioFromHash);
   document.addEventListener("keydown", event => {
     if (event.target.matches("button")) return;
     if (event.key === "ArrowRight") { event.preventDefault(); stop(); next(); }
@@ -879,6 +936,14 @@
   });
 
   validateScenarios();
+  const initialScenario = scenarioFromHash();
+  if (initialScenario) {
+    scenarioKey = initialScenario;
+    const canonicalHash = `#${scenarioHash(initialScenario)}`;
+    if (window.location.hash !== canonicalHash) window.history.replaceState(null, "", canonicalHash);
+  } else {
+    window.history.replaceState(null, "", `#${scenarioHash(scenarioKey)}`);
+  }
   render();
 })();
 </script>
