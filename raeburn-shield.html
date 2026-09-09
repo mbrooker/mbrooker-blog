@@ -71,11 +71,6 @@ h3 { margin: 0; font-size: 1.3rem; }
   filter: drop-shadow(0 18px 12px rgba(18, 70, 52, .18));
 }
 .shield::after { content: "🏉"; position: absolute; inset: 14px; display: grid; place-items: center; clip-path: inherit; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; font-size: 8rem; line-height: 1; }
-.rule { padding: 34px 0 72px; border-top: 1px solid var(--line); }
-.rule-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 32px; background: var(--line); border: 1px solid var(--line); }
-.rule-step { min-height: 165px; padding: 26px; background: var(--white); }
-.rule-step .number { color: var(--gold); font-family: Georgia, serif; font-size: 1.7rem; }
-.rule-step p { margin: 10px 0 0; color: var(--muted); font-size: .93rem; }
 .experiment { padding: 72px 0; background: var(--green-dark); color: var(--white); }
 .experiment .page { display: grid; grid-template-columns: .7fr 1.3fr; gap: 65px; }
 .experiment h2 { color: var(--gold-pale); }
@@ -87,6 +82,18 @@ h3 { margin: 0; font-size: 1.3rem; }
 .control label { font-weight: 750; }
 .control output { color: var(--green); font-family: Georgia, serif; font-size: 1.4rem; font-variant-numeric: tabular-nums; }
 .control small { display: block; margin-top: 8px; color: var(--muted); }
+.country-filter > summary { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; cursor: pointer; font-weight: 750; }
+.country-filter > summary output { color: var(--green); font-weight: 500; }
+.country-filter fieldset { padding: 16px 0 0; margin: 0; border: 0; }
+.country-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; }
+.country-grid label { display: flex; align-items: center; gap: 7px; font-weight: 500; }
+.country-grid input { accent-color: var(--green); }
+.country-actions { display: flex; gap: 8px; margin-top: 14px; }
+.country-actions button { padding: 6px 10px; color: var(--green-dark); background: var(--green-pale); border: 0; border-radius: 2px; cursor: pointer; }
+.checkbox-control label { display: flex; align-items: center; gap: 9px; font-weight: 750; }
+.checkbox-control input { accent-color: var(--green); }
+#countryError:not(:empty) { color: #8b2e22; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 input, select, button { font: inherit; }
 input[type="range"] { width: 100%; accent-color: var(--green); }
 input[type="number"], select {
@@ -143,9 +150,16 @@ input[type="number"], select {
 .diamond { width: 9px; height: 9px; border: 2px solid var(--gold); transform: rotate(45deg); }
 .trends { padding: 72px 0 80px; border-top: 1px solid var(--line); }
 .trends .results-head { margin-bottom: 22px; }
-.timeline-legend { display: flex; flex-wrap: wrap; gap: 9px 18px; margin-bottom: 30px; color: var(--muted); font-size: .78rem; }
-.timeline-legend span { display: inline-flex; align-items: center; gap: 6px; }
-.timeline-legend i { display: inline-block; width: 24px; height: 0; border-top: 3px solid var(--series-color); }
+.timeline-legend { display: flex; flex-wrap: wrap; gap: 9px 18px; margin-bottom: 12px; color: var(--muted); font-size: .78rem; }
+.timeline-legend span, .timeline-stat-key span { display: inline-flex; align-items: center; gap: 6px; }
+.timeline-stat-key { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-bottom: 30px; color: var(--muted); font-size: .78rem; }
+.timeline-stat-key i { position: relative; display: inline-block; width: 24px; height: 12px; }
+.timeline-stat-key .median-sample { height: 0; border-top: 3px solid var(--green); }
+.timeline-stat-key .iqr-sample { width: 12px; border-left: 1px solid var(--green); }
+.timeline-stat-key .iqr-sample::before, .timeline-stat-key .iqr-sample::after { position: absolute; left: -4px; width: 8px; border-top: 1px solid var(--green); content: ""; }
+.timeline-stat-key .iqr-sample::before { top: 0; }
+.timeline-stat-key .iqr-sample::after { bottom: 0; }
+.timeline-stat-key .reference-sample { height: 0; border-top: 2px dotted var(--muted); }
 .timeline-panel + .timeline-panel { margin-top: 42px; }
 .timeline-panel > p { margin: 6px 0 14px; color: var(--muted); font-size: .88rem; }
 .timeline-chart-shell { overflow-x: auto; padding: 8px 0 2px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -161,7 +175,6 @@ footer .page { display: flex; justify-content: space-between; gap: 25px; }
 @media (max-width: 800px) {
   .hero, .experiment .page, .method { grid-template-columns: 1fr; gap: 34px; }
   .shield-mark { display: none; }
-  .rule-grid { grid-template-columns: 1fr; }
   .results-head { display: block; }
   .results-head p { margin-top: 12px; }
   .summary { grid-template-columns: 1fr; }
@@ -172,7 +185,7 @@ footer .page { display: flex; justify-content: space-between; gap: 25px; }
   .page { width: min(100% - 24px, 1160px); }
   .masthead .edition { display: none; }
   .hero { padding-top: 48px; }
-  .row-inputs { grid-template-columns: 1fr; }
+  .row-inputs, .country-grid { grid-template-columns: 1fr; }
   footer .page { display: block; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -196,16 +209,6 @@ footer .page { display: flex; justify-content: space-between; gap: 25px; }
     <div class="shield-mark" aria-hidden="true"><div class="shield"></div></div>
   </section>
 
-  <section class="page rule" aria-labelledby="rule-title">
-    <div class="kicker">The simple rule</div>
-    <h2 id="rule-title">Winner stays on.</h2>
-    <div class="rule-grid">
-      <article class="rule-step"><div class="number">01</div><h3>Start in 1871</h3><p>The winner of the earliest remaining decisive Test becomes the first holder.</p></article>
-      <article class="rule-step"><div class="number">02</div><h3>Defend every Test</h3><p>A holder keeps the Shield after a win or draw. Each retention is a successful defence.</p></article>
-      <article class="rule-step"><div class="number">03</div><h3>Lose it on the field</h3><p>Defeat passes the Shield to the opponent, recording a successful acquisition.</p></article>
-    </div>
-  </section>
-
   <section class="experiment" aria-labelledby="experiment-title">
     <div class="page">
       <div class="experiment-copy">
@@ -220,6 +223,19 @@ footer .page { display: flex; justify-content: space-between; gap: 25px; }
           <input id="removalRate" type="range" min="0" max="90" step="1" value="5">
           <small>Each Test has this independent chance of being omitted.</small>
         </div>
+        <details class="control country-filter" id="countryFilter">
+          <summary><span>Countries</span><output id="countrySelectionSummary">All 10 selected</output></summary>
+          <fieldset id="countryFieldset" aria-describedby="countryHelp countryError">
+            <legend class="visually-hidden">Countries included in the model</legend>
+            <div class="country-grid" id="countryOptions"></div>
+            <div class="country-actions">
+              <button type="button" id="selectAllCountries">Select all</button>
+              <button type="button" id="clearCountries">Clear</button>
+            </div>
+            <small id="countryHelp">Every Test involving an unselected country is excluded before random removals.</small>
+            <small id="countryError" role="alert"></small>
+          </fieldset>
+        </details>
         <div class="row-inputs">
           <div class="control">
             <div class="control-head"><label for="startYear">Start year</label></div>
@@ -229,6 +245,10 @@ footer .page { display: flex; justify-content: space-between; gap: 25px; }
             <div class="control-head"><label for="endYear">End year</label></div>
             <input id="endYear" type="number" min="1871" max="2023" step="1" value="2023" required>
           </div>
+        </div>
+        <div class="control checkbox-control">
+          <label for="randomizeStartingHolder"><input id="randomizeStartingHolder" type="checkbox"> Randomize the starting holder</label>
+          <small>Each simulated run starts with a uniformly selected included country. The unmodified reference keeps the historical holder.</small>
         </div>
         <div class="row-inputs">
           <div class="control">
@@ -255,13 +275,13 @@ footer .page { display: flex; justify-content: space-between; gap: 25px; }
 
   <section class="page results" id="results" aria-labelledby="results-title">
     <div class="results-head">
-      <div><div class="kicker">Simulation results</div><h2 id="results-title">Fortunes across ten nations.</h2></div>
+      <div><div class="kicker">Simulation results</div><h2 id="results-title">Fortunes across selected nations.</h2></div>
       <p>Rows are ordered by median successful defences. Bars show the complete simulated distribution; the number beneath is the 10th / median / 90th percentile.</p>
     </div>
     <div class="summary" id="summary" aria-live="polite"></div>
     <div class="luck-table-shell">
       <table class="luck-table">
-        <caption>Luck factor: the percentile occupied by each nation's unmodified ten-nation-model defences within the selected year range.</caption>
+        <caption>Luck factor: the percentile occupied by each nation's unmodified selected-country-model defences within the chosen year range.</caption>
         <thead><tr><th scope="col">Nation</th><th scope="col">Unmodified model</th><th scope="col">Simulated median</th><th scope="col">Luck factor</th></tr></thead>
         <tbody id="luckResults"></tbody>
       </table>
@@ -272,10 +292,10 @@ footer .page { display: flex; justify-content: space-between; gap: 25px; }
         <desc id="chartDescription">Histograms of longest defence streaks, total successful defences, and successful acquisitions.</desc>
       </svg>
     </div>
-    <div class="legend"><span><i class="swatch"></i> simulation frequency</span><span><i class="diamond"></i> unmodified model for selected years</span><span>All three columns use their own shared scale across nations.</span></div>
+    <div class="legend"><span><i class="swatch"></i> simulation frequency</span><span><i class="diamond"></i> unmodified selected-country model</span><span>All three columns use their own shared scale across displayed nations.</span></div>
     <section class="history-check" aria-labelledby="history-check-title">
       <h3 id="history-check-title">Official-history acquisition cross-check</h3>
-      <p>The complete lineal history includes three holders absent from the simulation source: Romania, Samoa, and Japan. These acquisition totals follow the <a href="https://en.wikipedia.org/wiki/Raeburn_Shield">Raeburn Shield holder sequence</a> through the model cutoff of 15 July 2023; Scotland's initial 1871 award is not counted as an acquisition. This fixed cross-check does not change with the selected year range.</p>
+      <p>The complete lineal history includes three holders absent from the simulation source: Romania, Samoa, and Japan. These acquisition totals follow the <a href="https://en.wikipedia.org/wiki/Raeburn_Shield">Raeburn Shield holder sequence</a> through the model cutoff of 15 July 2023; Scotland's initial 1871 award is not counted as an acquisition. This fixed cross-check does not change with the selected years or countries.</p>
       <div class="luck-table-shell">
         <table class="luck-table">
           <caption>Successful acquisitions in the complete Raeburn Shield history through 15 July 2023.</caption>
@@ -302,17 +322,22 @@ footer .page { display: flex; justify-content: space-between; gap: 25px; }
 
   <section class="page trends" id="trends" aria-labelledby="trends-title">
     <div class="results-head">
-      <div><div class="kicker">Unmodified timeline</div><h2 id="trends-title">How the Shield accumulates.</h2></div>
-      <p>Year-end cumulative totals within the selected range. Both charts inherit the holder entering the range, but begin their counts at zero.</p>
+      <div><div class="kicker">Simulation over time</div><h2 id="trends-title">How the Shield accumulates.</h2></div>
+      <p>Lines show the simulated median at sampled year ends; thin whiskers span the interquartile range. Dotted lines show the unmodified model.</p>
     </div>
     <div class="timeline-legend" id="timelineLegend" aria-label="Nation colors"></div>
+    <div class="timeline-stat-key" aria-label="Time-series marks">
+      <span><i class="median-sample" aria-hidden="true"></i>simulation median</span>
+      <span><i class="iqr-sample" aria-hidden="true"></i>25th–75th percentile</span>
+      <span><i class="reference-sample" aria-hidden="true"></i>unmodified model</span>
+    </div>
     <article class="timeline-panel">
       <h3>Cumulative successful challenges</h3>
       <p>A successful challenge is a victory over the current holder—the same event counted above as an acquisition.</p>
       <div class="timeline-chart-shell" tabindex="0" aria-label="Scrollable successful challenges chart">
         <svg class="timeline-chart" id="challengeTimelineChart" viewBox="0 0 1050 360" role="img" aria-labelledby="challengeTimelineChartTitle challengeTimelineChartDescription">
           <title id="challengeTimelineChartTitle">Cumulative successful challenges</title>
-          <desc id="challengeTimelineChartDescription">Year-end cumulative successful challenges by nation in the selected range.</desc>
+          <desc id="challengeTimelineChartDescription">Simulated median cumulative successful challenges with interquartile-range whiskers.</desc>
         </svg>
       </div>
     </article>
@@ -322,7 +347,7 @@ footer .page { display: flex; justify-content: space-between; gap: 25px; }
       <div class="timeline-chart-shell" tabindex="0" aria-label="Scrollable retentions chart">
         <svg class="timeline-chart" id="retentionTimelineChart" viewBox="0 0 1050 360" role="img" aria-labelledby="retentionTimelineChartTitle retentionTimelineChartDescription">
           <title id="retentionTimelineChartTitle">Cumulative retentions</title>
-          <desc id="retentionTimelineChartDescription">Year-end cumulative Shield retentions by nation in the selected range.</desc>
+          <desc id="retentionTimelineChartDescription">Simulated median cumulative Shield retentions with interquartile-range whiskers.</desc>
         </svg>
       </div>
     </article>
@@ -380,35 +405,87 @@ function emptyStats() {
   return TEAMS.map(() => ({ streak: 0, currentStreak: 0, defences: 0, acquisitions: 0 }));
 }
 
-function playTimeline(removalProbability, random, startIndex = 0, endIndex = MATCHES.length, initialHolder = -1) {
+function matchIsEligible(match, selectedMask = null) {
+  return !selectedMask || (selectedMask[match[0]] && selectedMask[match[1]]);
+}
+
+function playTimeline(removalProbability, random, startIndex = 0, endIndex = MATCHES.length, initialHolder = -1, checkpointEnds = null, selectedMask = null) {
   const stats = emptyStats();
+  const snapshots = [];
+  let checkpointIndex = 0;
   let holder = initialHolder;
   let kept = 0;
-  for (let i = startIndex; i < endIndex; i++) {
-    if (random() < removalProbability) continue;
-    kept++;
-    const [home, away, homeScore, awayScore] = MATCHES[i];
-    const draw = homeScore === awayScore;
-    const winner = draw ? -1 : (homeScore > awayScore ? home : away);
 
-    if (holder < 0) {
-      if (!draw) holder = winner;
-      continue;
-    }
-    if (home !== holder && away !== holder) continue;
-
-    if (draw || winner === holder) {
-      const current = stats[holder];
-      current.defences++;
-      current.currentStreak++;
-      current.streak = Math.max(current.streak, current.currentStreak);
-    } else {
-      holder = winner;
-      stats[holder].acquisitions++;
-      stats[holder].currentStreak = 0;
+  function emitSnapshots(position) {
+    while (checkpointEnds && checkpointIndex < checkpointEnds.length && checkpointEnds[checkpointIndex] <= position) {
+      snapshots.push({
+        acquisitions: stats.map(team => team.acquisitions),
+        defences: stats.map(team => team.defences)
+      });
+      checkpointIndex++;
     }
   }
-  return { stats, holder, kept };
+
+  emitSnapshots(startIndex);
+  for (let i = startIndex; i < endIndex; i++) {
+    const match = MATCHES[i];
+    if (matchIsEligible(match, selectedMask) && random() >= removalProbability) {
+      kept++;
+      const [home, away, homeScore, awayScore] = match;
+      const draw = homeScore === awayScore;
+      const winner = draw ? -1 : (homeScore > awayScore ? home : away);
+
+      if (holder < 0) {
+        if (!draw) holder = winner;
+      } else if (home === holder || away === holder) {
+        if (draw || winner === holder) {
+          const current = stats[holder];
+          current.defences++;
+          current.currentStreak++;
+          current.streak = Math.max(current.streak, current.currentStreak);
+        } else {
+          holder = winner;
+          stats[holder].acquisitions++;
+          stats[holder].currentStreak = 0;
+        }
+      }
+    }
+    emitSnapshots(i + 1);
+  }
+  emitSnapshots(endIndex);
+  return { stats, holder, kept, snapshots };
+}
+
+let countryInputs = [];
+let simulationRunning = false;
+
+function initializeCountryOptions() {
+  const container = document.getElementById("countryOptions");
+  container.innerHTML = TEAMS.map((name, index) =>
+    `<label><input type="checkbox" value="${index}" checked><span class="flag" aria-hidden="true">${FLAGS[index]}</span>${escapeXml(name)}</label>`
+  ).join("");
+  countryInputs = Array.from(container.querySelectorAll("input[type=checkbox]"));
+}
+
+function countrySelection() {
+  const selectedIndexes = countryInputs.filter(input => input.checked).map(input => Number(input.value));
+  const fullSelection = selectedIndexes.length === TEAMS.length;
+  const selectedMask = fullSelection ? null : Uint8Array.from(TEAMS, (_, index) => selectedIndexes.includes(index) ? 1 : 0);
+  return { selectedIndexes, selectedMask, key: selectedIndexes.join(",") };
+}
+
+function validateCountrySelection(selection) {
+  const selectedCount = selection.selectedIndexes.length;
+  const valid = selectedCount >= 2;
+  document.getElementById("countrySelectionSummary").value = selectedCount === TEAMS.length ? "All 10 selected" : `${selectedCount} of ${TEAMS.length} selected`;
+  document.getElementById("countryError").textContent = valid ? "" : "Select at least two countries to replay matches.";
+  document.getElementById("countryFieldset").setAttribute("aria-invalid", String(!valid));
+  document.getElementById("runButton").disabled = simulationRunning || !valid;
+  return valid;
+}
+
+function chooseRandomStartingHolder(selectedIndexes, random) {
+  return selectedIndexes[Math.floor(random() * selectedIndexes.length)];
 }
 
 function normalizeYearRange(changedInput) {
@@ -427,36 +504,70 @@ function normalizeYearRange(changedInput) {
   return { startYear, endYear };
 }
 
-function matchRange(startYear, endYear) {
+function countEligibleMatches(startIndex, endIndex, selectedMask = null) {
+  let count = 0;
+  for (let index = startIndex; index < endIndex; index++) {
+    if (matchIsEligible(MATCHES[index], selectedMask)) count++;
+  }
+  return count;
+}
+
+function matchRange(startYear, endYear, selectedMask = null) {
   const startIndex = YEAR_START_INDEX[startYear - MIN_YEAR];
   const endIndex = YEAR_START_INDEX[endYear - MIN_YEAR + 1];
-  return { startIndex, endIndex, matchCount: endIndex - startIndex };
+  return { startIndex, endIndex, matchCount: countEligibleMatches(startIndex, endIndex, selectedMask) };
 }
 
-function buildCumulativeSeries(startYear, endYear, initialHolder) {
+function timelineCheckpoints(startYear, endYear, maximumCount = 12) {
+  const yearCount = endYear - startYear + 1;
+  const checkpointCount = Math.min(maximumCount, yearCount);
   const years = [];
-  const acquisitions = TEAMS.map(() => [0]);
-  const defences = TEAMS.map(() => [0]);
-  let holder = initialHolder;
-
-  for (let year = startYear; year <= endYear; year++) {
-    const yearStart = YEAR_START_INDEX[year - MIN_YEAR];
-    const yearEnd = YEAR_START_INDEX[year - MIN_YEAR + 1];
-    const annual = playTimeline(0, () => 1, yearStart, yearEnd, holder);
-    holder = annual.holder;
-    years.push(year);
-    TEAMS.forEach((_, teamIndex) => {
-      acquisitions[teamIndex].push(acquisitions[teamIndex].at(-1) + annual.stats[teamIndex].acquisitions);
-      defences[teamIndex].push(defences[teamIndex].at(-1) + annual.stats[teamIndex].defences);
-    });
+  for (let index = 0; index < checkpointCount; index++) {
+    const offset = checkpointCount === 1 ? 0 : Math.round(index * (yearCount - 1) / (checkpointCount - 1));
+    const year = startYear + offset;
+    if (years[years.length - 1] !== year) years.push(year);
   }
-  return { years, acquisitions, defences, holder };
+  return {
+    years,
+    endIndexes: years.map(year => YEAR_START_INDEX[year - MIN_YEAR + 1])
+  };
 }
 
-function updateRangeStatus(changedInput) {
+function createTimelineTarget(years, simulationCount) {
+  return {
+    years,
+    acquisitions: TEAMS.map(() => years.map(() => new Uint16Array(simulationCount))),
+    defences: TEAMS.map(() => years.map(() => new Uint16Array(simulationCount)))
+  };
+}
+
+function collectTimelineSimulation(target, snapshots, runIndex) {
+  snapshots.forEach((snapshot, checkpointIndex) => {
+    TEAMS.forEach((_, teamIndex) => {
+      target.acquisitions[teamIndex][checkpointIndex][runIndex] = snapshot.acquisitions[teamIndex];
+      target.defences[teamIndex][checkpointIndex][runIndex] = snapshot.defences[teamIndex];
+    });
+  });
+}
+
+function summarizeTimelineTarget(target) {
+  return {
+    years: target.years,
+    acquisitions: target.acquisitions.map(team => team.map(values => summarize(values))),
+    defences: target.defences.map(team => team.map(values => summarize(values)))
+  };
+}
+
+function updateReadyStatus(changedInput) {
   const { startYear, endYear } = normalizeYearRange(changedInput);
-  const { matchCount } = matchRange(startYear, endYear);
-  document.getElementById("runStatus").textContent = `Ready to replay ${matchCount.toLocaleString("en-US")} Tests from ${startYear}–${endYear}.`;
+  const selection = countrySelection();
+  if (!validateCountrySelection(selection)) {
+    document.getElementById("runStatus").textContent = "Select at least two countries to replay matches.";
+    return;
+  }
+  const { matchCount } = matchRange(startYear, endYear, selection.selectedMask);
+  const randomized = document.getElementById("randomizeStartingHolder").checked;
+  document.getElementById("runStatus").textContent = `Ready to replay ${matchCount.toLocaleString("en-US")} eligible Tests from ${startYear}–${endYear}.${randomized ? " Starting holders will be randomized." : ""}`;
 }
 
 function quantile(sorted, q) {
@@ -472,7 +583,9 @@ function summarize(values) {
   return {
     min: sorted[0] || 0,
     p10: quantile(sorted, .1),
+    q1: quantile(sorted, .25),
     median: quantile(sorted, .5),
+    q3: quantile(sorted, .75),
     p90: quantile(sorted, .9),
     max: sorted[sorted.length - 1] || 0
   };
@@ -489,9 +602,9 @@ function percentileRank(values, observed) {
   return 100 * (below + equal / 2) / values.length;
 }
 
-function nationOrder(distributions) {
-  return TEAMS.map((name, index) => ({
-    name,
+function nationOrder(distributions, selectedIndexes = TEAMS.map((_, index) => index)) {
+  return selectedIndexes.map(index => ({
+    name: TEAMS[index],
     index,
     medianDefences: summarize(distributions[index].defences).median
   })).sort((a, b) => b.medianDefences - a.medianDefences || a.name.localeCompare(b.name));
@@ -525,7 +638,7 @@ function histogram(values, bins, maximum) {
   return counts;
 }
 
-function renderSummary(simulationCount, removalRate, keptTotal, holderCounts, elapsedMs, startYear, endYear, rangeMatchCount) {
+function renderSummary(simulationCount, removalRate, keptTotal, holderCounts, elapsedMs, startYear, endYear, rangeMatchCount, selectedCount, randomizeStartingHolder) {
   const likelyHolder = holderCounts
     .map((count, index) => ({ count, index }))
     .sort((a, b) => b.count - a.count || a.index - b.index)[0];
@@ -536,7 +649,7 @@ function renderSummary(simulationCount, removalRate, keptTotal, holderCounts, el
   document.getElementById("summary").innerHTML = `
     <div class="summary-card"><span>Average Tests retained</span><strong>${formatNumber(keptMean)} of ${rangeMatchCount.toLocaleString("en-US")}</strong></div>
     <div class="summary-card"><span>Most common holder at range end</span><strong>${escapeXml(holderText)}</strong></div>
-    <div class="summary-card"><span>Experiment</span><strong>${simulationCount.toLocaleString("en-US")} runs · ${removalRate}% removed · ${startYear}–${endYear}</strong></div>`;
+    <div class="summary-card"><span>Experiment</span><strong>${simulationCount.toLocaleString("en-US")} runs · ${removalRate}% removed · ${selectedCount} countries · ${randomizeStartingHolder ? "random starts" : "historical start"} · ${startYear}–${endYear}</strong></div>`;
   document.getElementById("runStatus").textContent = `Completed ${startYear}–${endYear} in ${elapsedMs < 1000 ? Math.round(elapsedMs) + " ms" : (elapsedMs / 1000).toFixed(1) + " s"}.`;
 }
 
@@ -564,13 +677,15 @@ function renderChart(distributions, baseline, orderedNations, startYear, endYear
 
   METRICS.forEach(metric => {
     let maximum = 0;
-    distributions.forEach(team => team[metric.key].forEach(value => { maximum = Math.max(maximum, value); }));
-    baseline.stats.forEach(team => { maximum = Math.max(maximum, team[metric.key]); });
+    orderedNations.forEach(({ index }) => {
+      distributions[index][metric.key].forEach(value => { maximum = Math.max(maximum, value); });
+      maximum = Math.max(maximum, baseline.stats[index][metric.key]);
+    });
     maxima[metric.key] = Math.max(1, maximum);
   });
 
   let markup = `<title id="chartTitle">Raeburn Shield simulation distributions by nation, ${startYear}–${endYear}</title>`;
-  markup += `<desc id="chartDescription">For each of ten nations, histograms show longest defence streak, successful defences, and successful acquisitions during ${startYear}–${endYear}. Unmodified range results are marked with gold diamonds.</desc>`;
+  markup += `<desc id="chartDescription">For each of ${orderedNations.length} selected nations, histograms show longest defence streak, successful defences, and successful acquisitions during ${startYear}–${endYear}. Unmodified filtered-model results are marked with gold diamonds.</desc>`;
   markup += `<rect width="${width}" height="${height}" fill="#f5f1e8"/>`;
 
   METRICS.forEach((metric, metricIndex) => {
@@ -620,16 +735,25 @@ function timelineLineSample(teamIndex) {
   return `<svg width="24" height="8" aria-hidden="true">${outline}<line x1="0" x2="24" y1="4" y2="4" stroke="${SERIES_COLORS[teamIndex]}" stroke-width="3"${dash}/></svg>`;
 }
 
-function renderTimelineLegend(series) {
-  const activeTeams = TEAMS.map((_, index) => index).filter(index =>
-    series.acquisitions[index].at(-1) > 0 || series.defences[index].at(-1) > 0
+function timelineTeamIsActive(summary, baselineSnapshots, teamIndex) {
+  return ["acquisitions", "defences"].some(metricKey =>
+    summary[metricKey][teamIndex].some(point => point.q3 > 0) ||
+    baselineSnapshots.some(snapshot => snapshot[metricKey][teamIndex] > 0)
   );
+}
+
+function renderTimelineLegend(summary, baselineSnapshots, selectedIndexes) {
+  const activeTeams = selectedIndexes.filter(index => timelineTeamIsActive(summary, baselineSnapshots, index));
   document.getElementById("timelineLegend").innerHTML = activeTeams.length
     ? activeTeams.map(index => `<span>${timelineLineSample(index)}<span class="flag" aria-hidden="true">${FLAGS[index]}</span>${escapeXml(TEAMS[index])}</span>`).join("")
     : "No successful challenges or retentions in this range.";
 }
 
-function renderTimelineChart(svgId, series, metricKey, title, eventLabel, startYear, endYear) {
+function formatTimelineStat(value) {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1);
+}
+
+function renderTimelineChart(svgId, summary, baselineSnapshots, selectedIndexes, metricKey, title, eventLabel, startYear, endYear, randomizeStartingHolder) {
   const svg = document.getElementById(svgId);
   const width = 1050;
   const height = 360;
@@ -639,17 +763,21 @@ function renderTimelineChart(svgId, series, metricKey, title, eventLabel, startY
   const bottom = 48;
   const plotWidth = width - left - right;
   const plotHeight = height - top - bottom;
-  const valuesByTeam = series[metricKey];
-  const finalValues = valuesByTeam.map(values => values.at(-1));
-  const maximum = Math.max(...finalValues, 0);
+  const yearCount = endYear - startYear + 1;
+  const pointsByTeam = summary[metricKey];
+  const baselineByTeam = TEAMS.map((_, teamIndex) => baselineSnapshots.map(snapshot => snapshot[metricKey][teamIndex]));
+  const maximum = Math.max(
+    0,
+    ...selectedIndexes.flatMap(index => pointsByTeam[index].map(point => point.q3)),
+    ...selectedIndexes.flatMap(index => baselineByTeam[index])
+  );
   const tickStep = Math.max(1, Math.ceil(maximum / 4));
   const yMaximum = tickStep * 4;
-  const yearCount = series.years.length;
-  const xForPoint = pointIndex => left + pointIndex / yearCount * plotWidth;
+  const xForYear = year => left + (year - startYear + 1) / yearCount * plotWidth;
   const yForValue = value => top + plotHeight - value / yMaximum * plotHeight;
 
   let markup = `<title id="${svgId}Title">${escapeXml(title)}, ${startYear}–${endYear}</title>`;
-  markup += `<desc id="${svgId}Description">Year-end cumulative ${escapeXml(eventLabel)} in the unmodified ten-nation model. Counts begin at zero for ${startYear}, while the holder is inherited from earlier history.</desc>`;
+  markup += `<desc id="${svgId}Description">Simulated median year-end cumulative ${escapeXml(eventLabel)} with interquartile-range whiskers for ${selectedIndexes.length} selected countries${randomizeStartingHolder ? ", using a randomized included-country holder at the start of each run" : ", inheriting the filtered historical holder at the start of each run"}. Thin dotted lines show the unmodified filtered model with its historical entering holder. Counts begin at zero for ${startYear}.</desc>`;
   markup += `<rect width="${width}" height="${height}" fill="#f5f1e8"/>`;
 
   for (let tick = 0; tick <= 4; tick++) {
@@ -659,31 +787,51 @@ function renderTimelineChart(svgId, series, metricKey, title, eventLabel, startY
     markup += `<text x="${left - 10}" y="${(y + 4).toFixed(1)}" text-anchor="end" fill="#657169" font-family="system-ui, sans-serif" font-size="11">${value}</text>`;
   }
 
-  const xTickCount = Math.min(7, yearCount);
-  const yearOffsets = new Set();
-  for (let tick = 0; tick < xTickCount; tick++) {
-    yearOffsets.add(xTickCount === 1 ? 0 : Math.round(tick * (yearCount - 1) / (xTickCount - 1)));
-  }
-  yearOffsets.forEach(yearOffset => {
-    const x = xForPoint(yearOffset + 1);
+  summary.years.forEach(year => {
+    const x = xForYear(year);
     markup += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${top}" y2="${top + plotHeight}" stroke="#e4ded3" stroke-width="1"/>`;
-    markup += `<text x="${x.toFixed(1)}" y="${height - 19}" text-anchor="middle" fill="#657169" font-family="system-ui, sans-serif" font-size="11">${series.years[yearOffset]}</text>`;
+    markup += `<text x="${x.toFixed(1)}" y="${height - 19}" text-anchor="middle" fill="#657169" font-family="system-ui, sans-serif" font-size="11">${year}</text>`;
   });
-  markup += `<text x="${left + plotWidth / 2}" y="${height - 3}" text-anchor="middle" fill="#657169" font-family="system-ui, sans-serif" font-size="10">Year end</text>`;
+  markup += `<text x="${left + plotWidth / 2}" y="${height - 3}" text-anchor="middle" fill="#657169" font-family="system-ui, sans-serif" font-size="10">Sampled year end</text>`;
 
-  const activeTeams = TEAMS.map((_, index) => index)
-    .filter(index => finalValues[index] > 0)
-    .sort((a, b) => finalValues[b] - finalValues[a] || a - b);
+  const activeTeams = selectedIndexes
+    .filter(index => pointsByTeam[index].some(point => point.q3 > 0) || baselineByTeam[index].some(value => value > 0))
+    .sort((a, b) => Math.max(pointsByTeam[b].at(-1).median, baselineByTeam[b].at(-1)) - Math.max(pointsByTeam[a].at(-1).median, baselineByTeam[a].at(-1)) || a - b);
+
   activeTeams.forEach(teamIndex => {
-    const points = valuesByTeam[teamIndex].map((value, pointIndex) => `${xForPoint(pointIndex).toFixed(1)},${yForValue(value).toFixed(1)}`);
-    const label = `${TEAMS[teamIndex]}: ${finalValues[teamIndex]} cumulative ${eventLabel} from ${startYear} through ${endYear}.`;
+    const teamPoints = pointsByTeam[teamIndex];
+    const baselineValues = baselineByTeam[teamIndex];
+    const finalPoint = teamPoints.at(-1);
+    const finalBaseline = baselineValues.at(-1);
+    const label = `${TEAMS[teamIndex]}: simulated median ${formatTimelineStat(finalPoint.median)}, interquartile range ${formatTimelineStat(finalPoint.q1)} to ${formatTimelineStat(finalPoint.q3)}, unmodified result ${finalBaseline}, cumulative ${eventLabel} through ${endYear}.`;
     const dash = SERIES_DASHES[teamIndex] ? ` stroke-dasharray="${SERIES_DASHES[teamIndex]}"` : "";
+    const medianPoints = [`${left},${yForValue(0).toFixed(1)}`].concat(teamPoints.map((point, index) => `${xForYear(summary.years[index]).toFixed(1)},${yForValue(point.median).toFixed(1)}`));
+    const baselinePoints = [`${left},${yForValue(0).toFixed(1)}`].concat(baselineValues.map((value, index) => `${xForYear(summary.years[index]).toFixed(1)},${yForValue(value).toFixed(1)}`));
     markup += `<g aria-label="${escapeXml(label)}"><title>${escapeXml(label)}</title>`;
+
+    teamPoints.forEach((point, checkpointIndex) => {
+      const x = xForYear(summary.years[checkpointIndex]);
+      const y1 = yForValue(point.q3);
+      const y2 = yForValue(point.q1);
+      const whisker = (stroke, strokeWidth, opacity) =>
+        `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${y1.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${stroke}" stroke-width="${strokeWidth}" opacity="${opacity}"/>` +
+        `<line x1="${(x - 4).toFixed(1)}" x2="${(x + 4).toFixed(1)}" y1="${y1.toFixed(1)}" y2="${y1.toFixed(1)}" stroke="${stroke}" stroke-width="${strokeWidth}" opacity="${opacity}"/>` +
+        `<line x1="${(x - 4).toFixed(1)}" x2="${(x + 4).toFixed(1)}" y1="${y2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${stroke}" stroke-width="${strokeWidth}" opacity="${opacity}"/>`;
+      if (SERIES_OUTLINES[teamIndex]) markup += whisker(SERIES_OUTLINES[teamIndex], 3, .45);
+      markup += whisker(SERIES_COLORS[teamIndex], 1.2, .8);
+    });
+
     if (SERIES_OUTLINES[teamIndex]) {
-      markup += `<polyline points="${points.join(" ")}" fill="none" stroke="${SERIES_OUTLINES[teamIndex]}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"${dash}/>`;
+      markup += `<polyline points="${medianPoints.join(" ")}" fill="none" stroke="${SERIES_OUTLINES[teamIndex]}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"${dash}/>`;
     }
-    markup += `<polyline points="${points.join(" ")}" fill="none" stroke="${SERIES_COLORS[teamIndex]}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"${dash}/>`;
-    markup += `<circle cx="${xForPoint(yearCount).toFixed(1)}" cy="${yForValue(finalValues[teamIndex]).toFixed(1)}" r="3.5" fill="${SERIES_COLORS[teamIndex]}" stroke="${SERIES_OUTLINES[teamIndex] || "#f5f1e8"}" stroke-width="1.5"/></g>`;
+    markup += `<polyline points="${medianPoints.join(" ")}" fill="none" stroke="${SERIES_COLORS[teamIndex]}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"${dash}/>`;
+    teamPoints.forEach((point, checkpointIndex) => {
+      markup += `<circle cx="${xForYear(summary.years[checkpointIndex]).toFixed(1)}" cy="${yForValue(point.median).toFixed(1)}" r="2.5" fill="${SERIES_COLORS[teamIndex]}" stroke="${SERIES_OUTLINES[teamIndex] || "#f5f1e8"}" stroke-width="1"/>`;
+    });
+    if (SERIES_OUTLINES[teamIndex]) {
+      markup += `<polyline points="${baselinePoints.join(" ")}" fill="none" stroke="${SERIES_OUTLINES[teamIndex]}" stroke-width="3" stroke-dasharray="2 5" opacity=".45"/>`;
+    }
+    markup += `<polyline points="${baselinePoints.join(" ")}" fill="none" stroke="${SERIES_COLORS[teamIndex]}" stroke-width="1.2" stroke-dasharray="2 5" opacity=".75"/></g>`;
   });
 
   if (!activeTeams.length) {
@@ -693,23 +841,33 @@ function renderTimelineChart(svgId, series, metricKey, title, eventLabel, startY
   svg.innerHTML = markup;
 }
 
-function renderTimeSeries(series, startYear, endYear) {
-  renderTimelineLegend(series);
-  renderTimelineChart("challengeTimelineChart", series, "acquisitions", "Cumulative successful challenges", "successful challenges", startYear, endYear);
-  renderTimelineChart("retentionTimelineChart", series, "defences", "Cumulative retentions", "retentions", startYear, endYear);
+function renderTimeSeries(summary, baselineSnapshots, selectedIndexes, startYear, endYear, randomizeStartingHolder) {
+  renderTimelineLegend(summary, baselineSnapshots, selectedIndexes);
+  renderTimelineChart("challengeTimelineChart", summary, baselineSnapshots, selectedIndexes, "acquisitions", "Cumulative successful challenges", "successful challenges", startYear, endYear, randomizeStartingHolder);
+  renderTimelineChart("retentionTimelineChart", summary, baselineSnapshots, selectedIndexes, "defences", "Cumulative retentions", "retentions", startYear, endYear, randomizeStartingHolder);
 }
 
 async function runSimulations(event) {
   if (event) event.preventDefault();
   const removalRate = Number(document.getElementById("removalRate").value);
   const simulationCount = Number(document.getElementById("simulationCount").value);
+  const selection = countrySelection();
+  if (!validateCountrySelection(selection)) {
+    updateReadyStatus();
+    return;
+  }
+  const { selectedIndexes, selectedMask } = selection;
+  const randomizeStartingHolder = document.getElementById("randomizeStartingHolder").checked;
   const { startYear, endYear } = normalizeYearRange();
-  const { startIndex, endIndex, matchCount: rangeMatchCount } = matchRange(startYear, endYear);
-  const enteringHolder = playTimeline(0, () => 1, 0, startIndex).holder;
+  const { startIndex, endIndex, matchCount: rangeMatchCount } = matchRange(startYear, endYear, selectedMask);
+  const enteringHolder = playTimeline(0, () => 1, 0, startIndex, -1, null, selectedMask).holder;
   const seedValue = Number(document.getElementById("seed").value);
   const seed = Number.isFinite(seedValue) ? seedValue >>> 0 : 1871;
   const random = mulberry32(seed);
+  const holderRandom = mulberry32(seed ^ 0x9E3779B9);
   const distributions = createTarget();
+  const checkpoints = timelineCheckpoints(startYear, endYear);
+  const timelineTarget = createTimelineTarget(checkpoints.years, simulationCount);
   const holderCounts = Array(TEAMS.length).fill(0);
   const runButton = document.getElementById("runButton");
   const progressBar = document.getElementById("progressBar");
@@ -717,17 +875,24 @@ async function runSimulations(event) {
   const started = performance.now();
   let keptTotal = 0;
 
+  simulationRunning = true;
+  countryFieldset.disabled = true;
+  randomizeStartingHolderInput.disabled = true;
   runButton.disabled = true;
   runButton.textContent = "Replaying…";
-  status.textContent = `Building alternate timelines for ${startYear}–${endYear}…`;
+  status.textContent = `Building alternate timelines for ${selectedIndexes.length} countries, ${startYear}–${endYear}${randomizeStartingHolder ? ", with randomized starting holders" : ""}…`;
   progressBar.style.width = "0%";
 
   const batchSize = 50;
   for (let start = 0; start < simulationCount; start += batchSize) {
     const end = Math.min(start + batchSize, simulationCount);
     for (let run = start; run < end; run++) {
-      const timeline = playTimeline(removalRate / 100, random, startIndex, endIndex, enteringHolder);
+      const runStartingHolder = randomizeStartingHolder
+        ? chooseRandomStartingHolder(selectedIndexes, holderRandom)
+        : enteringHolder;
+      const timeline = playTimeline(removalRate / 100, random, startIndex, endIndex, runStartingHolder, checkpoints.endIndexes, selectedMask);
       collectSimulation(distributions, timeline);
+      collectTimelineSimulation(timelineTarget, timeline.snapshots, run);
       keptTotal += timeline.kept;
       if (timeline.holder >= 0) holderCounts[timeline.holder]++;
     }
@@ -736,31 +901,49 @@ async function runSimulations(event) {
     await new Promise(resolve => requestAnimationFrame(resolve));
   }
 
-  const baseline = playTimeline(0, () => 1, startIndex, endIndex, enteringHolder);
-  const cumulativeSeries = buildCumulativeSeries(startYear, endYear, enteringHolder);
-  const orderedNations = nationOrder(distributions);
-  renderSummary(simulationCount, removalRate, keptTotal, holderCounts, performance.now() - started, startYear, endYear, rangeMatchCount);
+  const baseline = playTimeline(0, () => 1, startIndex, endIndex, enteringHolder, checkpoints.endIndexes, selectedMask);
+  const timelineSummary = summarizeTimelineTarget(timelineTarget);
+  const orderedNations = nationOrder(distributions, selectedIndexes);
+  document.getElementById("results-title").textContent = `Fortunes across ${selectedIndexes.length} selected ${selectedIndexes.length === 1 ? "nation" : "nations"}.`;
+  renderSummary(simulationCount, removalRate, keptTotal, holderCounts, performance.now() - started, startYear, endYear, rangeMatchCount, selectedIndexes.length, randomizeStartingHolder);
   renderLuckTable(distributions, baseline, orderedNations);
   renderChart(distributions, baseline, orderedNations, startYear, endYear);
-  renderTimeSeries(cumulativeSeries, startYear, endYear);
-  runButton.disabled = false;
+  renderTimeSeries(timelineSummary, baseline.snapshots, selectedIndexes, startYear, endYear, randomizeStartingHolder);
+  simulationRunning = false;
+  countryFieldset.disabled = false;
+  randomizeStartingHolderInput.disabled = false;
+  validateCountrySelection(countrySelection());
   runButton.textContent = "Replay the Shield";
 }
 
+initializeCountryOptions();
 const removalRate = document.getElementById("removalRate");
 const startYearInput = document.getElementById("startYear");
 const endYearInput = document.getElementById("endYear");
+const randomizeStartingHolderInput = document.getElementById("randomizeStartingHolder");
+const countryFieldset = document.getElementById("countryFieldset");
 removalRate.addEventListener("input", () => { document.getElementById("removalOutput").value = `${removalRate.value}%`; });
-startYearInput.addEventListener("change", () => updateRangeStatus(startYearInput));
-endYearInput.addEventListener("change", () => updateRangeStatus(endYearInput));
+startYearInput.addEventListener("change", () => updateReadyStatus(startYearInput));
+endYearInput.addEventListener("change", () => updateReadyStatus(endYearInput));
+randomizeStartingHolderInput.addEventListener("change", () => updateReadyStatus());
+document.getElementById("countryOptions").addEventListener("change", () => updateReadyStatus());
+document.getElementById("selectAllCountries").addEventListener("click", () => {
+  countryInputs.forEach(input => { input.checked = true; });
+  updateReadyStatus();
+});
+document.getElementById("clearCountries").addEventListener("click", () => {
+  countryInputs.forEach(input => { input.checked = false; });
+  updateReadyStatus();
+});
 document.getElementById("newSeed").addEventListener("click", () => {
   const seed = crypto && crypto.getRandomValues ? crypto.getRandomValues(new Uint32Array(1))[0] : Math.floor(Math.random() * 4294967296);
   document.getElementById("seed").value = seed;
 });
 document.getElementById("controls").addEventListener("submit", runSimulations);
+updateReadyStatus();
 
 // Exposed for lightweight regression tests without changing browser behavior.
-window.RaeburnSimulator = { TEAMS, FLAGS, MATCHES, MIN_YEAR, MAX_YEAR, YEAR_START_INDEX, SERIES_COLORS, mulberry32, playTimeline, matchRange, buildCumulativeSeries, quantile, summarize, percentileRank, nationOrder, histogram };
+window.RaeburnSimulator = { TEAMS, FLAGS, MATCHES, MIN_YEAR, MAX_YEAR, YEAR_START_INDEX, SERIES_COLORS, mulberry32, chooseRandomStartingHolder, matchIsEligible, playTimeline, countEligibleMatches, matchRange, timelineCheckpoints, createTimelineTarget, collectTimelineSimulation, summarizeTimelineTarget, quantile, summarize, percentileRank, nationOrder, histogram };
 requestAnimationFrame(() => runSimulations());
 </script>
 </body>
