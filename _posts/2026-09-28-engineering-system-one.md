@@ -16,7 +16,7 @@ In an effort to understand these things well, it was time to build my own model:
 
 *How have I done so far?*
 
-![](/blog/images/hobson_jevbench_trajectory.png)
+![](/blog/images/hobson_jevbench_trajectory.svg)
 
 Fairly well, I think. You can read that as a trajectory of how versions of my model have performed on accuracy (on *x*) and calibration (on *y*) as I've made improvements. The pareto optimal is the bottom right. 
 
@@ -58,7 +58,7 @@ One of the most important things we learn at this stage is how well the model ge
 
 *What's Next?*
 
-There are a few things I want to try. Starting with more data synthesis, especially of harder problems. I think we're not yet close to tapped out on capabilities with this number of parameters. The other big one is some form of reinforcement learning, mostly seeing if that can help calibration and generalization. Smaller ones include trying a few architectural tweaks, evaluating a second epoch or partial epoch, evaluating some different training schedules, larger LoRA ranks, and experimenting with other torsos (I tried *instruct* variants early on with negative results, but I'm not sold on that yet).
+There are a few things I want to try. Starting with more data synthesis, especially of harder problems. I think we're not yet close to tapped out on capabilities with this number of parameters. The other big one is some form of reinforcement learning, mostly seeing if that can help calibration and generalization, especially on end-to-end decision utility (e.g. with a workflow that 'does the thing if confidence >0.9', which can't be differentiated). Smaller ones include trying a few architectural tweaks, evaluating a second epoch or partial epoch, evaluating some different training schedules, larger LoRA ranks, and experimenting with other torsos (I tried *instruct* variants early on with negative results, but I'm not sold on that yet).
 
 *Lessons*
 
@@ -67,6 +67,8 @@ Maybe the biggest lesson here is how much easier it is to learn this stuff now t
 I think I'll need to do this a few times before all the new concepts stick. I'm not yet at the point I could stand at a white board and walk through each decision, but I'm way further along that path than a week ago.
 
 The other lesson is that even at 2B and below, we can build useful models of this class. That's obvious from the JevBench website too, but getting hands-on has really helped calibrate my thinking about this problem.
+
+Finally, while this was fun, it showed how easy it is to get obsessed with this *number go up* model building game. People who had a bit of a, ah, *problem* with World of Warcraft or Diablo II should probably find another way to spend their time.
 
 **Footnotes**
 
