@@ -8,16 +8,6 @@ title: "Small Decisions: Engineering a Leading Model"
 
 <p class="meta">Or trying to, at least.</p>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script>
-  MathJax = {
-    tex: {inlineMath: [['\\(', '\\)'], ['$', '$']]}
-  };
-</script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 My day job has been primarily in AI for three years now, but I'd be the first to admit that's been almost entirely in one corner of AI: infrastructure, safety, and tools for AI agents. That work has brought me in contact with a lot of the AI science (and I'd dabbled there over the previous decade), but I'm super far from the day-to-day of work like model building. I wanted to catch up a little (after all [you have to know what you're talking about](https://brooker.co.za/blog/2026/03/20/ic-leadership.html)), and the last couple weeks provided a perfect opportunity.
 
 On the 15th of this month, the TypeSafe AI folks announced [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), a kind of general purpose calibrated classifier. You can see this as something exciting or not, but it sure has captured the world's attention. And mine. I was particularly interested in the calibration, combined with low latency and the ability to answer questions in parallel, it's a great building block for the more *workflowy* end of the spectrum of agents.
@@ -30,31 +20,33 @@ In an effort to understand these things well, it was time to build my own model:
 
 Fairly well, I think. You can read that as a trajectory of how versions of my model have performed on accuracy (on *x*) and calibration (on *y*) as I've made improvements. The pareto optimal is the bottom right. 
 
-On the [jevbench public set](https://benchmarkheaven.com/jev-models) I'm beating all models but one in my size range: [decider-2b](https://huggingface.co/Mapika/decider-2b). I handily beat Qwen3.5-2B on both calibration and accuracy. I'm measuring calibration with the multi-class [Brier score](https://en.wikipedia.org/wiki/Brier_score), roughly the mean-square predication error. Perhaps most usefully, Brier on the JevBench *easy* set is only 0.009 and accuracy is 100%, so we're very well calibrated for easy tasks.
+On the [jevbench public set](https://benchmarkheaven.com/jev-models) I'm at the top in my size range<sup>[1](#foot1)</sup>. There's a new version of [decider-2b](https://huggingface.co/Mapika/decider-2b) which beats me, but hasn't been added to the leaderboard yet. I handily beat Qwen3.5-2B on both calibration and accuracy. I'm measuring calibration with the multi-class [Brier score](https://en.wikipedia.org/wiki/Brier_score), roughly the mean-square prediction error in a range between 0 (perfect) and 2 (confidently wrong). Perhaps most usefully, Brier on the JevBench *easy* set is only 0.009 and accuracy is 100%, so we're very well calibrated for easy tasks.
 
 ![](/blog/images/hobson_jevbench_tiers.svg)
 
 *How does it work?*
 
-The core idea is that we take a pre-trained LLM torso (in this case Qwen3.5-2B), and rip off the LM head, and so remove its ability to generate text. The LM head is replaced with a *pointer head* which scores the answers offered by the torso for each option. This head is pretty small, just over a million total parameters. The torso is fine-tuned with a rank-16 LoRA adapter.
+The core idea is that we take a pre-trained LLM torso (in this case Qwen3.5-2B), and rip off the LM head, and so remove its ability to generate text. The LM head is replaced with a *pointer head* which scores the answers offered by the torso for each option. It does this by scoring the hidden state at each option position against the hidden state at the `<answer>` position. This head is pretty small, just over a million total parameters. The torso is fine-tuned with a rank-16 LoRA adapter.
 
 ![](/blog/images/hobson_architecture.svg)
 
-This approach appears to give significantly better calibration than the simple approach of reading the logits at the output of the equivalent size LLM. It's fairly similar to the approach [Kev](https://github.com/jaredpalmer/kev) takes. 
+This approach appears to give better calibration than the simple approach of reading the logits at the output of the equivalent size LLM. It's fairly similar to the approach [Kev](https://github.com/jaredpalmer/kev) takes. 
 
-My first attempt (inspired by a conversation with a colleague at work, so not original to me) was a *slot head* which only read the hidden states for each `<answer>` and passed it through a single linear layer with 24 fixed output slots. This was smaller (53k total parameters), but had some real disadvantages: a limit of 24 options, positional bias (it would learn things like 'the first option is often right'), and ignored the extra information in each answer's hidden states. I initially experimented with a more complex slot head (2.1M params with a hidden layer), but that approach seemed like a dead end.
+My first attempt (inspired by a conversation with a colleague at work, so not original to me) was a *slot head* which only read the hidden states for each `<answer>` and passed it through a single linear layer with 24 fixed output slots. This was smaller (53k total parameters), but had some real disadvantages: a limit of 24 options, positional bias (it would learn things like 'the first option is often right'), and ignored the extra information in each option's hidden states. I initially experimented with a more complex slot head (2.1M params with a hidden layer), but that approach seemed like a dead end.
 
 *Training*
 
 The training approach is a fairly standard LoRA fine-tuning, with some self-distillation. The self-distillation was introduced to limit forgetting: the training process tends to make the fine-tuned model forget how to do tasks that it's already good at. The basic recipe is to use [KL](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence) between the trainee and a frozen version of the torso (basic distillation), and KL to a previous version of the model on some tasks where I was seeing regressions. The rest is pretty standard: one epoch, cross-entropy to the gold options in the training set, and options shuffled on every example to stop learning positional lessons.
 
-The data set is 115,000 rows, about 113k from public datasets, and 2k from synthetic 'hard' questions. None of the jevbench set is trained on, and the synthesis process doesn't know about it either (the model used for synthesis is about six months old). Synthesis was a big needle mover, it allowed creating hard examples with the right structure, and I suspect there's a good amount of juice left in that approach.
+The data set is 115,000 rows, about 113k from public datasets, and 2k from synthetic 'hard' questions. None of the jevbench set is trained on, and the synthesis process doesn't know about it either (the model used for synthesis is about six months old). On the other hand, I have seen the *jevbench* examples, and I designed the synthesis process, so it all comes down to how sub subconsciously intellectually honest I am. Science is hard. 
+
+I expected synthesis to be a big needle mover, by creating hard examples with the right structure. It helped, but wasn't huge. I suspect there's a good amount of juice left in that approach.
 
 ![](/blog/images/hobson_training_loss.svg)
 
-Again, I'm not an expert, but the training loss graph looks pretty normal. Validation accuracy (not pictured) keep climbing towards the end, and loss keeps dropping. So no huge surprises.
+Again, I'm not an expert, but the training loss graph looks pretty normal. Validation accuracy (not pictured) keeps climbing towards the end, even though loss stalls out. So no huge surprises.
 
-After training, part of the held out training data is used to calibrate scores. One *temperature* per question type (binary/noul, choice, score) is calculated that minimizes log loss on that question type (and so ideally minimizes Brier). At inference time, this temperature is used to scale the confidence scores (by dividing the raw logits by the temperatures).
+After training, part of the held out data (so data I didn't train on) is used to calibrate scores. One *temperature* per question type (binary/noul, choice, score) is calculated that minimizes log loss on that question type (and so ideally improves Brier, but isn't guaranteed to). At inference time, this temperature is used to scale the confidence scores (by dividing the raw logits by the temperatures).
 
 *Evaluation*
 
@@ -64,16 +56,18 @@ The rest of the held-out set is used for evaluation, including some examples fro
 
 One of the most important things we learn at this stage is how well the model generalizes. Can it do tasks that it hasn't seen before? After all, that's what makes this kind of model interesting versus a custom classifier. The answer is that even at this small size it generalizes usefully, but isn't great. As I've evolved the model, in-task accuracy has been much easier to move than generalization. I suspect this would be much easier with a bigger torso, but the rules of the game don't allow that approach.
 
-This graph is understating our progress a bit, because I've mixed in a bunch of harder examples as I've chased better performance. And so it's not an apples-to-apples comparison between the model versions.
-
 *What's Next?*
 
 There are a few things I want to try. Starting with more data synthesis, especially of harder problems. I think we're not yet close to tapped out on capabilities with this number of parameters. The other big one is some form of reinforcement learning, mostly seeing if that can help calibration and generalization. Smaller ones include trying a few architectural tweaks, evaluating a second epoch or partial epoch, evaluating some different training schedules, larger LoRA ranks, and experimenting with other torsos (I tried *instruct* variants early on with negative results, but I'm not sold on that yet).
 
 *Lessons*
 
-Maybe the biggest lesson here is how much easier it is to learn this stuff now that a year or so ago. Being able to ask Kiro or Claude to step me through concepts and then quiz me on my understanding was exceptionally helpful - it's like having a custom textbook about exactly this problem at just this level. Every line of code was written by an agent, but at each step I tried to make sure the core ideas and insights were mine, or at least I understood them. I might not set such a bar for a project at work, but for this project the outcome was mostly about me learning.
+Maybe the biggest lesson here is how much easier it is to learn this stuff now than a year or so ago. Being able to ask Kiro or Claude to step me through concepts and then quiz me on my understanding was exceptionally helpful - it's like having a custom textbook about exactly this problem at just the right level for me. Every line of code was written by an agent, but at each step I tried to make sure the core ideas and insights were mine, or at least I understood them. I might not set such a bar for a project at work, but for this project the outcome was mostly about me learning.
 
 I think I'll need to do this a few times before all the new concepts stick. I'm not yet at the point I could stand at a white board and walk through each decision, but I'm way further along that path than a week ago.
 
 The other lesson is that even at 2B and below, we can build useful models of this class. That's obvious from the JevBench website too, but getting hands-on has really helped calibrate my thinking about this problem.
+
+**Footnotes**
+
+1. <a name="foot1"></a> joint first of 30 at 2B or below on the v1.4.2 board, level with decider-2b's v10 entry. There are two slightly larger models, around 2.5B, that do beat my model.
