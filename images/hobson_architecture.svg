@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="viz" width="860" height="540" viewBox="0 0 860 540" role="img" aria-labelledby="t d">
+<title id="t">Hobson architecture</title>
+<desc id="d">A pretrained decoder LLM normally runs input through its torso and a language-modelling head to generate text. Hobson keeps the torso, discards the head, and feeds the hidden states at the end of each option line and at the answer position into a pointer head, which produces one logit per option; a softmax over those logits is the answer.</desc>
+<style>
+.viz { --surface:#fcfcfb; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781; --grid:#e1e0d9;
+  --axis:#c3c2b7; --box:#f3f2ee; --s1:#2a78d6; --s1bg:#e8f1fc; }
+@media (prefers-color-scheme: dark) {
+  .viz { --surface:#1a1a19; --ink:#ffffff; --ink2:#c3c2b7; --muted:#898781; --grid:#2c2c2a; --axis:#4a4a46;
+    --box:#242423; --s1:#3987e5; --s1bg:#16263b; } }
+.viz text { font-family:system-ui, -apple-system, "Segoe UI", sans-serif; fill:var(--ink2); font-size:12px; }
+.viz .title { fill:var(--ink); font-size:15px; font-weight:600; }
+.viz .subtitle { font-size:12px; }
+.viz .panel { fill:var(--ink); font-size:12px; font-weight:600; }
+.viz .label { fill:var(--ink); }
+.viz .muted { fill:var(--muted); }
+.viz .small { font-size:11px; }
+.viz .mono { font-family:ui-monospace, "Cascadia Code", Consolas, monospace; font-size:11px; }
+.viz .frame { fill:none; stroke:var(--grid); stroke-width:1.5; }
+.viz .box { fill:var(--box); stroke:var(--axis); stroke-width:1; }
+.viz .trained { fill:var(--s1bg); stroke:var(--s1); stroke-width:2; }
+.viz .gone { fill:none; stroke:var(--muted); stroke-width:1; stroke-dasharray:4 3; }
+.viz .flow { stroke:var(--ink2); stroke-width:1.5; fill:none; }
+.viz .gone-flow { stroke:var(--muted); stroke-width:1; stroke-dasharray:4 3; fill:none; }
+.viz .head { fill:var(--ink2); }
+.viz .head-gone { fill:var(--muted); }
+</style>
+<defs>
+  <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+    <path class="head" d="M0,0 L8,4 L0,8 z"/></marker>
+  <marker id="ahg" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+    <path class="head-gone" d="M0,0 L8,4 L0,8 z"/></marker>
+</defs>
+<rect width="860" height="540" fill="var(--surface)"/>
+
+<text class="title" x="24" y="30">Hobson architecture</text>
+<text class="subtitle" x="24" y="50">Keep a pretrained decoder's torso, discard its language-modelling head, and score each option with a pointer head.</text>
+<text class="subtitle" x="24" y="66">One forward pass: no generation, no decoding loop.</text>
+
+<!-- left: an ordinary decoder LLM -->
+<text class="panel" x="44" y="94">A decoder LLM</text>
+<rect class="gone" x="44" y="110" width="200" height="34" rx="6"/>
+<text class="muted" x="144" y="131" text-anchor="middle">generated text</text>
+<rect class="gone" x="44" y="200" width="200" height="40" rx="6"/>
+<text class="muted" x="144" y="224" text-anchor="middle">LM head (vocabulary logits)</text>
+<text class="muted small" x="144" y="176" text-anchor="middle" font-style="italic">discarded</text>
+<line class="gone-flow" x1="144" y1="200" x2="144" y2="185" marker-end="url(#ahg)"/>
+<line class="gone-flow" x1="144" y1="166" x2="144" y2="146" marker-end="url(#ahg)"/>
+<rect class="box" x="44" y="334" width="200" height="50" rx="6"/>
+<text class="label" x="144" y="363" text-anchor="middle">LLM torso</text>
+<line class="gone-flow" x1="144" y1="334" x2="144" y2="242" marker-end="url(#ahg)"/>
+<rect class="box" x="44" y="416" width="200" height="40" rx="6"/>
+<text class="label" x="144" y="440" text-anchor="middle">input</text>
+<line class="flow" x1="144" y1="416" x2="144" y2="387" marker-end="url(#ah)"/>
+
+<!-- keep the torso -->
+<line class="flow" x1="246" y1="359" x2="352" y2="359" marker-end="url(#ah)"/>
+<text class="small" x="299" y="350" text-anchor="middle">same torso</text>
+
+<!-- right: hobson -->
+<rect class="frame" x="330" y="76" width="506" height="412" rx="10"/>
+<text class="panel" x="346" y="96">hobson</text>
+
+<rect class="box" x="359" y="106" width="332" height="30" rx="6"/>
+<text class="label" x="525" y="125" text-anchor="middle">softmax → answer, per-option probabilities</text>
+
+<g>
+  <rect class="box" x="369" y="150" width="80" height="26" rx="5"/><text class="mono" x="409" y="167" text-anchor="middle">logit 1</text>
+  <rect class="box" x="485" y="150" width="80" height="26" rx="5"/><text class="mono" x="525" y="167" text-anchor="middle">logit 2</text>
+  <rect class="box" x="601" y="150" width="80" height="26" rx="5"/><text class="mono" x="641" y="167" text-anchor="middle">logit 3</text>
+  <line class="flow" x1="409" y1="150" x2="409" y2="139" marker-end="url(#ah)"/>
+  <line class="flow" x1="525" y1="150" x2="525" y2="139" marker-end="url(#ah)"/>
+  <line class="flow" x1="641" y1="150" x2="641" y2="139" marker-end="url(#ah)"/>
+</g>
+
+<rect class="trained" x="359" y="196" width="448" height="46" rx="6"/>
+<text class="label" x="583" y="214" text-anchor="middle" font-weight="600">pointer head</text>
+<text class="mono" x="583" y="232" text-anchor="middle">logit_k = ⟨q(h_answer), k(h_opt k)⟩ / √256</text>
+<line class="flow" x1="409" y1="196" x2="409" y2="179" marker-end="url(#ah)"/>
+<line class="flow" x1="525" y1="196" x2="525" y2="179" marker-end="url(#ah)"/>
+<line class="flow" x1="641" y1="196" x2="641" y2="179" marker-end="url(#ah)"/>
+
+<g>
+  <rect class="box" x="359" y="272" width="100" height="30" rx="5"/><text class="mono" x="409" y="291" text-anchor="middle">h(opt 1)</text>
+  <rect class="box" x="475" y="272" width="100" height="30" rx="5"/><text class="mono" x="525" y="291" text-anchor="middle">h(opt 2)</text>
+  <rect class="box" x="591" y="272" width="100" height="30" rx="5"/><text class="mono" x="641" y="291" text-anchor="middle">h(opt 3)</text>
+  <rect class="box" x="707" y="272" width="100" height="30" rx="5"/><text class="mono" x="757" y="291" text-anchor="middle">h(answer)</text>
+  <line class="flow" x1="409" y1="272" x2="409" y2="245" marker-end="url(#ah)"/>
+  <line class="flow" x1="525" y1="272" x2="525" y2="245" marker-end="url(#ah)"/>
+  <line class="flow" x1="641" y1="272" x2="641" y2="245" marker-end="url(#ah)"/>
+  <line class="flow" x1="757" y1="272" x2="757" y2="245" marker-end="url(#ah)"/>
+  <text class="muted small" x="415" y="261">key</text>
+  <text class="muted small" x="531" y="261">key</text>
+  <text class="muted small" x="647" y="261">key</text>
+  <text class="muted small" x="763" y="261">query</text>
+</g>
+
+<rect class="box" x="359" y="334" width="448" height="50" rx="6"/>
+<text class="label" x="530" y="363" text-anchor="middle">LLM torso · Qwen3.5-2B-Base</text>
+<rect class="trained" x="713" y="346" width="84" height="26" rx="5"/>
+<text class="label small" x="755" y="363" text-anchor="middle">+ LoRA r16</text>
+<line class="flow" x1="409" y1="334" x2="409" y2="305" marker-end="url(#ah)"/>
+<line class="flow" x1="525" y1="334" x2="525" y2="305" marker-end="url(#ah)"/>
+<line class="flow" x1="641" y1="334" x2="641" y2="305" marker-end="url(#ah)"/>
+<line class="flow" x1="757" y1="334" x2="757" y2="305" marker-end="url(#ah)"/>
+<text class="muted small" x="583" y="474" text-anchor="middle">h(opt k): hidden state at the last token of option k's line. h(answer): hidden state at &lt;answer&gt;.</text>
+
+<rect class="box" x="359" y="416" width="448" height="40" rx="6"/>
+<text class="mono" x="583" y="440" text-anchor="middle">&lt;state&gt; … &lt;question&gt; … &lt;options&gt; 1. … 2. … 3. … &lt;/options&gt; &lt;answer&gt;</text>
+<line class="flow" x1="583" y1="416" x2="583" y2="387" marker-end="url(#ah)"/>
+
+<!-- key -->
+<rect class="trained" x="24" y="508" width="22" height="14" rx="3"/>
+<text x="54" y="519">trained: rank-16 LoRA adapters and the pointer head (~1M parameters)</text>
+<rect class="box" x="484" y="508" width="22" height="14" rx="3"/>
+<text x="514" y="519">pretrained weights</text>
+<rect class="gone" x="654" y="508" width="22" height="14" rx="3"/>
+<text x="684" y="519">discarded</text>
+</svg>
