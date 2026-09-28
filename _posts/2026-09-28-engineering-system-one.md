@@ -56,6 +56,8 @@ The rest of the held-out set is used for evaluation, including some examples fro
 
 One of the most important things we learn at this stage is how well the model generalizes. Can it do tasks that it hasn't seen before? After all, that's what makes this kind of model interesting versus a custom classifier. The answer is that even at this small size it generalizes usefully, but isn't great. As I've evolved the model, in-task accuracy has been much easier to move than generalization. I suspect this would be much easier with a bigger torso, but the rules of the game don't allow that approach.
 
+The lack of in-task progress here has more to do with my choice of test set than actual performance ceiling. I need to spend more time being more thoughtful about how I test progress. 
+
 *Inference*
 
 One thing that's attractive about small models, and about this class of decision models, is low latency and low cost. Inference in my model is either one or two forward passes: one when there's only one question, and two for any number of questions beyond that (so still O(1), not O(questions)). Quantitative latency scales very well with the number of questions, thanks to the ability to cache the forward pass over the state.
