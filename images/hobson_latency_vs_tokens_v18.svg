@@ -1,0 +1,290 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="viz" width="820" height="474" viewBox="0 0 820 474" role="img">
+<style>
+.viz { --surface:#fcfcfb; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781; --grid:#e1e0d9;
+  --axis:#c3c2b7; --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
+  --h0:#cde2fb; --h1:#9ec5f4; --h2:#6da7ec; --h3:#3987e5; --h4:#256abf; --h5:#184f95; --h6:#0d366b; }
+@media (prefers-color-scheme: dark) {
+  .viz { --surface:#1a1a19; --ink:#ffffff; --ink2:#c3c2b7; --grid:#2c2c2a; --axis:#383835;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+    --h0:#0d366b; --h1:#104281; --h2:#184f95; --h3:#1c5cab; --h4:#256abf; --h5:#3987e5; --h6:#6da7ec; } }
+.viz text { font-family:system-ui, -apple-system, "Segoe UI", sans-serif; fill:var(--ink2); font-size:11px; }
+.viz .title { fill:var(--ink); font-size:15px; font-weight:600; }
+.viz .subtitle { fill:var(--ink2); font-size:12px; }
+.viz .panel { fill:var(--ink); font-size:12px; font-weight:600; }
+.viz .muted { fill:var(--muted); }
+.viz .value { fill:var(--ink); font-weight:600; }
+.viz .tick { font-variant-numeric:tabular-nums; fill:var(--muted); }
+.viz .grid { stroke:var(--grid); stroke-width:1; }
+.viz .axis { stroke:var(--axis); stroke-width:1; }
+.viz .ref { stroke:var(--muted); stroke-width:1; }
+.viz .line1 { stroke:var(--s1); stroke-width:2; fill:none; stroke-linejoin:round; stroke-linecap:round; }
+.viz .line0, .viz .line2, .viz .line3 { stroke-width:1.5; fill:none; stroke-linejoin:round; stroke-linecap:round; }
+.viz .line0 { stroke:var(--ink2); }
+.viz .line2 { stroke:var(--s2); }
+.viz .line3 { stroke:var(--s3); }
+.viz .strip { fill:transparent; }
+.viz .strip:hover { fill:var(--grid); fill-opacity:0.5; }
+.viz .dot1 { fill:var(--s1); stroke:var(--surface); stroke-width:2; }
+.viz .dot2 { fill:var(--s2); stroke:var(--surface); stroke-width:2; }
+.viz .dot3 { fill:var(--s3); stroke:var(--surface); stroke-width:2; }
+.viz .dot1s { fill:var(--s1); fill-opacity:0.55; }
+.viz .arrow { fill:var(--s1); }
+.viz .hit { fill:transparent; }
+</style>
+<rect width="820" height="474" fill="var(--surface)"/>
+<text class="title" x="24" y="30">v18 latency against prompt length</text>
+<text class="subtitle" x="24" y="50">JevBench public set: one question per request through the local server, HTTP round trip included. 230 requests on an RTX 3090.</text>
+<line class="grid" x1="72" x2="718.4" y1="384.0" y2="384.0"/>
+<text class="tick" x="66" y="387.5" text-anchor="end">0</text>
+<line class="grid" x1="72" x2="718.4" y1="324.0" y2="324.0"/>
+<text class="tick" x="66" y="327.5" text-anchor="end">100</text>
+<line class="grid" x1="72" x2="718.4" y1="264.0" y2="264.0"/>
+<text class="tick" x="66" y="267.5" text-anchor="end">200</text>
+<line class="grid" x1="72" x2="718.4" y1="204.0" y2="204.0"/>
+<text class="tick" x="66" y="207.5" text-anchor="end">300</text>
+<line class="grid" x1="72" x2="718.4" y1="144.0" y2="144.0"/>
+<text class="tick" x="66" y="147.5" text-anchor="end">400</text>
+<line class="grid" x1="72" x2="718.4" y1="84.0" y2="84.0"/>
+<text class="tick" x="66" y="87.5" text-anchor="end">500</text>
+<line class="axis" x1="72" x2="718.4" y1="384" y2="384"/>
+<text class="tick" x="72.0" y="400" text-anchor="middle">0</text>
+<text class="tick" x="280.5" y="400" text-anchor="middle">1,000</text>
+<text class="tick" x="489.0" y="400" text-anchor="middle">2,000</text>
+<text class="tick" x="697.5" y="400" text-anchor="middle">3,000</text>
+<text class="muted" x="718.4" y="418" text-anchor="end">input tokens &#8594;</text>
+<text class="muted" x="32" y="72">latency (ms)</text>
+<g><title>original-policy-01-1: 128 tokens, 103 ms</title><circle class="hit" cx="98.7" cy="322.0" r="6"/><circle class="dot1s" cx="98.7" cy="322.0" r="3.5"/></g>
+<g><title>original-policy-02-0: 114 tokens, 97 ms</title><circle class="hit" cx="95.8" cy="325.6" r="6"/><circle class="dot1s" cx="95.8" cy="325.6" r="3.5"/></g>
+<g><title>original-policy-02-1: 113 tokens, 99 ms</title><circle class="hit" cx="95.6" cy="324.8" r="6"/><circle class="dot1s" cx="95.6" cy="324.8" r="3.5"/></g>
+<g><title>original-policy-03-0: 116 tokens, 97 ms</title><circle class="hit" cx="96.2" cy="325.7" r="6"/><circle class="dot1s" cx="96.2" cy="325.7" r="3.5"/></g>
+<g><title>original-policy-03-1: 115 tokens, 105 ms</title><circle class="hit" cx="96.0" cy="321.0" r="6"/><circle class="dot1s" cx="96.0" cy="321.0" r="3.5"/></g>
+<g><title>original-policy-04-0: 122 tokens, 112 ms</title><circle class="hit" cx="97.4" cy="316.7" r="6"/><circle class="dot1s" cx="97.4" cy="316.7" r="3.5"/></g>
+<g><title>original-policy-04-1: 119 tokens, 96 ms</title><circle class="hit" cx="96.8" cy="326.5" r="6"/><circle class="dot1s" cx="96.8" cy="326.5" r="3.5"/></g>
+<g><title>original-policy-05-0: 126 tokens, 109 ms</title><circle class="hit" cx="98.3" cy="318.8" r="6"/><circle class="dot1s" cx="98.3" cy="318.8" r="3.5"/></g>
+<g><title>original-policy-05-1: 118 tokens, 97 ms</title><circle class="hit" cx="96.6" cy="326.0" r="6"/><circle class="dot1s" cx="96.6" cy="326.0" r="3.5"/></g>
+<g><title>original-policy-06-0: 128 tokens, 100 ms</title><circle class="hit" cx="98.7" cy="324.1" r="6"/><circle class="dot1s" cx="98.7" cy="324.1" r="3.5"/></g>
+<g><title>original-policy-06-1: 118 tokens, 102 ms</title><circle class="hit" cx="96.6" cy="322.6" r="6"/><circle class="dot1s" cx="96.6" cy="322.6" r="3.5"/></g>
+<g><title>original-intent-01-0: 113 tokens, 100 ms</title><circle class="hit" cx="95.6" cy="324.1" r="6"/><circle class="dot1s" cx="95.6" cy="324.1" r="3.5"/></g>
+<g><title>original-intent-01-1: 114 tokens, 101 ms</title><circle class="hit" cx="95.8" cy="323.6" r="6"/><circle class="dot1s" cx="95.8" cy="323.6" r="3.5"/></g>
+<g><title>original-intent-02-0: 114 tokens, 116 ms</title><circle class="hit" cx="95.8" cy="314.5" r="6"/><circle class="dot1s" cx="95.8" cy="314.5" r="3.5"/></g>
+<g><title>original-intent-02-1: 113 tokens, 97 ms</title><circle class="hit" cx="95.6" cy="325.7" r="6"/><circle class="dot1s" cx="95.6" cy="325.7" r="3.5"/></g>
+<g><title>original-intent-03-0: 115 tokens, 98 ms</title><circle class="hit" cx="96.0" cy="325.5" r="6"/><circle class="dot1s" cx="96.0" cy="325.5" r="3.5"/></g>
+<g><title>original-intent-03-1: 113 tokens, 96 ms</title><circle class="hit" cx="95.6" cy="326.6" r="6"/><circle class="dot1s" cx="95.6" cy="326.6" r="3.5"/></g>
+<g><title>original-intent-04-0: 118 tokens, 119 ms</title><circle class="hit" cx="96.6" cy="312.8" r="6"/><circle class="dot1s" cx="96.6" cy="312.8" r="3.5"/></g>
+<g><title>original-intent-04-1: 113 tokens, 97 ms</title><circle class="hit" cx="95.6" cy="325.8" r="6"/><circle class="dot1s" cx="95.6" cy="325.8" r="3.5"/></g>
+<g><title>original-intent-05-0: 113 tokens, 103 ms</title><circle class="hit" cx="95.6" cy="322.2" r="6"/><circle class="dot1s" cx="95.6" cy="322.2" r="3.5"/></g>
+<g><title>original-intent-05-1: 112 tokens, 97 ms</title><circle class="hit" cx="95.4" cy="326.0" r="6"/><circle class="dot1s" cx="95.4" cy="326.0" r="3.5"/></g>
+<g><title>original-intent-06-0: 111 tokens, 120 ms</title><circle class="hit" cx="95.1" cy="312.2" r="6"/><circle class="dot1s" cx="95.1" cy="312.2" r="3.5"/></g>
+<g><title>original-intent-06-1: 116 tokens, 102 ms</title><circle class="hit" cx="96.2" cy="323.0" r="6"/><circle class="dot1s" cx="96.2" cy="323.0" r="3.5"/></g>
+<g><title>original-ordinal-01-0: 131 tokens, 115 ms</title><circle class="hit" cx="99.3" cy="315.1" r="6"/><circle class="dot1s" cx="99.3" cy="315.1" r="3.5"/></g>
+<g><title>original-ordinal-01-1: 132 tokens, 304 ms</title><circle class="hit" cx="99.5" cy="201.8" r="6"/><circle class="dot1s" cx="99.5" cy="201.8" r="3.5"/></g>
+<g><title>original-ordinal-02-0: 135 tokens, 102 ms</title><circle class="hit" cx="100.1" cy="322.5" r="6"/><circle class="dot1s" cx="100.1" cy="322.5" r="3.5"/></g>
+<g><title>original-ordinal-02-1: 136 tokens, 110 ms</title><circle class="hit" cx="100.4" cy="317.8" r="6"/><circle class="dot1s" cx="100.4" cy="317.8" r="3.5"/></g>
+<g><title>original-ordinal-03-0: 132 tokens, 109 ms</title><circle class="hit" cx="99.5" cy="318.7" r="6"/><circle class="dot1s" cx="99.5" cy="318.7" r="3.5"/></g>
+<g><title>original-ordinal-03-1: 134 tokens, 112 ms</title><circle class="hit" cx="99.9" cy="316.6" r="6"/><circle class="dot1s" cx="99.9" cy="316.6" r="3.5"/></g>
+<g><title>original-ordinal-04-0: 134 tokens, 100 ms</title><circle class="hit" cx="99.9" cy="324.2" r="6"/><circle class="dot1s" cx="99.9" cy="324.2" r="3.5"/></g>
+<g><title>original-ordinal-04-1: 133 tokens, 104 ms</title><circle class="hit" cx="99.7" cy="321.6" r="6"/><circle class="dot1s" cx="99.7" cy="321.6" r="3.5"/></g>
+<g><title>original-ordinal-05-0: 137 tokens, 102 ms</title><circle class="hit" cx="100.6" cy="322.7" r="6"/><circle class="dot1s" cx="100.6" cy="322.7" r="3.5"/></g>
+<g><title>original-ordinal-05-1: 136 tokens, 122 ms</title><circle class="hit" cx="100.4" cy="311.0" r="6"/><circle class="dot1s" cx="100.4" cy="311.0" r="3.5"/></g>
+<g><title>original-ordinal-06-0: 137 tokens, 114 ms</title><circle class="hit" cx="100.6" cy="315.5" r="6"/><circle class="dot1s" cx="100.6" cy="315.5" r="3.5"/></g>
+<g><title>original-ordinal-06-1: 144 tokens, 112 ms</title><circle class="hit" cx="102.0" cy="316.9" r="6"/><circle class="dot1s" cx="102.0" cy="316.9" r="3.5"/></g>
+<g><title>original-extraction-01-0: 102 tokens, 119 ms</title><circle class="hit" cx="93.3" cy="312.8" r="6"/><circle class="dot1s" cx="93.3" cy="312.8" r="3.5"/></g>
+<g><title>original-extraction-01-1: 104 tokens, 102 ms</title><circle class="hit" cx="93.7" cy="322.8" r="6"/><circle class="dot1s" cx="93.7" cy="322.8" r="3.5"/></g>
+<g><title>original-extraction-02-0: 105 tokens, 99 ms</title><circle class="hit" cx="93.9" cy="324.4" r="6"/><circle class="dot1s" cx="93.9" cy="324.4" r="3.5"/></g>
+<g><title>original-extraction-02-1: 104 tokens, 101 ms</title><circle class="hit" cx="93.7" cy="323.3" r="6"/><circle class="dot1s" cx="93.7" cy="323.3" r="3.5"/></g>
+<g><title>original-extraction-03-0: 108 tokens, 99 ms</title><circle class="hit" cx="94.5" cy="324.8" r="6"/><circle class="dot1s" cx="94.5" cy="324.8" r="3.5"/></g>
+<g><title>original-extraction-03-1: 107 tokens, 98 ms</title><circle class="hit" cx="94.3" cy="325.3" r="6"/><circle class="dot1s" cx="94.3" cy="325.3" r="3.5"/></g>
+<g><title>original-extraction-04-0: 105 tokens, 100 ms</title><circle class="hit" cx="93.9" cy="324.1" r="6"/><circle class="dot1s" cx="93.9" cy="324.1" r="3.5"/></g>
+<g><title>original-extraction-04-1: 102 tokens, 105 ms</title><circle class="hit" cx="93.3" cy="321.1" r="6"/><circle class="dot1s" cx="93.3" cy="321.1" r="3.5"/></g>
+<g><title>original-extraction-05-0: 105 tokens, 115 ms</title><circle class="hit" cx="93.9" cy="314.9" r="6"/><circle class="dot1s" cx="93.9" cy="314.9" r="3.5"/></g>
+<g><title>original-extraction-05-1: 101 tokens, 114 ms</title><circle class="hit" cx="93.1" cy="315.7" r="6"/><circle class="dot1s" cx="93.1" cy="315.7" r="3.5"/></g>
+<g><title>original-extraction-06-0: 105 tokens, 97 ms</title><circle class="hit" cx="93.9" cy="325.9" r="6"/><circle class="dot1s" cx="93.9" cy="325.9" r="3.5"/></g>
+<g><title>original-extraction-06-1: 104 tokens, 98 ms</title><circle class="hit" cx="93.7" cy="325.1" r="6"/><circle class="dot1s" cx="93.7" cy="325.1" r="3.5"/></g>
+<g><title>original-adequacy-01-0: 107 tokens, 101 ms</title><circle class="hit" cx="94.3" cy="323.3" r="6"/><circle class="dot1s" cx="94.3" cy="323.3" r="3.5"/></g>
+<g><title>original-adequacy-01-1: 103 tokens, 102 ms</title><circle class="hit" cx="93.5" cy="322.7" r="6"/><circle class="dot1s" cx="93.5" cy="322.7" r="3.5"/></g>
+<g><title>original-adequacy-02-0: 104 tokens, 100 ms</title><circle class="hit" cx="93.7" cy="324.2" r="6"/><circle class="dot1s" cx="93.7" cy="324.2" r="3.5"/></g>
+<g><title>original-adequacy-02-1: 105 tokens, 100 ms</title><circle class="hit" cx="93.9" cy="324.0" r="6"/><circle class="dot1s" cx="93.9" cy="324.0" r="3.5"/></g>
+<g><title>original-adequacy-03-0: 107 tokens, 99 ms</title><circle class="hit" cx="94.3" cy="324.4" r="6"/><circle class="dot1s" cx="94.3" cy="324.4" r="3.5"/></g>
+<g><title>original-adequacy-03-1: 111 tokens, 98 ms</title><circle class="hit" cx="95.1" cy="325.0" r="6"/><circle class="dot1s" cx="95.1" cy="325.0" r="3.5"/></g>
+<g><title>original-adequacy-04-0: 111 tokens, 102 ms</title><circle class="hit" cx="95.1" cy="323.0" r="6"/><circle class="dot1s" cx="95.1" cy="323.0" r="3.5"/></g>
+<g><title>original-adequacy-04-1: 108 tokens, 104 ms</title><circle class="hit" cx="94.5" cy="321.7" r="6"/><circle class="dot1s" cx="94.5" cy="321.7" r="3.5"/></g>
+<g><title>original-adequacy-05-0: 100 tokens, 104 ms</title><circle class="hit" cx="92.9" cy="321.4" r="6"/><circle class="dot1s" cx="92.9" cy="321.4" r="3.5"/></g>
+<g><title>original-adequacy-05-1: 101 tokens, 114 ms</title><circle class="hit" cx="93.1" cy="315.6" r="6"/><circle class="dot1s" cx="93.1" cy="315.6" r="3.5"/></g>
+<g><title>original-adequacy-06-0: 116 tokens, 118 ms</title><circle class="hit" cx="96.2" cy="313.4" r="6"/><circle class="dot1s" cx="96.2" cy="313.4" r="3.5"/></g>
+<g><title>original-adequacy-06-1: 118 tokens, 105 ms</title><circle class="hit" cx="96.6" cy="321.2" r="6"/><circle class="dot1s" cx="96.6" cy="321.2" r="3.5"/></g>
+<g><title>original-routing-01-0: 143 tokens, 105 ms</title><circle class="hit" cx="101.8" cy="321.2" r="6"/><circle class="dot1s" cx="101.8" cy="321.2" r="3.5"/></g>
+<g><title>original-routing-01-1: 139 tokens, 114 ms</title><circle class="hit" cx="101.0" cy="315.7" r="6"/><circle class="dot1s" cx="101.0" cy="315.7" r="3.5"/></g>
+<g><title>original-routing-02-0: 144 tokens, 102 ms</title><circle class="hit" cx="102.0" cy="322.9" r="6"/><circle class="dot1s" cx="102.0" cy="322.9" r="3.5"/></g>
+<g><title>original-routing-02-1: 138 tokens, 111 ms</title><circle class="hit" cx="100.8" cy="317.2" r="6"/><circle class="dot1s" cx="100.8" cy="317.2" r="3.5"/></g>
+<g><title>original-routing-03-0: 143 tokens, 100 ms</title><circle class="hit" cx="101.8" cy="323.9" r="6"/><circle class="dot1s" cx="101.8" cy="323.9" r="3.5"/></g>
+<g><title>original-routing-03-1: 145 tokens, 99 ms</title><circle class="hit" cx="102.2" cy="324.5" r="6"/><circle class="dot1s" cx="102.2" cy="324.5" r="3.5"/></g>
+<g><title>original-routing-04-0: 139 tokens, 111 ms</title><circle class="hit" cx="101.0" cy="317.2" r="6"/><circle class="dot1s" cx="101.0" cy="317.2" r="3.5"/></g>
+<g><title>original-routing-04-1: 138 tokens, 114 ms</title><circle class="hit" cx="100.8" cy="315.7" r="6"/><circle class="dot1s" cx="100.8" cy="315.7" r="3.5"/></g>
+<g><title>original-routing-05-0: 140 tokens, 111 ms</title><circle class="hit" cx="101.2" cy="317.3" r="6"/><circle class="dot1s" cx="101.2" cy="317.3" r="3.5"/></g>
+<g><title>original-routing-05-1: 140 tokens, 117 ms</title><circle class="hit" cx="101.2" cy="313.8" r="6"/><circle class="dot1s" cx="101.2" cy="313.8" r="3.5"/></g>
+<g><title>original-routing-06-0: 139 tokens, 112 ms</title><circle class="hit" cx="101.0" cy="316.6" r="6"/><circle class="dot1s" cx="101.0" cy="316.6" r="3.5"/></g>
+<g><title>original-routing-06-1: 138 tokens, 100 ms</title><circle class="hit" cx="100.8" cy="324.1" r="6"/><circle class="dot1s" cx="100.8" cy="324.1" r="3.5"/></g>
+<g><title>easy-intent-00: 133 tokens, 99 ms</title><circle class="hit" cx="99.7" cy="324.5" r="6"/><circle class="dot1s" cx="99.7" cy="324.5" r="3.5"/></g>
+<g><title>easy-intent-01: 133 tokens, 118 ms</title><circle class="hit" cx="99.7" cy="313.1" r="6"/><circle class="dot1s" cx="99.7" cy="313.1" r="3.5"/></g>
+<g><title>easy-intent-02: 136 tokens, 100 ms</title><circle class="hit" cx="100.4" cy="323.7" r="6"/><circle class="dot1s" cx="100.4" cy="323.7" r="3.5"/></g>
+<g><title>easy-intent-03: 125 tokens, 99 ms</title><circle class="hit" cx="98.1" cy="324.4" r="6"/><circle class="dot1s" cx="98.1" cy="324.4" r="3.5"/></g>
+<g><title>easy-intent-04: 130 tokens, 108 ms</title><circle class="hit" cx="99.1" cy="319.2" r="6"/><circle class="dot1s" cx="99.1" cy="319.2" r="3.5"/></g>
+<g><title>easy-intent-05: 129 tokens, 103 ms</title><circle class="hit" cx="98.9" cy="322.4" r="6"/><circle class="dot1s" cx="98.9" cy="322.4" r="3.5"/></g>
+<g><title>easy-intent-06: 121 tokens, 110 ms</title><circle class="hit" cx="97.2" cy="317.9" r="6"/><circle class="dot1s" cx="97.2" cy="317.9" r="3.5"/></g>
+<g><title>easy-intent-07: 114 tokens, 99 ms</title><circle class="hit" cx="95.8" cy="324.5" r="6"/><circle class="dot1s" cx="95.8" cy="324.5" r="3.5"/></g>
+<g><title>easy-intent-08: 116 tokens, 98 ms</title><circle class="hit" cx="96.2" cy="325.3" r="6"/><circle class="dot1s" cx="96.2" cy="325.3" r="3.5"/></g>
+<g><title>easy-intent-09: 119 tokens, 111 ms</title><circle class="hit" cx="96.8" cy="317.2" r="6"/><circle class="dot1s" cx="96.8" cy="317.2" r="3.5"/></g>
+<g><title>easy-intent-10: 117 tokens, 101 ms</title><circle class="hit" cx="96.4" cy="323.4" r="6"/><circle class="dot1s" cx="96.4" cy="323.4" r="3.5"/></g>
+<g><title>easy-intent-11: 117 tokens, 98 ms</title><circle class="hit" cx="96.4" cy="325.4" r="6"/><circle class="dot1s" cx="96.4" cy="325.4" r="3.5"/></g>
+<g><title>easy-fact-00: 105 tokens, 101 ms</title><circle class="hit" cx="93.9" cy="323.6" r="6"/><circle class="dot1s" cx="93.9" cy="323.6" r="3.5"/></g>
+<g><title>easy-fact-01: 103 tokens, 103 ms</title><circle class="hit" cx="93.5" cy="322.1" r="6"/><circle class="dot1s" cx="93.5" cy="322.1" r="3.5"/></g>
+<g><title>easy-fact-02: 111 tokens, 98 ms</title><circle class="hit" cx="95.1" cy="325.5" r="6"/><circle class="dot1s" cx="95.1" cy="325.5" r="3.5"/></g>
+<g><title>easy-fact-03: 114 tokens, 114 ms</title><circle class="hit" cx="95.8" cy="315.7" r="6"/><circle class="dot1s" cx="95.8" cy="315.7" r="3.5"/></g>
+<g><title>easy-fact-04: 103 tokens, 103 ms</title><circle class="hit" cx="93.5" cy="322.3" r="6"/><circle class="dot1s" cx="93.5" cy="322.3" r="3.5"/></g>
+<g><title>easy-fact-05: 104 tokens, 117 ms</title><circle class="hit" cx="93.7" cy="313.7" r="6"/><circle class="dot1s" cx="93.7" cy="313.7" r="3.5"/></g>
+<g><title>easy-fact-06: 124 tokens, 101 ms</title><circle class="hit" cx="97.9" cy="323.3" r="6"/><circle class="dot1s" cx="97.9" cy="323.3" r="3.5"/></g>
+<g><title>easy-fact-07: 99 tokens, 101 ms</title><circle class="hit" cx="92.6" cy="323.3" r="6"/><circle class="dot1s" cx="92.6" cy="323.3" r="3.5"/></g>
+<g><title>easy-fact-08: 95 tokens, 100 ms</title><circle class="hit" cx="91.8" cy="323.7" r="6"/><circle class="dot1s" cx="91.8" cy="323.7" r="3.5"/></g>
+<g><title>easy-fact-09: 95 tokens, 102 ms</title><circle class="hit" cx="91.8" cy="322.9" r="6"/><circle class="dot1s" cx="91.8" cy="322.9" r="3.5"/></g>
+<g><title>easy-fact-10: 104 tokens, 100 ms</title><circle class="hit" cx="93.7" cy="323.7" r="6"/><circle class="dot1s" cx="93.7" cy="323.7" r="3.5"/></g>
+<g><title>easy-fact-11: 105 tokens, 103 ms</title><circle class="hit" cx="93.9" cy="322.0" r="6"/><circle class="dot1s" cx="93.9" cy="322.0" r="3.5"/></g>
+<g><title>easy-extraction-00: 89 tokens, 105 ms</title><circle class="hit" cx="90.6" cy="320.8" r="6"/><circle class="dot1s" cx="90.6" cy="320.8" r="3.5"/></g>
+<g><title>easy-extraction-01: 91 tokens, 120 ms</title><circle class="hit" cx="91.0" cy="312.1" r="6"/><circle class="dot1s" cx="91.0" cy="312.1" r="3.5"/></g>
+<g><title>easy-extraction-02: 92 tokens, 114 ms</title><circle class="hit" cx="91.2" cy="315.5" r="6"/><circle class="dot1s" cx="91.2" cy="315.5" r="3.5"/></g>
+<g><title>easy-extraction-03: 93 tokens, 102 ms</title><circle class="hit" cx="91.4" cy="322.5" r="6"/><circle class="dot1s" cx="91.4" cy="322.5" r="3.5"/></g>
+<g><title>easy-extraction-04: 91 tokens, 102 ms</title><circle class="hit" cx="91.0" cy="322.9" r="6"/><circle class="dot1s" cx="91.0" cy="322.9" r="3.5"/></g>
+<g><title>easy-extraction-05: 91 tokens, 103 ms</title><circle class="hit" cx="91.0" cy="322.3" r="6"/><circle class="dot1s" cx="91.0" cy="322.3" r="3.5"/></g>
+<g><title>easy-extraction-06: 84 tokens, 103 ms</title><circle class="hit" cx="89.5" cy="322.4" r="6"/><circle class="dot1s" cx="89.5" cy="322.4" r="3.5"/></g>
+<g><title>easy-extraction-07: 82 tokens, 102 ms</title><circle class="hit" cx="89.1" cy="322.6" r="6"/><circle class="dot1s" cx="89.1" cy="322.6" r="3.5"/></g>
+<g><title>easy-extraction-08: 91 tokens, 100 ms</title><circle class="hit" cx="91.0" cy="323.9" r="6"/><circle class="dot1s" cx="91.0" cy="323.9" r="3.5"/></g>
+<g><title>easy-extraction-09: 93 tokens, 100 ms</title><circle class="hit" cx="91.4" cy="323.9" r="6"/><circle class="dot1s" cx="91.4" cy="323.9" r="3.5"/></g>
+<g><title>easy-extraction-10: 89 tokens, 102 ms</title><circle class="hit" cx="90.6" cy="322.8" r="6"/><circle class="dot1s" cx="90.6" cy="322.8" r="3.5"/></g>
+<g><title>easy-extraction-11: 95 tokens, 112 ms</title><circle class="hit" cx="91.8" cy="316.6" r="6"/><circle class="dot1s" cx="91.8" cy="316.6" r="3.5"/></g>
+<g><title>easy-tool_selection-00: 124 tokens, 110 ms</title><circle class="hit" cx="97.9" cy="318.0" r="6"/><circle class="dot1s" cx="97.9" cy="318.0" r="3.5"/></g>
+<g><title>easy-tool_selection-01: 125 tokens, 116 ms</title><circle class="hit" cx="98.1" cy="314.1" r="6"/><circle class="dot1s" cx="98.1" cy="314.1" r="3.5"/></g>
+<g><title>easy-tool_selection-02: 128 tokens, 113 ms</title><circle class="hit" cx="98.7" cy="316.1" r="6"/><circle class="dot1s" cx="98.7" cy="316.1" r="3.5"/></g>
+<g><title>easy-tool_selection-03: 126 tokens, 102 ms</title><circle class="hit" cx="98.3" cy="323.0" r="6"/><circle class="dot1s" cx="98.3" cy="323.0" r="3.5"/></g>
+<g><title>easy-tool_selection-04: 122 tokens, 109 ms</title><circle class="hit" cx="97.4" cy="318.4" r="6"/><circle class="dot1s" cx="97.4" cy="318.4" r="3.5"/></g>
+<g><title>easy-tool_selection-05: 128 tokens, 115 ms</title><circle class="hit" cx="98.7" cy="314.9" r="6"/><circle class="dot1s" cx="98.7" cy="314.9" r="3.5"/></g>
+<g><title>easy-tool_selection-06: 132 tokens, 105 ms</title><circle class="hit" cx="99.5" cy="321.0" r="6"/><circle class="dot1s" cx="99.5" cy="321.0" r="3.5"/></g>
+<g><title>easy-tool_selection-07: 132 tokens, 101 ms</title><circle class="hit" cx="99.5" cy="323.3" r="6"/><circle class="dot1s" cx="99.5" cy="323.3" r="3.5"/></g>
+<g><title>easy-tool_selection-08: 131 tokens, 101 ms</title><circle class="hit" cx="99.3" cy="323.3" r="6"/><circle class="dot1s" cx="99.3" cy="323.3" r="3.5"/></g>
+<g><title>easy-tool_selection-09: 128 tokens, 96 ms</title><circle class="hit" cx="98.7" cy="326.2" r="6"/><circle class="dot1s" cx="98.7" cy="326.2" r="3.5"/></g>
+<g><title>easy-tool_selection-10: 128 tokens, 98 ms</title><circle class="hit" cx="98.7" cy="325.4" r="6"/><circle class="dot1s" cx="98.7" cy="325.4" r="3.5"/></g>
+<g><title>easy-tool_selection-11: 131 tokens, 100 ms</title><circle class="hit" cx="99.3" cy="323.9" r="6"/><circle class="dot1s" cx="99.3" cy="323.9" r="3.5"/></g>
+<g><title>hard-opus-a-long_policy-01: 3,072 tokens, 441 ms</title><circle class="hit" cx="712.6" cy="119.6" r="6"/><circle class="dot1s" cx="712.6" cy="119.6" r="3.5"/></g>
+<g><title>hard-opus-a-long_policy-04: 2,628 tokens, 276 ms</title><circle class="hit" cx="620.0" cy="218.3" r="6"/><circle class="dot1s" cx="620.0" cy="218.3" r="3.5"/></g>
+<g><title>hard-opus-a-long_policy-08: 2,402 tokens, 246 ms</title><circle class="hit" cx="572.9" cy="236.6" r="6"/><circle class="dot1s" cx="572.9" cy="236.6" r="3.5"/></g>
+<g><title>hard-opus-a-long_policy-09: 2,530 tokens, 239 ms</title><circle class="hit" cx="599.5" cy="240.5" r="6"/><circle class="dot1s" cx="599.5" cy="240.5" r="3.5"/></g>
+<g><title>hard-opus-a-long_policy-11: 2,349 tokens, 230 ms</title><circle class="hit" cx="561.8" cy="245.8" r="6"/><circle class="dot1s" cx="561.8" cy="245.8" r="3.5"/></g>
+<g><title>hard-opus-a-long_policy-13: 2,441 tokens, 235 ms</title><circle class="hit" cx="581.0" cy="243.1" r="6"/><circle class="dot1s" cx="581.0" cy="243.1" r="3.5"/></g>
+<g><title>hard-opus-a-long_policy-17: 2,363 tokens, 242 ms</title><circle class="hit" cx="564.7" cy="238.6" r="6"/><circle class="dot1s" cx="564.7" cy="238.6" r="3.5"/></g>
+<g><title>hard-opus-a-long_policy-19: 2,340 tokens, 233 ms</title><circle class="hit" cx="559.9" cy="244.3" r="6"/><circle class="dot1s" cx="559.9" cy="244.3" r="3.5"/></g>
+<g><title>hard-opus-a-probability-03: 444 tokens, 100 ms</title><circle class="hit" cx="164.6" cy="323.8" r="6"/><circle class="dot1s" cx="164.6" cy="323.8" r="3.5"/></g>
+<g><title>hard-opus-a-probability-04: 1,107 tokens, 133 ms</title><circle class="hit" cx="302.8" cy="304.4" r="6"/><circle class="dot1s" cx="302.8" cy="304.4" r="3.5"/></g>
+<g><title>hard-opus-a-probability-07: 1,221 tokens, 128 ms</title><circle class="hit" cx="326.6" cy="307.1" r="6"/><circle class="dot1s" cx="326.6" cy="307.1" r="3.5"/></g>
+<g><title>hard-opus-a-probability-08: 406 tokens, 101 ms</title><circle class="hit" cx="156.7" cy="323.2" r="6"/><circle class="dot1s" cx="156.7" cy="323.2" r="3.5"/></g>
+<g><title>hard-opus-a-temporal_numeric-03: 502 tokens, 105 ms</title><circle class="hit" cx="176.7" cy="320.9" r="6"/><circle class="dot1s" cx="176.7" cy="320.9" r="3.5"/></g>
+<g><title>hard-opus-a-temporal_numeric-06: 537 tokens, 116 ms</title><circle class="hit" cx="184.0" cy="314.6" r="6"/><circle class="dot1s" cx="184.0" cy="314.6" r="3.5"/></g>
+<g><title>hard-opus-a-temporal_numeric-07: 1,308 tokens, 162 ms</title><circle class="hit" cx="344.7" cy="286.9" r="6"/><circle class="dot1s" cx="344.7" cy="286.9" r="3.5"/></g>
+<g><title>hard-opus-a-temporal_numeric-09: 534 tokens, 120 ms</title><circle class="hit" cx="183.3" cy="312.2" r="6"/><circle class="dot1s" cx="183.3" cy="312.2" r="3.5"/></g>
+<g><title>hard-opus-a-temporal_numeric-12: 607 tokens, 109 ms</title><circle class="hit" cx="198.6" cy="318.5" r="6"/><circle class="dot1s" cx="198.6" cy="318.5" r="3.5"/></g>
+<g><title>hard-opus-b-ambiguous-02: 543 tokens, 102 ms</title><circle class="hit" cx="185.2" cy="322.5" r="6"/><circle class="dot1s" cx="185.2" cy="322.5" r="3.5"/></g>
+<g><title>hard-opus-b-ambiguous-03: 497 tokens, 103 ms</title><circle class="hit" cx="175.6" cy="322.4" r="6"/><circle class="dot1s" cx="175.6" cy="322.4" r="3.5"/></g>
+<g><title>hard-opus-b-ambiguous-07: 500 tokens, 123 ms</title><circle class="hit" cx="176.3" cy="310.3" r="6"/><circle class="dot1s" cx="176.3" cy="310.3" r="3.5"/></g>
+<g><title>hard-opus-b-ambiguous-09: 638 tokens, 102 ms</title><circle class="hit" cx="205.0" cy="322.6" r="6"/><circle class="dot1s" cx="205.0" cy="322.6" r="3.5"/></g>
+<g><title>hard-opus-b-ambiguous-10: 565 tokens, 102 ms</title><circle class="hit" cx="189.8" cy="322.6" r="6"/><circle class="dot1s" cx="189.8" cy="322.6" r="3.5"/></g>
+<g><title>hard-opus-b-ambiguous-11: 467 tokens, 106 ms</title><circle class="hit" cx="169.4" cy="320.2" r="6"/><circle class="dot1s" cx="169.4" cy="320.2" r="3.5"/></g>
+<g><title>hard-opus-b-ambiguous-13: 605 tokens, 100 ms</title><circle class="hit" cx="198.2" cy="323.7" r="6"/><circle class="dot1s" cx="198.2" cy="323.7" r="3.5"/></g>
+<g><title>hard-opus-b-multi_hop-03: 2,968 tokens, 309 ms</title><circle class="hit" cx="690.9" cy="198.4" r="6"/><circle class="dot1s" cx="690.9" cy="198.4" r="3.5"/></g>
+<g><title>hard-opus-b-multi_hop-04: 2,352 tokens, 230 ms</title><circle class="hit" cx="562.4" cy="245.9" r="6"/><circle class="dot1s" cx="562.4" cy="245.9" r="3.5"/></g>
+<g><title>hard-opus-b-multi_hop-05: 2,603 tokens, 271 ms</title><circle class="hit" cx="614.8" cy="221.5" r="6"/><circle class="dot1s" cx="614.8" cy="221.5" r="3.5"/></g>
+<g><title>hard-opus-b-multi_hop-07: 2,647 tokens, 274 ms</title><circle class="hit" cx="623.9" cy="219.4" r="6"/><circle class="dot1s" cx="623.9" cy="219.4" r="3.5"/></g>
+<g><title>hard-opus-b-multi_hop-08: 2,327 tokens, 252 ms</title><circle class="hit" cx="557.2" cy="232.7" r="6"/><circle class="dot1s" cx="557.2" cy="232.7" r="3.5"/></g>
+<g><title>hard-opus-b-probability-01: 1,922 tokens, 198 ms</title><circle class="hit" cx="472.8" cy="265.4" r="6"/><circle class="dot1s" cx="472.8" cy="265.4" r="3.5"/></g>
+<g><title>hard-opus-b-probability-02: 503 tokens, 103 ms</title><circle class="hit" cx="176.9" cy="322.2" r="6"/><circle class="dot1s" cx="176.9" cy="322.2" r="3.5"/></g>
+<g><title>hard-opus-b-probability-03: 1,228 tokens, 130 ms</title><circle class="hit" cx="328.1" cy="306.0" r="6"/><circle class="dot1s" cx="328.1" cy="306.0" r="3.5"/></g>
+<g><title>hard-opus-b-probability-04: 605 tokens, 101 ms</title><circle class="hit" cx="198.2" cy="323.2" r="6"/><circle class="dot1s" cx="198.2" cy="323.2" r="3.5"/></g>
+<g><title>hard-opus-b-probability-06: 1,022 tokens, 116 ms</title><circle class="hit" cx="285.1" cy="314.5" r="6"/><circle class="dot1s" cx="285.1" cy="314.5" r="3.5"/></g>
+<g><title>hard-opus-b-tradeoff-01: 845 tokens, 107 ms</title><circle class="hit" cx="248.2" cy="319.9" r="6"/><circle class="dot1s" cx="248.2" cy="319.9" r="3.5"/></g>
+<g><title>hard-opus-b-tradeoff-03: 763 tokens, 115 ms</title><circle class="hit" cx="231.1" cy="315.1" r="6"/><circle class="dot1s" cx="231.1" cy="315.1" r="3.5"/></g>
+<g><title>hard-opus-b-tradeoff-06: 805 tokens, 113 ms</title><circle class="hit" cx="239.9" cy="316.1" r="6"/><circle class="dot1s" cx="239.9" cy="316.1" r="3.5"/></g>
+<g><title>hard-opus-b-tradeoff-07: 723 tokens, 109 ms</title><circle class="hit" cx="222.8" cy="318.7" r="6"/><circle class="dot1s" cx="222.8" cy="318.7" r="3.5"/></g>
+<g><title>hard-opus-b-tradeoff-08: 616 tokens, 104 ms</title><circle class="hit" cx="200.4" cy="321.8" r="6"/><circle class="dot1s" cx="200.4" cy="321.8" r="3.5"/></g>
+<g><title>hard-opus-b-tradeoff-12: 598 tokens, 103 ms</title><circle class="hit" cx="196.7" cy="322.1" r="6"/><circle class="dot1s" cx="196.7" cy="322.1" r="3.5"/></g>
+<g><title>hard-opus-c-long_policy-02: 3,072 tokens, 303 ms</title><circle class="hit" cx="712.6" cy="202.4" r="6"/><circle class="dot1s" cx="712.6" cy="202.4" r="3.5"/></g>
+<g><title>hard-opus-c-long_policy-03: 3,072 tokens, 303 ms</title><circle class="hit" cx="712.6" cy="202.1" r="6"/><circle class="dot1s" cx="712.6" cy="202.1" r="3.5"/></g>
+<g><title>hard-opus-c-long_policy-04: 3,072 tokens, 309 ms</title><circle class="hit" cx="712.6" cy="198.8" r="6"/><circle class="dot1s" cx="712.6" cy="198.8" r="3.5"/></g>
+<g><title>hard-opus-c-long_policy-05: 3,072 tokens, 301 ms</title><circle class="hit" cx="712.6" cy="203.3" r="6"/><circle class="dot1s" cx="712.6" cy="203.3" r="3.5"/></g>
+<g><title>hard-opus-c-long_policy-08: 3,072 tokens, 300 ms</title><circle class="hit" cx="712.6" cy="204.1" r="6"/><circle class="dot1s" cx="712.6" cy="204.1" r="3.5"/></g>
+<g><title>hard-opus-c-long_policy-10: 3,072 tokens, 318 ms</title><circle class="hit" cx="712.6" cy="193.1" r="6"/><circle class="dot1s" cx="712.6" cy="193.1" r="3.5"/></g>
+<g><title>hard-opus-c-long_policy-11: 3,072 tokens, 300 ms</title><circle class="hit" cx="712.6" cy="203.7" r="6"/><circle class="dot1s" cx="712.6" cy="203.7" r="3.5"/></g>
+<g><title>hard-opus-c-probability-03: 553 tokens, 119 ms</title><circle class="hit" cx="187.3" cy="312.7" r="6"/><circle class="dot1s" cx="187.3" cy="312.7" r="3.5"/></g>
+<g><title>hard-opus-c-temporal_numeric-02: 951 tokens, 115 ms</title><circle class="hit" cx="270.3" cy="315.2" r="6"/><circle class="dot1s" cx="270.3" cy="315.2" r="3.5"/></g>
+<g><title>hard-opus-c-temporal_numeric-03: 874 tokens, 119 ms</title><circle class="hit" cx="254.2" cy="312.4" r="6"/><circle class="dot1s" cx="254.2" cy="312.4" r="3.5"/></g>
+<g><title>hard-opus-c-temporal_numeric-04: 789 tokens, 105 ms</title><circle class="hit" cx="236.5" cy="320.9" r="6"/><circle class="dot1s" cx="236.5" cy="320.9" r="3.5"/></g>
+<g><title>hard-opus-c-temporal_numeric-06: 992 tokens, 117 ms</title><circle class="hit" cx="278.8" cy="313.9" r="6"/><circle class="dot1s" cx="278.8" cy="313.9" r="3.5"/></g>
+<g><title>hard-opus-c-temporal_numeric-08: 993 tokens, 122 ms</title><circle class="hit" cx="279.1" cy="310.9" r="6"/><circle class="dot1s" cx="279.1" cy="310.9" r="3.5"/></g>
+<g><title>hard-opus-c-temporal_numeric-12: 827 tokens, 109 ms</title><circle class="hit" cx="244.4" cy="318.7" r="6"/><circle class="dot1s" cx="244.4" cy="318.7" r="3.5"/></g>
+<g><title>hard-sol-a-adversarial-01: 287 tokens, 118 ms</title><circle class="hit" cx="131.8" cy="313.1" r="6"/><circle class="dot1s" cx="131.8" cy="313.1" r="3.5"/></g>
+<g><title>hard-sol-a-adversarial-06: 256 tokens, 101 ms</title><circle class="hit" cx="125.4" cy="323.3" r="6"/><circle class="dot1s" cx="125.4" cy="323.3" r="3.5"/></g>
+<g><title>hard-sol-a-adversarial-07: 303 tokens, 115 ms</title><circle class="hit" cx="135.2" cy="315.1" r="6"/><circle class="dot1s" cx="135.2" cy="315.1" r="3.5"/></g>
+<g><title>hard-sol-a-adversarial-08: 233 tokens, 102 ms</title><circle class="hit" cx="120.6" cy="323.0" r="6"/><circle class="dot1s" cx="120.6" cy="323.0" r="3.5"/></g>
+<g><title>hard-sol-a-adversarial-09: 247 tokens, 116 ms</title><circle class="hit" cx="123.5" cy="314.6" r="6"/><circle class="dot1s" cx="123.5" cy="314.6" r="3.5"/></g>
+<g><title>hard-sol-a-adversarial-11: 308 tokens, 100 ms</title><circle class="hit" cx="136.2" cy="323.7" r="6"/><circle class="dot1s" cx="136.2" cy="323.7" r="3.5"/></g>
+<g><title>hard-sol-a-multi_hop-01: 2,717 tokens, 282 ms</title><circle class="hit" cx="638.5" cy="214.5" r="6"/><circle class="dot1s" cx="638.5" cy="214.5" r="3.5"/></g>
+<g><title>hard-sol-a-multi_hop-02: 2,765 tokens, 279 ms</title><circle class="hit" cx="648.5" cy="216.6" r="6"/><circle class="dot1s" cx="648.5" cy="216.6" r="3.5"/></g>
+<g><title>hard-sol-a-multi_hop-05: 2,677 tokens, 288 ms</title><circle class="hit" cx="630.2" cy="211.1" r="6"/><circle class="dot1s" cx="630.2" cy="211.1" r="3.5"/></g>
+<g><title>hard-sol-a-multi_hop-07: 2,658 tokens, 271 ms</title><circle class="hit" cx="626.2" cy="221.3" r="6"/><circle class="dot1s" cx="626.2" cy="221.3" r="3.5"/></g>
+<g><title>hard-sol-a-multi_hop-08: 2,628 tokens, 296 ms</title><circle class="hit" cx="620.0" cy="206.7" r="6"/><circle class="dot1s" cx="620.0" cy="206.7" r="3.5"/></g>
+<g><title>hard-sol-a-multi_hop-09: 2,642 tokens, 279 ms</title><circle class="hit" cx="622.9" cy="216.8" r="6"/><circle class="dot1s" cx="622.9" cy="216.8" r="3.5"/></g>
+<g><title>hard-sol-a-multi_hop-10: 2,706 tokens, 272 ms</title><circle class="hit" cx="636.2" cy="220.7" r="6"/><circle class="dot1s" cx="636.2" cy="220.7" r="3.5"/></g>
+<g><title>hard-sol-a-multi_hop-12: 2,653 tokens, 274 ms</title><circle class="hit" cx="625.2" cy="219.6" r="6"/><circle class="dot1s" cx="625.2" cy="219.6" r="3.5"/></g>
+<g><title>hard-sol-a-trap-02: 307 tokens, 101 ms</title><circle class="hit" cx="136.0" cy="323.2" r="6"/><circle class="dot1s" cx="136.0" cy="323.2" r="3.5"/></g>
+<g><title>hard-sol-a-trap-04: 213 tokens, 130 ms</title><circle class="hit" cx="116.4" cy="306.2" r="6"/><circle class="dot1s" cx="116.4" cy="306.2" r="3.5"/></g>
+<g><title>hard-sol-a-trap-05: 358 tokens, 104 ms</title><circle class="hit" cx="146.6" cy="321.5" r="6"/><circle class="dot1s" cx="146.6" cy="321.5" r="3.5"/></g>
+<g><title>hard-sol-a-trap-06: 355 tokens, 104 ms</title><circle class="hit" cx="146.0" cy="321.7" r="6"/><circle class="dot1s" cx="146.0" cy="321.7" r="3.5"/></g>
+<g><title>hard-sol-a-trap-08: 282 tokens, 106 ms</title><circle class="hit" cx="130.8" cy="320.5" r="6"/><circle class="dot1s" cx="130.8" cy="320.5" r="3.5"/></g>
+<g><title>hard-sol-a-trap-10: 209 tokens, 106 ms</title><circle class="hit" cx="115.6" cy="320.5" r="6"/><circle class="dot1s" cx="115.6" cy="320.5" r="3.5"/></g>
+<g><title>hard-sol-a-trap-13: 221 tokens, 105 ms</title><circle class="hit" cx="118.1" cy="321.2" r="6"/><circle class="dot1s" cx="118.1" cy="321.2" r="3.5"/></g>
+<g><title>hard-sol-a-trap-15: 323 tokens, 118 ms</title><circle class="hit" cx="139.4" cy="313.1" r="6"/><circle class="dot1s" cx="139.4" cy="313.1" r="3.5"/></g>
+<g><title>hard-sol-b-judge_hard-01: 309 tokens, 120 ms</title><circle class="hit" cx="136.4" cy="312.0" r="6"/><circle class="dot1s" cx="136.4" cy="312.0" r="3.5"/></g>
+<g><title>hard-sol-b-judge_hard-02: 233 tokens, 117 ms</title><circle class="hit" cx="120.6" cy="313.6" r="6"/><circle class="dot1s" cx="120.6" cy="313.6" r="3.5"/></g>
+<g><title>hard-sol-b-judge_hard-05: 253 tokens, 117 ms</title><circle class="hit" cx="124.8" cy="313.8" r="6"/><circle class="dot1s" cx="124.8" cy="313.8" r="3.5"/></g>
+<g><title>hard-sol-b-judge_hard-08: 235 tokens, 120 ms</title><circle class="hit" cx="121.0" cy="312.0" r="6"/><circle class="dot1s" cx="121.0" cy="312.0" r="3.5"/></g>
+<g><title>hard-sol-b-judge_hard-10: 254 tokens, 105 ms</title><circle class="hit" cx="125.0" cy="320.8" r="6"/><circle class="dot1s" cx="125.0" cy="320.8" r="3.5"/></g>
+<g><title>hard-sol-b-judge_hard-14: 271 tokens, 118 ms</title><circle class="hit" cx="128.5" cy="313.5" r="6"/><circle class="dot1s" cx="128.5" cy="313.5" r="3.5"/></g>
+<g><title>hard-sol-b-judge_hard-15: 227 tokens, 104 ms</title><circle class="hit" cx="119.3" cy="321.9" r="6"/><circle class="dot1s" cx="119.3" cy="321.9" r="3.5"/></g>
+<g><title>hard-sol-b-judge_hard-18: 195 tokens, 103 ms</title><circle class="hit" cx="112.7" cy="322.2" r="6"/><circle class="dot1s" cx="112.7" cy="322.2" r="3.5"/></g>
+<g><title>hard-sol-b-long_policy-01: 2,745 tokens, 300 ms</title><circle class="hit" cx="644.4" cy="203.7" r="6"/><circle class="dot1s" cx="644.4" cy="203.7" r="3.5"/></g>
+<g><title>hard-sol-b-long_policy-02: 2,596 tokens, 266 ms</title><circle class="hit" cx="613.3" cy="224.5" r="6"/><circle class="dot1s" cx="613.3" cy="224.5" r="3.5"/></g>
+<g><title>hard-sol-b-long_policy-05: 2,557 tokens, 242 ms</title><circle class="hit" cx="605.2" cy="238.9" r="6"/><circle class="dot1s" cx="605.2" cy="238.9" r="3.5"/></g>
+<g><title>hard-sol-b-long_policy-06: 2,640 tokens, 290 ms</title><circle class="hit" cx="622.5" cy="210.1" r="6"/><circle class="dot1s" cx="622.5" cy="210.1" r="3.5"/></g>
+<g><title>hard-sol-b-routing_hard-01: 337 tokens, 105 ms</title><circle class="hit" cx="142.3" cy="321.0" r="6"/><circle class="dot1s" cx="142.3" cy="321.0" r="3.5"/></g>
+<g><title>hard-sol-b-routing_hard-02: 320 tokens, 102 ms</title><circle class="hit" cx="138.7" cy="322.8" r="6"/><circle class="dot1s" cx="138.7" cy="322.8" r="3.5"/></g>
+<g><title>hard-sol-b-routing_hard-03: 318 tokens, 123 ms</title><circle class="hit" cx="138.3" cy="310.4" r="6"/><circle class="dot1s" cx="138.3" cy="310.4" r="3.5"/></g>
+<g><title>hard-sol-b-routing_hard-07: 301 tokens, 124 ms</title><circle class="hit" cx="134.8" cy="309.8" r="6"/><circle class="dot1s" cx="134.8" cy="309.8" r="3.5"/></g>
+<g><title>hard-sol-b-routing_hard-09: 307 tokens, 106 ms</title><circle class="hit" cx="136.0" cy="320.5" r="6"/><circle class="dot1s" cx="136.0" cy="320.5" r="3.5"/></g>
+<g><title>hard-sol-b-temporal_numeric-01: 300 tokens, 113 ms</title><circle class="hit" cx="134.6" cy="316.2" r="6"/><circle class="dot1s" cx="134.6" cy="316.2" r="3.5"/></g>
+<g><title>hard-sol-b-temporal_numeric-02: 313 tokens, 102 ms</title><circle class="hit" cx="137.3" cy="322.7" r="6"/><circle class="dot1s" cx="137.3" cy="322.7" r="3.5"/></g>
+<g><title>hard-sol-b-temporal_numeric-03: 252 tokens, 100 ms</title><circle class="hit" cx="124.5" cy="323.8" r="6"/><circle class="dot1s" cx="124.5" cy="323.8" r="3.5"/></g>
+<g><title>hard-sol-b-temporal_numeric-04: 262 tokens, 104 ms</title><circle class="hit" cx="126.6" cy="321.5" r="6"/><circle class="dot1s" cx="126.6" cy="321.5" r="3.5"/></g>
+<g><title>hard-sol-c-judge_hard-03: 416 tokens, 111 ms</title><circle class="hit" cx="158.7" cy="317.3" r="6"/><circle class="dot1s" cx="158.7" cy="317.3" r="3.5"/></g>
+<g><title>hard-sol-c-judge_hard-05: 378 tokens, 115 ms</title><circle class="hit" cx="150.8" cy="315.1" r="6"/><circle class="dot1s" cx="150.8" cy="315.1" r="3.5"/></g>
+<g><title>hard-sol-c-judge_hard-07: 342 tokens, 103 ms</title><circle class="hit" cx="143.3" cy="322.1" r="6"/><circle class="dot1s" cx="143.3" cy="322.1" r="3.5"/></g>
+<g><title>hard-sol-c-judge_hard-08: 337 tokens, 112 ms</title><circle class="hit" cx="142.3" cy="316.9" r="6"/><circle class="dot1s" cx="142.3" cy="316.9" r="3.5"/></g>
+<g><title>hard-sol-c-judge_hard-09: 367 tokens, 114 ms</title><circle class="hit" cx="148.5" cy="315.5" r="6"/><circle class="dot1s" cx="148.5" cy="315.5" r="3.5"/></g>
+<g><title>hard-sol-c-judge_hard-10: 396 tokens, 122 ms</title><circle class="hit" cx="154.6" cy="310.9" r="6"/><circle class="dot1s" cx="154.6" cy="310.9" r="3.5"/></g>
+<g><title>hard-sol-c-judge_hard-11: 367 tokens, 114 ms</title><circle class="hit" cx="148.5" cy="315.5" r="6"/><circle class="dot1s" cx="148.5" cy="315.5" r="3.5"/></g>
+<g><title>hard-sol-c-judge_hard-13: 357 tokens, 124 ms</title><circle class="hit" cx="146.4" cy="309.7" r="6"/><circle class="dot1s" cx="146.4" cy="309.7" r="3.5"/></g>
+<g><title>hard-sol-c-judge_hard-15: 312 tokens, 100 ms</title><circle class="hit" cx="137.1" cy="323.9" r="6"/><circle class="dot1s" cx="137.1" cy="323.9" r="3.5"/></g>
+<g><title>hard-sol-c-multi_hop-07: 2,534 tokens, 234 ms</title><circle class="hit" cx="600.4" cy="243.4" r="6"/><circle class="dot1s" cx="600.4" cy="243.4" r="3.5"/></g>
+<g><title>hard-sol-c-multi_hop-09: 2,553 tokens, 235 ms</title><circle class="hit" cx="604.3" cy="243.2" r="6"/><circle class="dot1s" cx="604.3" cy="243.2" r="3.5"/></g>
+<g><title>hard-sol-c-multi_hop-11: 2,631 tokens, 275 ms</title><circle class="hit" cx="620.6" cy="218.8" r="6"/><circle class="dot1s" cx="620.6" cy="218.8" r="3.5"/></g>
+<g><title>hard-sol-c-multi_hop-12: 550 tokens, 103 ms</title><circle class="hit" cx="186.7" cy="322.3" r="6"/><circle class="dot1s" cx="186.7" cy="322.3" r="3.5"/></g>
+<g><title>hard-sol-c-multi_hop-13: 2,602 tokens, 278 ms</title><circle class="hit" cx="614.6" cy="217.1" r="6"/><circle class="dot1s" cx="614.6" cy="217.1" r="3.5"/></g>
+<g><title>p95 296 ms: 296</title><line class="ref" x1="72" x2="718.4" y1="206.7" y2="206.7" stroke-dasharray="4 3"/><text x="724.4" y="210.2">p95 296 ms</text></g>
+<g><title>p50 106 ms: 106</title><line class="ref" x1="72" x2="718.4" y1="320.2" y2="320.2" stroke-dasharray="4 3"/><text x="724.4" y="323.7">p50 106 ms</text></g>
+<text class="muted" x="24" y="444">Left out: the first request (7.7 s, server warm-up). p99 is 309 ms, set by the top three requests, so it is not drawn.</text>
+<text class="muted" x="24" y="462">Percentiles are nearest-rank over these requests; JevBench&#x27;s own summary includes the warm-up request.</text>
+</svg>

@@ -56,6 +56,18 @@ The rest of the held-out set is used for evaluation, including some examples fro
 
 One of the most important things we learn at this stage is how well the model generalizes. Can it do tasks that it hasn't seen before? After all, that's what makes this kind of model interesting versus a custom classifier. The answer is that even at this small size it generalizes usefully, but isn't great. As I've evolved the model, in-task accuracy has been much easier to move than generalization. I suspect this would be much easier with a bigger torso, but the rules of the game don't allow that approach.
 
+*Inference*
+
+One thing that's attractive about small models, and about this class of decision models, is low latency and low cost. Inference in my model is either one or two forward passes: one when there's only one question, and two for any number of questions beyond that (so still O(1), not O(questions)). Quantitative latency scales very well with the number of questions, thanks to the ability to cache the forward pass over the state.
+
+![](/blog/images/hobson_latency_vs_questions.svg)
+
+On the jevbench public set, on my 3090, p50 latency is just over 100ms, and p95 latency is less than 300ms. Most of the latency effect is driven by prompt length. Scaling looks super linear, as one might expect given Qwen3.2-2B's six full attention layers with their quadratic term, but what's really happening in this range is floor-then-linear and it doesn't seem like the quadratic term has kicked in yet.
+
+![](/blog/images/hobson_latency_vs_tokens_v18.svg)
+
+I suspect there's a ton of scope to improve latency, mostly the floor. I haven't worked on it yet, but roughly it seems like the entitlement is closer to 10ms on this hardware, which would bring p50 down substantially. On more modern hardware there's also likely a significant gain available on the slope, but haven't benchmarked that either (don't tempt me to buy a 5090).
+
 *What's Next?*
 
 There are a few things I want to try. Starting with more data synthesis, especially of harder problems. I think we're not yet close to tapped out on capabilities with this number of parameters. The other big one is some form of reinforcement learning, mostly seeing if that can help calibration and generalization, especially on end-to-end decision utility (e.g. with a workflow that 'does the thing if confidence >0.9', which can't be differentiated). Smaller ones include trying a few architectural tweaks, evaluating a second epoch or partial epoch, evaluating some different training schedules, larger LoRA ranks, and experimenting with other torsos (I tried *instruct* variants early on with negative results, but I'm not sold on that yet).
@@ -75,11 +87,11 @@ What worked: the head rearchitecture, a more modern and slightly bigger torso, d
 
 *Lessons*
 
-Maybe the biggest lesson here is how much easier it is to learn this stuff now than a year or so ago. Being able to ask Kiro or Claude to step me through concepts and then quiz me on my understanding was exceptionally helpful - it's like having a custom textbook about exactly this problem at just the right level for me. Every line of code was written by an agent, but at each step I tried to make sure the core ideas and insights were mine, or at least I understood them. I might not set such a bar for a project at work, but for this project the outcome was mostly about me learning.
+Maybe the biggest lesson here is how much easier it is to learn this stuff now than a year or so ago. Being able to ask Kiro or Claude to step me through concepts and then quiz me on my understanding was exceptionally helpful - it's like having a custom textbook about exactly this problem at just the right level. Every line of code was written by an agent, but at each step I tried to make sure the core ideas and insights were mine, or at least I understood them. I might not set such a bar for a project at work, but for this project the outcome was mostly about me learning.
 
-I think I'll need to do this a few times before all the new concepts stick. I'm not yet at the point I could stand at a white board and walk through each decision, but I'm way further along that path than a week ago.
+I think I'll need to do this a few times before all the new concepts stick. I'm not yet at the point I could stand at a white board and walk through each decision (especially at the algebra level), but I'm way further along that path than a week ago.
 
-The other lesson is that even at 2B and below, we can build useful models of this class. That's obvious from the JevBench website too, but getting hands-on has really helped calibrate my thinking about this problem.
+Even at 2B and below, we can build useful models of this class. That's obvious from the JevBench website too, but getting hands-on has really helped calibrate my thinking about this problem.
 
 Finally, while this was fun, it showed how easy it is to get obsessed with this *number go up* model building game. People who had a bit of a, ah, *problem* with World of Warcraft or Diablo II should probably find another way to spend their time.
 
