@@ -8,6 +8,8 @@ title: "Small Decisions: Engineering a Leading Model"
 
 <p class="meta">Or trying to, at least.</p>
 
+**Update:** *An evolved version of the model described here is now available as part of Strands. Check out [strands-decider](https://github.com/strands-labs/strands-decider) on [github](https://github.com/strands-labs/strands-decider) and [HuggingFace](https://huggingface.co/StrandsAgents/strands-decider-2B-hobson-v19).*
+
 My day job has been primarily in AI for three years now, but I'd be the first to admit that's been almost entirely in one corner of AI: infrastructure, safety, and tools for AI agents. That work has brought me in contact with a lot of the AI science (and I'd dabbled there over the previous decade), but I'm super far from the day-to-day of work like model building. I wanted to catch up a little (after all [you have to know what you're talking about](https://brooker.co.za/blog/2026/03/20/ic-leadership.html)), and the last couple weeks provided a perfect opportunity.
 
 On the 15th of this month, the TypeSafe AI folks announced [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), a kind of general purpose calibrated classifier. You can see this as something exciting or not, but it sure has captured the world's attention. And mine. I was particularly interested in the calibration, combined with low latency and the ability to answer questions in parallel, it's a great building block for the more *workflowy* end of the spectrum of agents.
