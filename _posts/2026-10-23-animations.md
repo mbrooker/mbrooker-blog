@@ -21,7 +21,7 @@ Animations can help us build an intuition for how and why systems work, or how a
 
 Here's one example: did you know that a Raft cluster can lose writes if even one of the cluster members has a storage layer that lies about `fsync()`?
 
-<video width="640" height="360" controls>
+<video width="800" controls>
   <source src="https://brooker.co.za/blog/images/lying-fsync.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
@@ -30,7 +30,7 @@ When I built [Stability Sim](https://stability-sim.systems/), I wanted to help e
 
 Let's start with Postgres.
 
-<video width="640" height="360" controls>
+<video width="800" controls>
   <source src="https://brooker.co.za/blog/images/pg-thrash.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
@@ -39,7 +39,7 @@ In this example, captured from traces on real Postgres 16 running in a real Micr
 
 What about `etcd`?
 
-<video width="640" height="360" controls>
+<video width="800" controls>
   <source src="https://brooker.co.za/blog/images/etcd-metastable.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
@@ -50,7 +50,7 @@ When I wrote [Garbage Collection and Metastability](https://brooker.co.za/blog/2
 
 So it's nice to have a real world example, picking on `etcd` again.
 
-<video width="640" height="360" controls>
+<video width="800" controls>
   <source src="https://brooker.co.za/blog/images/etcd-gc.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
