@@ -6,7 +6,7 @@ title: "Traffic mix matters"
 {{ page.title }}
 ================
 
-<p class="meta">Can I send you a mix tape?</p>
+<p class="meta">Wanna listen to my mixtape?</p>
 
 The [preliminary report on last week's M365 outage](https://www.365fanatic.com/wp-content/uploads/2026/11/postincidentreport.pdf) contains one statement that really caught my eye:
 
@@ -140,8 +140,8 @@ Now, let's consider a different mental model of a relational database (at least 
   <g stroke="#999" stroke-width="1.5" fill="none">
     <line x1="10" y1="115" x2="106" y2="115" marker-end="url(#cacheArrow)"/>
     <line x1="222" y1="115" x2="246" y2="115" marker-end="url(#cacheArrow)"/>
-    <polyline points="642,72 680,72 680,115 714,115" marker-end="url(#cacheArrow)"/>
-    <polyline points="642,157 680,157 680,115"/>
+    <polyline points="662,72 690,72 690,115 714,115" marker-end="url(#cacheArrow)"/>
+    <polyline points="662,157 690,157 690,115"/>
   </g>
   <!-- Backlog: open on the left, five slots. -->
   <g stroke="#bbb" stroke-width="1.5">
@@ -176,23 +176,23 @@ Now, let's consider a different mental model of a relational database (at least 
   </g>
   <!-- Hit and miss paths. -->
   <g stroke-width="1.5" fill="none">
-    <polyline points="402,105 430,105 430,72 466,72" stroke="#0d7a6e" marker-end="url(#cacheArrowTeal)"/>
-    <polyline points="402,125 430,125 430,157 466,157" stroke="#e8623d" marker-end="url(#cacheArrowOrange)"/>
+    <polyline points="402,105 430,105 430,72 456,72" stroke="#0d7a6e" marker-end="url(#cacheArrowTeal)"/>
+    <polyline points="402,125 430,125 430,157 456,157" stroke="#e8623d" marker-end="url(#cacheArrowOrange)"/>
     <line x1="505" y1="130" x2="505" y2="103" stroke="#999" stroke-dasharray="4 3" marker-end="url(#cacheArrow)"/>
   </g>
   <g font-size="11">
-    <text x="436" y="64" fill="#0d7a6e">hit</text>
-    <text x="436" y="172" fill="#e8623d">miss</text>
+    <text x="406" y="98" fill="#0d7a6e">hit</text>
+    <text x="406" y="140" fill="#e8623d">miss</text>
     <text x="513" y="119" fill="#999">fill on miss</text>
   </g>
   <!-- Cache and storage. -->
-  <rect x="470" y="45" width="170" height="55" rx="8" fill="rgba(13,122,110,0.08)" stroke="#0d7a6e" stroke-width="1.5"/>
-  <rect x="470" y="130" width="170" height="55" rx="8" fill="rgba(232,98,61,0.08)" stroke="#e8623d" stroke-width="1.5"/>
+  <rect x="460" y="45" width="200" height="55" rx="8" fill="rgba(13,122,110,0.08)" stroke="#0d7a6e" stroke-width="1.5"/>
+  <rect x="460" y="130" width="200" height="55" rx="8" fill="rgba(232,98,61,0.08)" stroke="#e8623d" stroke-width="1.5"/>
   <g text-anchor="middle">
-    <text x="555" y="67" font-size="13" fill="#444">LRU cache</text>
-    <text x="555" y="86" font-size="11" fill="#555"><tspan id="cacheDiagPct">5</tspan>% of keys, ~Exp(mean <tspan id="cacheDiagHitMs">0.01</tspan> ms)</text>
-    <text x="555" y="152" font-size="13" fill="#444">storage</text>
-    <text x="555" y="171" font-size="11" fill="#555">all N keys, ~Exp(mean 1 ms)</text>
+    <text x="560" y="67" font-size="13" fill="#444">LRU cache</text>
+    <text x="560" y="86" font-size="11" fill="#555"><tspan id="cacheDiagPct">5</tspan>% of keys, ~Exp(mean <tspan id="cacheDiagHitMs">0.01</tspan> ms)</text>
+    <text x="560" y="152" font-size="13" fill="#444">storage</text>
+    <text x="560" y="171" font-size="11" fill="#555">all N keys, ~Exp(mean 1 ms)</text>
   </g>
   <!-- Legend. -->
   <g font-size="11" fill="#555">
@@ -352,7 +352,7 @@ This curve goes the other way! The more skewed the distribution, the better the 
   const formatRate = r => r >= 1000 ? (r / 1000).toFixed(r >= 10000 ? 1 : 2) + 'k' : r.toFixed(0);
 
   function draw(results, message) {
-    const padLeft = 64, padRight = 24, padTop = 56, padBottom = 52;
+    const padLeft = 80, padRight = 24, padTop = 56, padBottom = 52;
     const W = canvas.width, H = canvas.height;
     const plotW = W - padLeft - padRight;
     const plotH = H - padTop - padBottom;
@@ -686,7 +686,7 @@ This curve goes the other way! The more skewed the distribution, the better the 
   }
 
   function draw(results, params, message) {
-    const padLeft = 64, padRight = 24, padTop = 56, padBottom = 52;
+    const padLeft = 80, padRight = 24, padTop = 56, padBottom = 52;
     const W = canvas.width, H = canvas.height;
     const plotW = W - padLeft - padRight;
     const plotH = H - padTop - padBottom;
