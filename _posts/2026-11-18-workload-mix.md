@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "What does it mean to understand what we built?"
+title: "Traffic mix matters"
 
 ---
 {{ page.title }}
