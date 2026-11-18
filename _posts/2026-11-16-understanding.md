@@ -20,7 +20,7 @@ I fully agree with that as a pithy statement, but I think we are working with di
 
 That's an example of a symptom of something that I think makes this document substantially less useful and forward-looking than it could have been. Specifically, it privileges *code*. That's natural for programmers, of course, because program text has been somewhat privileged in our field's thinking for something like 60 years.
 
-I believe that the goal of understanding code is, longer-term, holding us back from understanding what matters. I'm excited about the posibilties of what we can understand better when we are freed from understanding code, and can focus on other things.
+I believe that the goal of understanding code is, longer-term, holding us back from understanding what matters. I'm excited about the possibilities of what we can understand better when we are freed from understanding code, and can focus on other things.
 
 What are those other things? The properties of the as-built system. Precise *properties* like "a SELECT never shows results from uncommitted transactions". And fuzzy properties like "makes the user's life easier". Those are already non-local properties that come from the code as a whole, not from any individual line. In fact, trying to understand how they are synthesized out of individual lines is a mammoth task! One that we've spent six decades coming up with abstractions to handle.
 
