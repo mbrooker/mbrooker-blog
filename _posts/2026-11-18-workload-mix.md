@@ -218,7 +218,7 @@ Now, let's consider a different mental model of a relational database (at least 
 </p>
 </div>
 
-This curve goes the other way! The more skewed the distribution, the better the performance, over something of a broad range. This is what makes it so important that workload mix in load tests and benchmarks matches real production traffic. This is especially true in relational database-shaped things, but applies to systems of all kinds.
+This curve goes the other way! The more skewed the distribution, the better the performance, over something of a broad range. This is what makes it so important that workload mix in load tests and benchmarks matches real production traffic: throughput can vary by multiple orders of magnitude, in both directions, depending on things as subtle as key skew in the benchmark workload. This is especially true in relational database-shaped things, but applies to systems of all kinds.
 
 **Aside**: This is also a reason I like optimistic concurrency control, and architectures with a single cost/latency *mode*. [Aurora DSQL](https://aws.amazon.com/rds/aurora/dsql/) reflects this thinking on how to make things less workload sensitive: all reads go to a single fast storage layer, and nobody is holding resources waiting on locks.
 
